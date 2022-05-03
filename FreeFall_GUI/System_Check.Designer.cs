@@ -28,98 +28,98 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-01",
             "Control Mode",
             "200",
             "Int",
             "-",
             "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-03",
             "CCW TRQ LMT",
             "202",
             "Float",
             "-",
             "%"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-04",
             "CW TRQ LMT",
             "203",
             "Float",
             "-",
             "%"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-05",
             "CW Speed LMT",
             "204",
             "Float",
             "-",
             "rpm"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem19 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-06",
             "CW Speed LMT",
             "205",
             "Float",
             "-",
             "rpm"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem20 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-07",
             "Brake Speed",
             "206",
             "Float",
             "-",
             "rpm"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem21 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-08",
             "Brake Time",
             "207",
             "Float",
             "-",
             "ms"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem22 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-09",
             "DB Mode",
             "208",
             "Int",
             "-",
             "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem(new string[] {
             "P02-19",
             "Inertial Ratio",
             "218",
             "Float",
             "-",
             "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem(new string[] {
             "P03-10",
             "ACCEL Time",
             "309",
             "Float",
             "-",
             "ms"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem25 = new System.Windows.Forms.ListViewItem(new string[] {
             "P03-11",
             "DECEL Time",
             "310",
             "FLoat",
             "-",
             "ms"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem26 = new System.Windows.Forms.ListViewItem(new string[] {
             "P05-02",
             "POS Pulse Type",
             "501",
             "Int",
             "-",
             "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem27 = new System.Windows.Forms.ListViewItem(new string[] {
             "P07-01",
             "CN1-Input Type",
             "700",
             "Int",
             "-",
             "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem28 = new System.Windows.Forms.ListViewItem(new string[] {
             "P08-01",
             "CN1-Output Type",
             "800",
@@ -138,8 +138,8 @@
             this.btnRefAccSet = new System.Windows.Forms.Button();
             this.btnKiSet = new System.Windows.Forms.Button();
             this.btnKpSet = new System.Windows.Forms.Button();
-            this.btnMaxSpdSet = new System.Windows.Forms.Button();
-            this.btnAccTimeSet = new System.Windows.Forms.Button();
+            this.btnMaxDistSet = new System.Windows.Forms.Button();
+            this.btnDrumRadiusSet = new System.Windows.Forms.Button();
             this.txtSampleTime = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -152,8 +152,8 @@
             this.txtKi = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtAcclerationTime = new System.Windows.Forms.TextBox();
-            this.txtMaxSpeed = new System.Windows.Forms.TextBox();
+            this.txtDrumRadius = new System.Windows.Forms.TextBox();
+            this.txtMaxDistance = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -205,20 +205,20 @@
             this.lstParam.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lstParam.HideSelection = false;
             this.lstParam.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4,
-            listViewItem5,
-            listViewItem6,
-            listViewItem7,
-            listViewItem8,
-            listViewItem9,
-            listViewItem10,
-            listViewItem11,
-            listViewItem12,
-            listViewItem13,
-            listViewItem14});
+            listViewItem15,
+            listViewItem16,
+            listViewItem17,
+            listViewItem18,
+            listViewItem19,
+            listViewItem20,
+            listViewItem21,
+            listViewItem22,
+            listViewItem23,
+            listViewItem24,
+            listViewItem25,
+            listViewItem26,
+            listViewItem27,
+            listViewItem28});
             this.lstParam.Location = new System.Drawing.Point(12, 12);
             this.lstParam.Name = "lstParam";
             this.lstParam.Size = new System.Drawing.Size(817, 366);
@@ -232,8 +232,8 @@
             this.groupBox1.Controls.Add(this.btnRefAccSet);
             this.groupBox1.Controls.Add(this.btnKiSet);
             this.groupBox1.Controls.Add(this.btnKpSet);
-            this.groupBox1.Controls.Add(this.btnMaxSpdSet);
-            this.groupBox1.Controls.Add(this.btnAccTimeSet);
+            this.groupBox1.Controls.Add(this.btnMaxDistSet);
+            this.groupBox1.Controls.Add(this.btnDrumRadiusSet);
             this.groupBox1.Controls.Add(this.txtSampleTime);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.groupBox4);
@@ -293,27 +293,27 @@
             this.btnKpSet.UseVisualStyleBackColor = true;
             this.btnKpSet.Click += new System.EventHandler(this.btnKpSet_Click);
             // 
-            // btnMaxSpdSet
+            // btnMaxDistSet
             // 
-            this.btnMaxSpdSet.AllowDrop = true;
-            this.btnMaxSpdSet.Location = new System.Drawing.Point(371, 98);
-            this.btnMaxSpdSet.Name = "btnMaxSpdSet";
-            this.btnMaxSpdSet.Size = new System.Drawing.Size(91, 29);
-            this.btnMaxSpdSet.TabIndex = 12;
-            this.btnMaxSpdSet.Text = "SET";
-            this.btnMaxSpdSet.UseVisualStyleBackColor = true;
-            this.btnMaxSpdSet.Click += new System.EventHandler(this.btnMaxSpdSet_Click);
+            this.btnMaxDistSet.AllowDrop = true;
+            this.btnMaxDistSet.Location = new System.Drawing.Point(371, 98);
+            this.btnMaxDistSet.Name = "btnMaxDistSet";
+            this.btnMaxDistSet.Size = new System.Drawing.Size(91, 29);
+            this.btnMaxDistSet.TabIndex = 12;
+            this.btnMaxDistSet.Text = "SET";
+            this.btnMaxDistSet.UseVisualStyleBackColor = true;
+            this.btnMaxDistSet.Click += new System.EventHandler(this.btnMaxDistSet_Click);
             // 
-            // btnAccTimeSet
+            // btnDrumRadiusSet
             // 
-            this.btnAccTimeSet.AllowDrop = true;
-            this.btnAccTimeSet.Location = new System.Drawing.Point(371, 63);
-            this.btnAccTimeSet.Name = "btnAccTimeSet";
-            this.btnAccTimeSet.Size = new System.Drawing.Size(91, 29);
-            this.btnAccTimeSet.TabIndex = 11;
-            this.btnAccTimeSet.Text = "SET";
-            this.btnAccTimeSet.UseVisualStyleBackColor = true;
-            this.btnAccTimeSet.Click += new System.EventHandler(this.btnAccTimeSet_Click);
+            this.btnDrumRadiusSet.AllowDrop = true;
+            this.btnDrumRadiusSet.Location = new System.Drawing.Point(371, 63);
+            this.btnDrumRadiusSet.Name = "btnDrumRadiusSet";
+            this.btnDrumRadiusSet.Size = new System.Drawing.Size(91, 29);
+            this.btnDrumRadiusSet.TabIndex = 11;
+            this.btnDrumRadiusSet.Text = "SET";
+            this.btnDrumRadiusSet.UseVisualStyleBackColor = true;
+            this.btnDrumRadiusSet.Click += new System.EventHandler(this.btnDrumRadiusSet_Click);
             // 
             // txtSampleTime
             // 
@@ -412,8 +412,8 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.txtAcclerationTime);
-            this.groupBox2.Controls.Add(this.txtMaxSpeed);
+            this.groupBox2.Controls.Add(this.txtDrumRadius);
+            this.groupBox2.Controls.Add(this.txtMaxDistance);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.ForeColor = System.Drawing.Color.Red;
             this.groupBox2.Location = new System.Drawing.Point(10, 41);
@@ -427,35 +427,35 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(26, 32);
+            this.label1.Location = new System.Drawing.Point(90, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(218, 19);
+            this.label1.Size = new System.Drawing.Size(159, 19);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Acceleration Time (ms)";
+            this.label1.Text = "Drum Radius (m)";
             // 
-            // txtAcclerationTime
+            // txtDrumRadius
             // 
-            this.txtAcclerationTime.Location = new System.Drawing.Point(255, 22);
-            this.txtAcclerationTime.Name = "txtAcclerationTime";
-            this.txtAcclerationTime.Size = new System.Drawing.Size(100, 29);
-            this.txtAcclerationTime.TabIndex = 6;
+            this.txtDrumRadius.Location = new System.Drawing.Point(255, 22);
+            this.txtDrumRadius.Name = "txtDrumRadius";
+            this.txtDrumRadius.Size = new System.Drawing.Size(100, 29);
+            this.txtDrumRadius.TabIndex = 6;
             // 
-            // txtMaxSpeed
+            // txtMaxDistance
             // 
-            this.txtMaxSpeed.Location = new System.Drawing.Point(255, 57);
-            this.txtMaxSpeed.Name = "txtMaxSpeed";
-            this.txtMaxSpeed.Size = new System.Drawing.Size(100, 29);
-            this.txtMaxSpeed.TabIndex = 8;
+            this.txtMaxDistance.Location = new System.Drawing.Point(255, 57);
+            this.txtMaxDistance.Name = "txtMaxDistance";
+            this.txtMaxDistance.Size = new System.Drawing.Size(100, 29);
+            this.txtMaxDistance.TabIndex = 8;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(79, 67);
+            this.label3.Location = new System.Drawing.Point(81, 62);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(165, 19);
+            this.label3.Size = new System.Drawing.Size(168, 19);
             this.label3.TabIndex = 2;
-            this.label3.Text = "Max Speed (rpm)";
+            this.label3.Text = "Max Distance (m)";
             // 
             // btnLoad
             // 
@@ -512,8 +512,8 @@
         private System.Windows.Forms.ColumnHeader Unit;
         private System.Windows.Forms.ListView lstParam;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox txtMaxSpeed;
-        private System.Windows.Forms.TextBox txtAcclerationTime;
+        private System.Windows.Forms.TextBox txtMaxDistance;
+        private System.Windows.Forms.TextBox txtDrumRadius;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
@@ -533,7 +533,7 @@
         private System.Windows.Forms.Button btnRefAccSet;
         private System.Windows.Forms.Button btnKiSet;
         private System.Windows.Forms.Button btnKpSet;
-        private System.Windows.Forms.Button btnMaxSpdSet;
-        private System.Windows.Forms.Button btnAccTimeSet;
+        private System.Windows.Forms.Button btnMaxDistSet;
+        private System.Windows.Forms.Button btnDrumRadiusSet;
     }
 }

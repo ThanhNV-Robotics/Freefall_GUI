@@ -53,6 +53,15 @@
             this.labelCcwTorqueLim = new System.Windows.Forms.Label();
             this.labelAlarm = new System.Windows.Forms.Label();
             this.labelTorqueLimit = new System.Windows.Forms.Label();
+            this.lbZeroSpeedReach = new FreeFall_GUI.Elip_Label();
+            this.lbCwTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbCcwTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbAlarm = new FreeFall_GUI.Elip_Label();
+            this.lbTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbSpeedReach = new FreeFall_GUI.Elip_Label();
+            this.lbReady = new FreeFall_GUI.Elip_Label();
+            this.lbBrake = new FreeFall_GUI.Elip_Label();
+            this.lb_Type = new FreeFall_GUI.Elip_Label();
             this.lbReach = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -89,17 +98,10 @@
             this.cbAccY = new System.Windows.Forms.CheckBox();
             this.cbAccX = new System.Windows.Forms.CheckBox();
             this.btnRstMcu = new System.Windows.Forms.Button();
-            this.buttonEllipse1 = new FreeFall_GUI.ButtonEllipse();
-            this.lbZeroSpeedReach = new FreeFall_GUI.Elip_Label();
-            this.lbCwTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbCcwTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbAlarm = new FreeFall_GUI.Elip_Label();
-            this.lbTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbSpeedReach = new FreeFall_GUI.Elip_Label();
-            this.lbReady = new FreeFall_GUI.Elip_Label();
-            this.lbBrake = new FreeFall_GUI.Elip_Label();
-            this.lb_Type = new FreeFall_GUI.Elip_Label();
+            this.btnBrake = new FreeFall_GUI.ButtonEllipse();
             this.btnEstop = new FreeFall_GUI.ButtonEllipse();
+            this.label12 = new System.Windows.Forms.Label();
+            this.lbEncoderPulses = new System.Windows.Forms.Label();
             this.gbJogControl.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -130,7 +132,7 @@
             this.btnMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.BackgroundImage")));
             this.btnMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMoveUp.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveUp.Location = new System.Drawing.Point(250, 15);
+            this.btnMoveUp.Location = new System.Drawing.Point(313, 15);
             this.btnMoveUp.Name = "btnMoveUp";
             this.btnMoveUp.Size = new System.Drawing.Size(63, 78);
             this.btnMoveUp.TabIndex = 4;
@@ -144,7 +146,7 @@
             this.btnMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.BackgroundImage")));
             this.btnMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMoveDown.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveDown.Location = new System.Drawing.Point(250, 99);
+            this.btnMoveDown.Location = new System.Drawing.Point(313, 99);
             this.btnMoveDown.Name = "btnMoveDown";
             this.btnMoveDown.Size = new System.Drawing.Size(63, 78);
             this.btnMoveDown.TabIndex = 5;
@@ -178,6 +180,8 @@
             // 
             // gbJogControl
             // 
+            this.gbJogControl.Controls.Add(this.lbEncoderPulses);
+            this.gbJogControl.Controls.Add(this.label12);
             this.gbJogControl.Controls.Add(this.btnSetJogSpeed);
             this.gbJogControl.Controls.Add(this.txtSetSpeed);
             this.gbJogControl.Controls.Add(this.label5);
@@ -195,7 +199,7 @@
             // 
             // btnSetJogSpeed
             // 
-            this.btnSetJogSpeed.Location = new System.Drawing.Point(124, 125);
+            this.btnSetJogSpeed.Location = new System.Drawing.Point(220, 36);
             this.btnSetJogSpeed.Name = "btnSetJogSpeed";
             this.btnSetJogSpeed.Size = new System.Drawing.Size(80, 37);
             this.btnSetJogSpeed.TabIndex = 15;
@@ -205,7 +209,7 @@
             // 
             // txtSetSpeed
             // 
-            this.txtSetSpeed.Location = new System.Drawing.Point(125, 82);
+            this.txtSetSpeed.Location = new System.Drawing.Point(135, 36);
             this.txtSetSpeed.Multiline = true;
             this.txtSetSpeed.Name = "txtSetSpeed";
             this.txtSetSpeed.Size = new System.Drawing.Size(79, 37);
@@ -215,7 +219,7 @@
             // label5
             // 
             this.label5.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label5.Location = new System.Drawing.Point(6, 82);
+            this.label5.Location = new System.Drawing.Point(6, 36);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(122, 37);
             this.label5.TabIndex = 13;
@@ -225,7 +229,7 @@
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label3.Location = new System.Drawing.Point(9, 35);
+            this.label3.Location = new System.Drawing.Point(14, 95);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(110, 32);
             this.label3.TabIndex = 12;
@@ -236,7 +240,7 @@
             // 
             this.lbMotorSpeed.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lbMotorSpeed.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbMotorSpeed.Location = new System.Drawing.Point(125, 35);
+            this.lbMotorSpeed.Location = new System.Drawing.Point(135, 92);
             this.lbMotorSpeed.Name = "lbMotorSpeed";
             this.lbMotorSpeed.Size = new System.Drawing.Size(79, 36);
             this.lbMotorSpeed.TabIndex = 11;
@@ -378,6 +382,97 @@
             this.labelTorqueLimit.Size = new System.Drawing.Size(126, 20);
             this.labelTorqueLimit.TabIndex = 21;
             this.labelTorqueLimit.Text = "Torque Limit";
+            // 
+            // lbZeroSpeedReach
+            // 
+            this.lbZeroSpeedReach.AutoEllipsis = true;
+            this.lbZeroSpeedReach.BackColor = System.Drawing.Color.Gray;
+            this.lbZeroSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbZeroSpeedReach.Location = new System.Drawing.Point(9, 369);
+            this.lbZeroSpeedReach.Name = "lbZeroSpeedReach";
+            this.lbZeroSpeedReach.Size = new System.Drawing.Size(31, 31);
+            this.lbZeroSpeedReach.TabIndex = 20;
+            // 
+            // lbCwTorqueLimit
+            // 
+            this.lbCwTorqueLimit.AutoEllipsis = true;
+            this.lbCwTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbCwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbCwTorqueLimit.Location = new System.Drawing.Point(9, 327);
+            this.lbCwTorqueLimit.Name = "lbCwTorqueLimit";
+            this.lbCwTorqueLimit.Size = new System.Drawing.Size(31, 31);
+            this.lbCwTorqueLimit.TabIndex = 19;
+            // 
+            // lbCcwTorqueLimit
+            // 
+            this.lbCcwTorqueLimit.AutoEllipsis = true;
+            this.lbCcwTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbCcwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbCcwTorqueLimit.Location = new System.Drawing.Point(9, 282);
+            this.lbCcwTorqueLimit.Name = "lbCcwTorqueLimit";
+            this.lbCcwTorqueLimit.Size = new System.Drawing.Size(31, 31);
+            this.lbCcwTorqueLimit.TabIndex = 18;
+            // 
+            // lbAlarm
+            // 
+            this.lbAlarm.AutoEllipsis = true;
+            this.lbAlarm.BackColor = System.Drawing.Color.Gray;
+            this.lbAlarm.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbAlarm.Location = new System.Drawing.Point(9, 237);
+            this.lbAlarm.Name = "lbAlarm";
+            this.lbAlarm.Size = new System.Drawing.Size(31, 31);
+            this.lbAlarm.TabIndex = 17;
+            // 
+            // lbTorqueLimit
+            // 
+            this.lbTorqueLimit.AutoEllipsis = true;
+            this.lbTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbTorqueLimit.Location = new System.Drawing.Point(9, 195);
+            this.lbTorqueLimit.Name = "lbTorqueLimit";
+            this.lbTorqueLimit.Size = new System.Drawing.Size(31, 31);
+            this.lbTorqueLimit.TabIndex = 16;
+            // 
+            // lbSpeedReach
+            // 
+            this.lbSpeedReach.AutoEllipsis = true;
+            this.lbSpeedReach.BackColor = System.Drawing.Color.Gray;
+            this.lbSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbSpeedReach.Location = new System.Drawing.Point(9, 154);
+            this.lbSpeedReach.Name = "lbSpeedReach";
+            this.lbSpeedReach.Size = new System.Drawing.Size(31, 31);
+            this.lbSpeedReach.TabIndex = 15;
+            // 
+            // lbReady
+            // 
+            this.lbReady.AutoEllipsis = true;
+            this.lbReady.BackColor = System.Drawing.Color.Gray;
+            this.lbReady.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbReady.Location = new System.Drawing.Point(9, 113);
+            this.lbReady.Name = "lbReady";
+            this.lbReady.Size = new System.Drawing.Size(31, 31);
+            this.lbReady.TabIndex = 14;
+            this.lbReady.BackColorChanged += new System.EventHandler(this.lbReady_BackColorChanged);
+            // 
+            // lbBrake
+            // 
+            this.lbBrake.AutoEllipsis = true;
+            this.lbBrake.BackColor = System.Drawing.Color.Gray;
+            this.lbBrake.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbBrake.Location = new System.Drawing.Point(9, 69);
+            this.lbBrake.Name = "lbBrake";
+            this.lbBrake.Size = new System.Drawing.Size(31, 31);
+            this.lbBrake.TabIndex = 13;
+            // 
+            // lb_Type
+            // 
+            this.lb_Type.AutoEllipsis = true;
+            this.lb_Type.BackColor = System.Drawing.Color.Gray;
+            this.lb_Type.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lb_Type.Location = new System.Drawing.Point(9, 26);
+            this.lb_Type.Name = "lb_Type";
+            this.lb_Type.Size = new System.Drawing.Size(31, 31);
+            this.lb_Type.TabIndex = 12;
             // 
             // lbReach
             // 
@@ -685,7 +780,7 @@
             this.gbDataView.Controls.Add(this.cbSpdCmd);
             this.gbDataView.Controls.Add(this.btnGraphOn);
             this.gbDataView.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.gbDataView.Location = new System.Drawing.Point(1520, 189);
+            this.gbDataView.Location = new System.Drawing.Point(1521, 30);
             this.gbDataView.Name = "gbDataView";
             this.gbDataView.Size = new System.Drawing.Size(167, 485);
             this.gbDataView.TabIndex = 35;
@@ -740,108 +835,18 @@
             this.btnRstMcu.UseVisualStyleBackColor = false;
             this.btnRstMcu.Click += new System.EventHandler(this.btnRstMcu_Click);
             // 
-            // buttonEllipse1
+            // btnBrake
             // 
-            this.buttonEllipse1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonEllipse1.BackgroundImage")));
-            this.buttonEllipse1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.buttonEllipse1.Font = new System.Drawing.Font("Gulim", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.buttonEllipse1.Location = new System.Drawing.Point(164, 842);
-            this.buttonEllipse1.Name = "buttonEllipse1";
-            this.buttonEllipse1.Size = new System.Drawing.Size(115, 111);
-            this.buttonEllipse1.TabIndex = 36;
-            this.buttonEllipse1.Text = "Brake";
-            this.buttonEllipse1.UseVisualStyleBackColor = true;
-            // 
-            // lbZeroSpeedReach
-            // 
-            this.lbZeroSpeedReach.AutoEllipsis = true;
-            this.lbZeroSpeedReach.BackColor = System.Drawing.Color.Gray;
-            this.lbZeroSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbZeroSpeedReach.Location = new System.Drawing.Point(9, 369);
-            this.lbZeroSpeedReach.Name = "lbZeroSpeedReach";
-            this.lbZeroSpeedReach.Size = new System.Drawing.Size(31, 31);
-            this.lbZeroSpeedReach.TabIndex = 20;
-            // 
-            // lbCwTorqueLimit
-            // 
-            this.lbCwTorqueLimit.AutoEllipsis = true;
-            this.lbCwTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbCwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbCwTorqueLimit.Location = new System.Drawing.Point(9, 327);
-            this.lbCwTorqueLimit.Name = "lbCwTorqueLimit";
-            this.lbCwTorqueLimit.Size = new System.Drawing.Size(31, 31);
-            this.lbCwTorqueLimit.TabIndex = 19;
-            // 
-            // lbCcwTorqueLimit
-            // 
-            this.lbCcwTorqueLimit.AutoEllipsis = true;
-            this.lbCcwTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbCcwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbCcwTorqueLimit.Location = new System.Drawing.Point(9, 282);
-            this.lbCcwTorqueLimit.Name = "lbCcwTorqueLimit";
-            this.lbCcwTorqueLimit.Size = new System.Drawing.Size(31, 31);
-            this.lbCcwTorqueLimit.TabIndex = 18;
-            // 
-            // lbAlarm
-            // 
-            this.lbAlarm.AutoEllipsis = true;
-            this.lbAlarm.BackColor = System.Drawing.Color.Gray;
-            this.lbAlarm.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbAlarm.Location = new System.Drawing.Point(9, 237);
-            this.lbAlarm.Name = "lbAlarm";
-            this.lbAlarm.Size = new System.Drawing.Size(31, 31);
-            this.lbAlarm.TabIndex = 17;
-            // 
-            // lbTorqueLimit
-            // 
-            this.lbTorqueLimit.AutoEllipsis = true;
-            this.lbTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbTorqueLimit.Location = new System.Drawing.Point(9, 195);
-            this.lbTorqueLimit.Name = "lbTorqueLimit";
-            this.lbTorqueLimit.Size = new System.Drawing.Size(31, 31);
-            this.lbTorqueLimit.TabIndex = 16;
-            // 
-            // lbSpeedReach
-            // 
-            this.lbSpeedReach.AutoEllipsis = true;
-            this.lbSpeedReach.BackColor = System.Drawing.Color.Gray;
-            this.lbSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbSpeedReach.Location = new System.Drawing.Point(9, 154);
-            this.lbSpeedReach.Name = "lbSpeedReach";
-            this.lbSpeedReach.Size = new System.Drawing.Size(31, 31);
-            this.lbSpeedReach.TabIndex = 15;
-            // 
-            // lbReady
-            // 
-            this.lbReady.AutoEllipsis = true;
-            this.lbReady.BackColor = System.Drawing.Color.Gray;
-            this.lbReady.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbReady.Location = new System.Drawing.Point(9, 113);
-            this.lbReady.Name = "lbReady";
-            this.lbReady.Size = new System.Drawing.Size(31, 31);
-            this.lbReady.TabIndex = 14;
-            this.lbReady.BackColorChanged += new System.EventHandler(this.lbReady_BackColorChanged);
-            // 
-            // lbBrake
-            // 
-            this.lbBrake.AutoEllipsis = true;
-            this.lbBrake.BackColor = System.Drawing.Color.Gray;
-            this.lbBrake.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbBrake.Location = new System.Drawing.Point(9, 69);
-            this.lbBrake.Name = "lbBrake";
-            this.lbBrake.Size = new System.Drawing.Size(31, 31);
-            this.lbBrake.TabIndex = 13;
-            // 
-            // lb_Type
-            // 
-            this.lb_Type.AutoEllipsis = true;
-            this.lb_Type.BackColor = System.Drawing.Color.Gray;
-            this.lb_Type.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lb_Type.Location = new System.Drawing.Point(9, 26);
-            this.lb_Type.Name = "lb_Type";
-            this.lb_Type.Size = new System.Drawing.Size(31, 31);
-            this.lb_Type.TabIndex = 12;
+            this.btnBrake.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnBrake.BackgroundImage")));
+            this.btnBrake.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnBrake.Font = new System.Drawing.Font("Gulim", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnBrake.Location = new System.Drawing.Point(164, 842);
+            this.btnBrake.Name = "btnBrake";
+            this.btnBrake.Size = new System.Drawing.Size(115, 111);
+            this.btnBrake.TabIndex = 36;
+            this.btnBrake.Text = "Brake";
+            this.btnBrake.UseVisualStyleBackColor = true;
+            this.btnBrake.Click += new System.EventHandler(this.buttonBrake_Click);
             // 
             // btnEstop
             // 
@@ -857,6 +862,26 @@
             this.btnEstop.UseVisualStyleBackColor = false;
             this.btnEstop.Click += new System.EventHandler(this.btnEstop_Click);
             // 
+            // label12
+            // 
+            this.label12.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label12.Location = new System.Drawing.Point(14, 145);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(114, 32);
+            this.label12.TabIndex = 16;
+            this.label12.Text = "Encoder Pulses";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbEncoderPulses
+            // 
+            this.lbEncoderPulses.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lbEncoderPulses.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbEncoderPulses.Location = new System.Drawing.Point(135, 142);
+            this.lbEncoderPulses.Name = "lbEncoderPulses";
+            this.lbEncoderPulses.Size = new System.Drawing.Size(79, 36);
+            this.lbEncoderPulses.TabIndex = 17;
+            this.lbEncoderPulses.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Main_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -865,7 +890,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1699, 962);
             this.Controls.Add(this.btnRstMcu);
-            this.Controls.Add(this.buttonEllipse1);
+            this.Controls.Add(this.btnBrake);
             this.Controls.Add(this.gbDataView);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.listData);
@@ -970,7 +995,9 @@
         private System.Windows.Forms.CheckBox cbAccX;
         private System.Windows.Forms.ColumnHeader AccY;
         private System.Windows.Forms.ColumnHeader AccZ;
-        private ButtonEllipse buttonEllipse1;
+        private ButtonEllipse btnBrake;
         private System.Windows.Forms.Button btnRstMcu;
+        private System.Windows.Forms.Label lbEncoderPulses;
+        private System.Windows.Forms.Label label12;
     }
 }

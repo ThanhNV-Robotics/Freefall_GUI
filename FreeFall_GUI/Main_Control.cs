@@ -66,6 +66,8 @@ namespace FreeFall_GUI
 
         float MotorSpeed; // Motor speed
         float SpdCommand; // Speed Command
+        int EncoderPulse;
+        private const int EncoderResolution = 2048; // Encoder Resolution
         float AccelerationX; // acclerometerX
         float AccelerationY;
         float AccelerationZ;
@@ -105,21 +107,14 @@ namespace FreeFall_GUI
                 ReceivedMessage = (ReceivedMessage.Replace("s", null)).Replace("e", null); // remove the character s in the string
                 // After remove 's' and 'e': functioncode/data1/data2
                 string[] ExtractReceivedMessage = ReceivedMessage.Split('/');
-
-                if (ExtractReceivedMessage[0] == "1") // Only the driver outputs
-                {
-                    if (uint.TryParse(ExtractReceivedMessage[1], out DriverOutput)) // Neu du lieu truyen len la speed
-                    {
-                        ShowDriverOutput(DriverOutput);
-                    }
-                }
                 if (ExtractReceivedMessage[0] == "2") // Only the speed data
                 {
                     try
                     {
                         MotorSpeed = float.Parse(ExtractReceivedMessage[1]);
-                        SpdCommand = float.Parse(ExtractReceivedMessage[2]);
+                        EncoderPulse = int.Parse(ExtractReceivedMessage[2]);
                         lbMotorSpeed.Text = ExtractReceivedMessage[1];
+                        lbEncoderPulses.Text = ExtractReceivedMessage[2];
                     }
                     catch { }                  
                 }
@@ -129,12 +124,21 @@ namespace FreeFall_GUI
                     {
                         //Console.WriteLine(ExtractReceivedMessage[1].ToString());
                         MotorSpeed = float.Parse(ExtractReceivedMessage[1]);
-                        SpdCommand = float.Parse(ExtractReceivedMessage[2]); // Speed command
+                        EncoderPulse = int.Parse(ExtractReceivedMessage[2]); // Speed command
                         DriverOutput = uint.Parse(ExtractReceivedMessage[3]);
                         //ShowDriverOutput(DriverOutput);
                         lbMotorSpeed.Text = ExtractReceivedMessage[1];
+                        lbEncoderPulses.Text = ExtractReceivedMessage[2];
                     }
                     catch { }
+                }
+            }
+            if (ReceivedMessage[0] == 'o') // Only the driver outputs
+            {
+                ReceivedMessage = (ReceivedMessage.Replace("o", null)).Replace("e", null);
+                if (uint.TryParse(ReceivedMessage, out DriverOutput)) // Neu du lieu truyen len la speed
+                {
+                    ShowDriverOutput(DriverOutput);
                 }
             }
             // An episode is completed
@@ -947,6 +951,11 @@ namespace FreeFall_GUI
         private void btnRstMcu_Click(object sender, EventArgs e)
         {
             SendCommand("17$");
+        }
+
+        private void buttonBrake_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

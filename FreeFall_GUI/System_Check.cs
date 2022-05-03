@@ -13,8 +13,8 @@ namespace FreeFall_GUI
 
     public partial class ParamSetting : Form
     {
-        private float AccelerationTime;
-        private float MaxSpeed;
+        private float DrumRadius;
+        private float MaxDistance;
         private float Kp;
         private float Ki;
         private float AccRef;
@@ -29,24 +29,24 @@ namespace FreeFall_GUI
         {
             InitializeComponent();
         }
-        public void SetParameters(float AccelerationTime, float MaxSpeed, float Kp, float Ki)
+        public void SetParameters(float DrumRadius, float MaxDistance, float Kp, float Ki)
         {
-            string Param2Send = "7" + "/" + AccelerationTime.ToString() + "/" + MaxSpeed.ToString() + "/" + Kp.ToString()+ "/" + Ki.ToString() + "$";
+            string Param2Send = "7" + "/" + DrumRadius.ToString() + "/" + MaxDistance.ToString() + "/" + Kp.ToString()+ "/" + Ki.ToString() + "$";
 
             _SendCommand(Param2Send); // 7 is the function code, means set params
         }
 
-        public void LoadSavedParams (float _AccelerationTime, float _MaxSpeed, float _Kp, float _Ki, float _AccRef, uint _SampleTime)
+        public void LoadSavedParams (float _DrumRadius, float _MaxDistance, float _Kp, float _Ki, float _AccRef, uint _SampleTime)
         {
-            AccelerationTime = _AccelerationTime;
-            MaxSpeed = _MaxSpeed;
+            DrumRadius = _DrumRadius;
+            MaxDistance = _MaxDistance;
             Kp = _Kp;
             Ki = _Ki;
             AccRef = _AccRef;
             SampleTime = _SampleTime;
 
-            txtAcclerationTime.Text = AccelerationTime.ToString();
-            txtMaxSpeed.Text = MaxSpeed.ToString();
+            txtDrumRadius.Text = DrumRadius.ToString();
+            txtMaxDistance.Text = MaxDistance.ToString();
             txtKp.Text = Kp.ToString();
             txtKi.Text = Ki.ToString();
             txtAccRef.Text = AccRef.ToString();
@@ -60,9 +60,9 @@ namespace FreeFall_GUI
                     MessageBox.Show("Saving Done!");
                     break;
                 case 11:
-                    if (AccelerationTime == Param)
+                    if (DrumRadius == Param)
                     {
-                        MessageBox.Show("Successfully Set Acceleration Time");
+                        MessageBox.Show("Successfully Set the Drum Radius");
                     }
                     else
                     {
@@ -70,9 +70,9 @@ namespace FreeFall_GUI
                     }
                     break;
                 case 12:
-                    if (MaxSpeed == Param)
+                    if (MaxDistance == Param)
                     {
-                        MessageBox.Show("Successfully Set MaxSpeed");
+                        MessageBox.Show("Successfully Set MaxDistance");
                     }
                     else
                     {
@@ -147,32 +147,30 @@ namespace FreeFall_GUI
             _SendCommand("10" + "$");
         }
 
-        private void btnAccTimeSet_Click(object sender, EventArgs e)
+        private void btnDrumRadiusSet_Click(object sender, EventArgs e)
         {
             try
             {
-                AccelerationTime = float.Parse(txtAcclerationTime.Text);
-                _SendCommand("11" + "/" + AccelerationTime.ToString() + "$");
+                DrumRadius = float.Parse(txtDrumRadius.Text);
+                _SendCommand("11" + "/" + DrumRadius.ToString() + "$");
             }
             catch
             {
                 MessageBox.Show("Invalid Input Type");
             }
         }
-
-        private void btnMaxSpdSet_Click(object sender, EventArgs e)
+        private void btnMaxDistSet_Click(object sender, EventArgs e)
         {
             try
             {
-                MaxSpeed = float.Parse(txtMaxSpeed.Text);
-                _SendCommand("12" + "/" + MaxSpeed.ToString() + "$");
+                MaxDistance = float.Parse(txtMaxDistance.Text);
+                _SendCommand("12" + "/" + MaxDistance.ToString() + "$");
             }
             catch
             {
                 MessageBox.Show("Invalid Input Type");
             }
         }
-
         private void btnKpSet_Click(object sender, EventArgs e)
         {
             try
@@ -227,5 +225,7 @@ namespace FreeFall_GUI
                 MessageBox.Show("Invalid Input Type");
             }
         }
+
+       
     }
 }
