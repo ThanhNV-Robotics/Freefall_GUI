@@ -21,7 +21,7 @@ namespace FreeFall_GUI
         public Label CheckStatusLabel;
 
         private string ReceivedMessage;
-        private string MessageToWrite;
+
         private string AccelDataToSend;
 
         COM_Config _COM_Config = new COM_Config();
@@ -34,7 +34,7 @@ namespace FreeFall_GUI
         public delegate void SendData2MainControlForm(string data);
         public SendData2MainControlForm Pass2MainControl; // Create an instance 
         // Delegate to load the saved params to the ParamSetting Form
-        public delegate void LoadDataToParamSettingForm(float _AccelerationTime, float MaxSpeed, float kp, float Ki, float AccRef);
+        public delegate void LoadDataToParamSettingForm(float _AccelerationTime, float MaxSpeed, float kp, float Ki, float AccRef, uint SampleTime);
         public LoadDataToParamSettingForm LoadData; // creat an instance
         #endregion
 
@@ -53,24 +53,14 @@ namespace FreeFall_GUI
                 serialPort1.Open();
                 if (serialPort1.IsOpen)
                 {
-                    serialPort1.Write("6.0/0.0" + "$");
+                    serialPort1.Write("6/0" + "$");
                     lb_com_status.Text = serialPort1.PortName + " is connected";
                     lb_com_status.BackColor = Color.Green;
                     timer1.Enabled = true;
                     gb_System_Check.Enabled = true;
                     btnTestCOM.Enabled = true;
                     btn_com_config.Enabled = false;
-                    
-                    /*serialPort1.WriteTimeout = 200;
-                    serialPort1.Write("Initializing"+"$");
-                    serialPort1.Write("Initializing"+"$");*/
-
                 }
-                //else
-                //{
-                //    lb_com_status.Text = serialPort1.PortName + "is connected";
-                //    lb_com_status.BackColor = Color.Red;
-                //}
             }
             catch (Exception err)
             {
@@ -213,7 +203,17 @@ namespace FreeFall_GUI
         #region Function
         public void SendMessage(string message) // Function to send a message to STM32
         {
-            MessageToWrite = message;
+            //MessageToWrite = message;
+            try
+            {
+                serialPort1.WriteTimeout = 500;
+                serialPort1.Write(message);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.ToString());
+            }
+            
         }
         public void SendAccZData(float AccZ)
         {
@@ -329,14 +329,12 @@ namespace FreeFall_GUI
             {
                 ReceivedMessage = (ReceivedMessage.Replace("r", null)).Replace("e", null); // remove the character s in the string
                 string[] RunningParamString = ReceivedMessage.Split('/'); // Split the string
-                float[] RunningParamInt = new float[5];
+                
                 try
                 {
-                    for (int i = 0; i < RunningParamInt.Length; i++)
-                    {
-                        RunningParamInt[i] = float.Parse(RunningParamString[i]);
-                    }
-                    _CheckRunningData(RunningParamInt[0], RunningParamInt[1], RunningParamInt[2], RunningParamInt[3], RunningParamInt[4]); // Check if setting is done or not
+                    uint ParamCode = uint.Parse(RunningParamString[0]);
+                    float Param = float.Parse(RunningParamString[1]);
+                    _CheckRunningData(ParamCode, Param); // Check if setting is done or not
                 }
                 catch (Exception)
                 {
@@ -347,14 +345,14 @@ namespace FreeFall_GUI
             {
                 ReceivedMessage = (ReceivedMessage.Replace("p", null)).Replace("e", null); // remove the character s in the string
                 string[] RunningParamString = ReceivedMessage.Split('/'); // Split the string
-                float[] RunningParamFloat = new float[5];
+                float[] RunningParamFloat = new float[6];
                 try
                 {
                     for (int i = 0; i < RunningParamFloat.Length; i++)
                     {
                         RunningParamFloat[i] = float.Parse(RunningParamString[i]);
                     }
-                    LoadData(RunningParamFloat[0], RunningParamFloat[1], RunningParamFloat[2], RunningParamFloat[3], RunningParamFloat[4]); // Load the data
+                    LoadData(RunningParamFloat[0], RunningParamFloat[1], RunningParamFloat[2], RunningParamFloat[3], RunningParamFloat[4], (uint)RunningParamFloat[5]); // Load the data
                 }
                 catch (Exception)
                 {
@@ -362,17 +360,17 @@ namespace FreeFall_GUI
                 }
             }
         }
-        public delegate void CheckRunningData(float AccelerationTime, float MaxSpeed, float Kp, float Ki, float AccRef);
+        public delegate void CheckRunningData(uint Code, float Param);
         public CheckRunningData _CheckRunningData;
         private void btn_check_start_Click(object sender, EventArgs e)
         {
-            ParamSetting _ParamSetting = new ParamSetting();
+            ParamSetting _ParamSetting = new ParamSetting(); // Create a new form
             _CheckRunningData = new CheckRunningData(_ParamSetting.CheckParams); // initialize the delegates
 
             // Assign the delegate to a function in Paramseting Form
             LoadData = new LoadDataToParamSettingForm(_ParamSetting.LoadSavedParams);
             _ParamSetting._SendCommand = new ParamSetting.SendCommand(SendMessage);
-
+            _ParamSetting._SetSampleTime = new ParamSetting.SetSampleTime(_MainCOntrol.SetSampleTime);
             _ParamSetting.Show();
             // Load the data at the beginning
             try
@@ -411,20 +409,6 @@ namespace FreeFall_GUI
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            if (MessageToWrite != null)
-            {
-                try
-                {
-                    serialPort1.WriteTimeout = 500;
-                    serialPort1.Write(MessageToWrite);
-                    MessageToWrite = null;
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Check the communication");
-                    //throw;
-                }
-            }
             if (AccelDataToSend != null)
             {
                 try

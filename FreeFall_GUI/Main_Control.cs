@@ -39,6 +39,7 @@ namespace FreeFall_GUI
         private bool CcwTorqueLimit;
         private bool CwTorqueLimit;
         private bool ZeroSpeedReach;
+        private bool ExternalBrake;
 
         private int TotalEpisodes;
         private int CurrentEpisode;
@@ -48,6 +49,9 @@ namespace FreeFall_GUI
         private bool WaitingBeforeRunning = false;
 
         private volatile int timercount; // to measure the timer counter
+
+        private int SampleTime = 50;
+
         double time;
 
         double TickStart;
@@ -163,6 +167,11 @@ namespace FreeFall_GUI
                     }
                 }
             }
+        }
+        public void SetSampleTime (int _SampleTime)
+        {
+            SampleTime = _SampleTime;
+            timer1.Interval = SampleTime;
         }
         private void ShowDriverOutput (uint DriverOutput) // Visual the driver's output
         {
@@ -370,7 +379,7 @@ namespace FreeFall_GUI
             DisableJogControl();
             TickStart = Environment.TickCount;
 
-            timer1.Interval = 50; //ms
+            timer1.Interval = SampleTime; //ms
             timer1.Enabled = false;
             ShowCurrentEpisodeLabel(CurrentEpisode,TotalEpisodes);
             //Initial output states color
@@ -727,7 +736,7 @@ namespace FreeFall_GUI
             GraphOn = false;
             //SendCommand("6/0" + "$"); // Stop transmit speed data;
             timer1.Enabled = false; // Stop receive speed data            
-            timer1.Interval = 50; //ms Sample time 
+            timer1.Interval = SampleTime; //ms Sample time 
             timercount = 0;
             time = 0;
 
@@ -868,10 +877,10 @@ namespace FreeFall_GUI
         }
         private void DisableJogControl()
         {
-            gbJogControl.Enabled = false;
-            btnMoveDown.Enabled = false;
-            btnSetJogSpeed.Enabled = false;
-            txtSetSpeed.Enabled = false;
+            //gbJogControl.Enabled = false;
+            btnMoveDown.Enabled = false; 
+            btnMoveUp.Enabled = false;
+            //txtSetSpeed.Enabled = false;
 
             btnMoveDown.BackColor = Color.LightGray;
             btnMoveUp.BackColor = Color.LightGray;
@@ -934,5 +943,10 @@ namespace FreeFall_GUI
             else AccZView = false;
         }
         #endregion
+
+        private void btnRstMcu_Click(object sender, EventArgs e)
+        {
+            SendCommand("17$");
+        }
     }
 }

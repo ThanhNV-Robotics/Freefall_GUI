@@ -48,7 +48,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnConsole = new System.Windows.Forms.Button();
             this.btnHideConsole = new System.Windows.Forms.Button();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.gb_System_Check.SuspendLayout();
             this.SuspendLayout();
@@ -253,12 +252,6 @@
             this.btnHideConsole.UseVisualStyleBackColor = true;
             this.btnHideConsole.Click += new System.EventHandler(this.btnHideConsole_Click);
             // 
-            // timer2
-            // 
-            this.timer2.Enabled = true;
-            this.timer2.Interval = 50;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -306,7 +299,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnConsole;
         private System.Windows.Forms.Button btnHideConsole;
-        private System.Windows.Forms.Timer timer2;
     }
 }
 

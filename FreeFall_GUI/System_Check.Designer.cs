@@ -134,6 +134,17 @@
             this.Unit = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lstParam = new System.Windows.Forms.ListView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnSampleTimeSet = new System.Windows.Forms.Button();
+            this.btnRefAccSet = new System.Windows.Forms.Button();
+            this.btnKiSet = new System.Windows.Forms.Button();
+            this.btnKpSet = new System.Windows.Forms.Button();
+            this.btnMaxSpdSet = new System.Windows.Forms.Button();
+            this.btnAccTimeSet = new System.Windows.Forms.Button();
+            this.txtSampleTime = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtAccRef = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtKp = new System.Windows.Forms.TextBox();
@@ -145,14 +156,11 @@
             this.txtMaxSpeed = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnLoad = new System.Windows.Forms.Button();
-            this.btnApply = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtAccRef = new System.Windows.Forms.TextBox();
+            this.btnSave = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // Register
@@ -220,18 +228,138 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnSampleTimeSet);
+            this.groupBox1.Controls.Add(this.btnRefAccSet);
+            this.groupBox1.Controls.Add(this.btnKiSet);
+            this.groupBox1.Controls.Add(this.btnKpSet);
+            this.groupBox1.Controls.Add(this.btnMaxSpdSet);
+            this.groupBox1.Controls.Add(this.btnAccTimeSet);
+            this.groupBox1.Controls.Add(this.txtSampleTime);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.groupBox4);
             this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Controls.Add(this.btnLoad);
-            this.groupBox1.Controls.Add(this.btnApply);
+            this.groupBox1.Controls.Add(this.btnSave);
             this.groupBox1.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.groupBox1.Location = new System.Drawing.Point(905, 12);
+            this.groupBox1.Location = new System.Drawing.Point(844, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(371, 394);
+            this.groupBox1.Size = new System.Drawing.Size(471, 451);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Running Params";
+            // 
+            // btnSampleTimeSet
+            // 
+            this.btnSampleTimeSet.AllowDrop = true;
+            this.btnSampleTimeSet.Location = new System.Drawing.Point(371, 344);
+            this.btnSampleTimeSet.Name = "btnSampleTimeSet";
+            this.btnSampleTimeSet.Size = new System.Drawing.Size(91, 29);
+            this.btnSampleTimeSet.TabIndex = 16;
+            this.btnSampleTimeSet.Text = "SET";
+            this.btnSampleTimeSet.UseVisualStyleBackColor = true;
+            this.btnSampleTimeSet.Click += new System.EventHandler(this.btnSampleTimeSet_Click);
+            // 
+            // btnRefAccSet
+            // 
+            this.btnRefAccSet.AllowDrop = true;
+            this.btnRefAccSet.Location = new System.Drawing.Point(371, 279);
+            this.btnRefAccSet.Name = "btnRefAccSet";
+            this.btnRefAccSet.Size = new System.Drawing.Size(91, 29);
+            this.btnRefAccSet.TabIndex = 15;
+            this.btnRefAccSet.Text = "SET";
+            this.btnRefAccSet.UseVisualStyleBackColor = true;
+            this.btnRefAccSet.Click += new System.EventHandler(this.btnRefAccSet_Click);
+            // 
+            // btnKiSet
+            // 
+            this.btnKiSet.AllowDrop = true;
+            this.btnKiSet.Location = new System.Drawing.Point(371, 205);
+            this.btnKiSet.Name = "btnKiSet";
+            this.btnKiSet.Size = new System.Drawing.Size(91, 29);
+            this.btnKiSet.TabIndex = 14;
+            this.btnKiSet.Text = "SET";
+            this.btnKiSet.UseVisualStyleBackColor = true;
+            this.btnKiSet.Click += new System.EventHandler(this.btnKiSet_Click);
+            // 
+            // btnKpSet
+            // 
+            this.btnKpSet.AllowDrop = true;
+            this.btnKpSet.Location = new System.Drawing.Point(371, 167);
+            this.btnKpSet.Name = "btnKpSet";
+            this.btnKpSet.Size = new System.Drawing.Size(91, 29);
+            this.btnKpSet.TabIndex = 13;
+            this.btnKpSet.Text = "SET";
+            this.btnKpSet.UseVisualStyleBackColor = true;
+            this.btnKpSet.Click += new System.EventHandler(this.btnKpSet_Click);
+            // 
+            // btnMaxSpdSet
+            // 
+            this.btnMaxSpdSet.AllowDrop = true;
+            this.btnMaxSpdSet.Location = new System.Drawing.Point(371, 98);
+            this.btnMaxSpdSet.Name = "btnMaxSpdSet";
+            this.btnMaxSpdSet.Size = new System.Drawing.Size(91, 29);
+            this.btnMaxSpdSet.TabIndex = 12;
+            this.btnMaxSpdSet.Text = "SET";
+            this.btnMaxSpdSet.UseVisualStyleBackColor = true;
+            this.btnMaxSpdSet.Click += new System.EventHandler(this.btnMaxSpdSet_Click);
+            // 
+            // btnAccTimeSet
+            // 
+            this.btnAccTimeSet.AllowDrop = true;
+            this.btnAccTimeSet.Location = new System.Drawing.Point(371, 63);
+            this.btnAccTimeSet.Name = "btnAccTimeSet";
+            this.btnAccTimeSet.Size = new System.Drawing.Size(91, 29);
+            this.btnAccTimeSet.TabIndex = 11;
+            this.btnAccTimeSet.Text = "SET";
+            this.btnAccTimeSet.UseVisualStyleBackColor = true;
+            this.btnAccTimeSet.Click += new System.EventHandler(this.btnAccTimeSet_Click);
+            // 
+            // txtSampleTime
+            // 
+            this.txtSampleTime.Location = new System.Drawing.Point(265, 344);
+            this.txtSampleTime.Name = "txtSampleTime";
+            this.txtSampleTime.Size = new System.Drawing.Size(100, 29);
+            this.txtSampleTime.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.Red;
+            this.label2.Location = new System.Drawing.Point(85, 354);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(171, 19);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Sample Time (ms)";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label4);
+            this.groupBox4.Controls.Add(this.txtAccRef);
+            this.groupBox4.ForeColor = System.Drawing.Color.Red;
+            this.groupBox4.Location = new System.Drawing.Point(10, 251);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(355, 72);
+            this.groupBox4.TabIndex = 10;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Reference Accel";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.Black;
+            this.label4.Location = new System.Drawing.Point(84, 38);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(160, 19);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Ref Acc (m/s^2)";
+            // 
+            // txtAccRef
+            // 
+            this.txtAccRef.Location = new System.Drawing.Point(255, 28);
+            this.txtAccRef.Name = "txtAccRef";
+            this.txtAccRef.Size = new System.Drawing.Size(100, 29);
+            this.txtAccRef.TabIndex = 6;
             // 
             // groupBox3
             // 
@@ -332,7 +460,7 @@
             // btnLoad
             // 
             this.btnLoad.AllowDrop = true;
-            this.btnLoad.Location = new System.Drawing.Point(274, 345);
+            this.btnLoad.Location = new System.Drawing.Point(371, 409);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(91, 36);
             this.btnLoad.TabIndex = 9;
@@ -340,45 +468,16 @@
             this.btnLoad.UseVisualStyleBackColor = true;
             this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
-            // btnApply
+            // btnSave
             // 
-            this.btnApply.AllowDrop = true;
-            this.btnApply.Location = new System.Drawing.Point(10, 345);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(91, 36);
-            this.btnApply.TabIndex = 5;
-            this.btnApply.Text = "Apply";
-            this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.label4);
-            this.groupBox4.Controls.Add(this.txtAccRef);
-            this.groupBox4.ForeColor = System.Drawing.Color.Red;
-            this.groupBox4.Location = new System.Drawing.Point(10, 251);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(355, 72);
-            this.groupBox4.TabIndex = 10;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Reference Accel";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(84, 38);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(160, 19);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Ref Acc (m/s^2)";
-            // 
-            // txtAccRef
-            // 
-            this.txtAccRef.Location = new System.Drawing.Point(255, 28);
-            this.txtAccRef.Name = "txtAccRef";
-            this.txtAccRef.Size = new System.Drawing.Size(100, 29);
-            this.txtAccRef.TabIndex = 6;
+            this.btnSave.AllowDrop = true;
+            this.btnSave.Location = new System.Drawing.Point(10, 409);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(91, 36);
+            this.btnSave.TabIndex = 5;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click_1);
             // 
             // ParamSetting
             // 
@@ -393,12 +492,13 @@
             this.Text = "Parameter Setting";
             this.Load += new System.EventHandler(this.System_Check_Load);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -414,7 +514,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtMaxSpeed;
         private System.Windows.Forms.TextBox txtAcclerationTime;
-        private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnLoad;
@@ -427,5 +527,13 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtAccRef;
+        private System.Windows.Forms.TextBox txtSampleTime;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnSampleTimeSet;
+        private System.Windows.Forms.Button btnRefAccSet;
+        private System.Windows.Forms.Button btnKiSet;
+        private System.Windows.Forms.Button btnKpSet;
+        private System.Windows.Forms.Button btnMaxSpdSet;
+        private System.Windows.Forms.Button btnAccTimeSet;
     }
 }
