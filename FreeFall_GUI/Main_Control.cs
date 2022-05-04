@@ -39,7 +39,8 @@ namespace FreeFall_GUI
         private bool CcwTorqueLimit;
         private bool CwTorqueLimit;
         private bool ZeroSpeedReach;
-        private bool ExternalBrake;
+        private bool ExternalBrakeFlag;
+        private bool ServoEnableFag;
 
         private int TotalEpisodes;
         private int CurrentEpisode;
@@ -264,20 +265,6 @@ namespace FreeFall_GUI
             Console.WriteLine("> Emergency Stop");
         }
 
-        private void rdPositionMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rdPositionMode.Checked) // If Position mode is selected
-            {
-                Console.WriteLine("> Position Mode");
-                SendCommand(PositionMode + "$");
-            }
-            else
-            {
-                Console.WriteLine("> Speed Mode");
-                SendCommand(SpeedMode + "$");
-            }
-        }
-
         private void btnMoveUp_MouseDown(object sender, MouseEventArgs e)
         {
             Console.WriteLine("> Jog Move Up");
@@ -380,7 +367,7 @@ namespace FreeFall_GUI
         {
             GraphInit();
             ProgressBarInit();
-            DisableJogControl();
+            //DisableJogControl();
             TickStart = Environment.TickCount;
 
             timer1.Interval = SampleTime; //ms
@@ -956,6 +943,30 @@ namespace FreeFall_GUI
         private void buttonBrake_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void rjToggleButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (toggleServoEnable.CheckState == CheckState.Checked) // Servo Enable ON
+            {
+                SendCommand("18/1$");
+            }
+            else
+            {
+                SendCommand("18/1$");
+            }
+        }
+
+        private void toggleControlMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (toggleControlMode.CheckState == CheckState.Checked) // Position Control Mode
+            {
+                SendCommand(PositionMode + "$");
+            }
+            else
+            {
+                SendCommand(SpeedMode + "$");
+            }
         }
     }
 }
