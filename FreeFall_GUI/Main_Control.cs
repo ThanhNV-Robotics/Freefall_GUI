@@ -41,6 +41,7 @@ namespace FreeFall_GUI
         private bool ZeroSpeedReach;
         private bool ExternalBrakeFlag;
         private bool ServoEnableFag;
+        private bool PositionControlMode;
 
         private int TotalEpisodes;
         private int CurrentEpisode;
@@ -73,6 +74,7 @@ namespace FreeFall_GUI
         float AccelerationY;
         float AccelerationZ;
         uint DriverOutput;
+        uint JogSpeed;
 
         private GraphPane MyPane = new GraphPane();
         private bool IsRunning = false;
@@ -291,19 +293,36 @@ namespace FreeFall_GUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int RegisterAddress = 401; //  P4-02, Speed Command
-            float value;
-            try
+            if (PositionControlMode)
             {
-                value = float.Parse(txtSetSpeed.Text);
-                string Command = "5" + "/" + "1" + "/" + RegisterAddress.ToString() + "/" + value.ToString() + "$";                
-                SendCommand(Command);
-                Console.WriteLine("> Set Speed: " + Command);
+                try
+                {
+                    JogSpeed = uint.Parse(txtSetSpeed.Text);
+                    string Command = "5" + "/" +  JogSpeed.ToString() + "$";
+                    SendCommand(Command);
+                    Console.WriteLine("> Set Speed: " + Command);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Invalid Input data type");
+                }
             }
-            catch (Exception)
+            else
             {
-                MessageBox.Show("Invalid Input data type");
-            }
+                int RegisterAddress = 401; //  P4-02, Speed Command
+                float value;
+                try
+                {
+                    value = float.Parse(txtSetSpeed.Text);
+                    string Command = "5" + "/" + "1" + "/" + RegisterAddress.ToString() + "/" + value.ToString() + "$";
+                    SendCommand(Command);
+                    Console.WriteLine("> Set Speed: " + Command);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Invalid Input data type");
+                }
+            }            
         }
         private void GraphInit()
         {
@@ -369,6 +388,10 @@ namespace FreeFall_GUI
             ProgressBarInit();
             //DisableJogControl();
             TickStart = Environment.TickCount;
+
+            // Consider to get the driver status from the board
+            toggleControlMode.CheckState = CheckState.Checked;
+            PositionControlMode = true;
 
             timer1.Interval = SampleTime; //ms
             timer1.Enabled = false;
@@ -963,7 +986,7 @@ namespace FreeFall_GUI
             {
                 SendCommand(PositionMode + "$");
             }
-            else
+            else // Speed Mode
             {
                 SendCommand(SpeedMode + "$");
             }
