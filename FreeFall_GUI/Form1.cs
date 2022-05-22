@@ -207,7 +207,7 @@ namespace FreeFall_GUI
             try
             {
                 serialPort1.WriteTimeout = 500;
-                serialPort1.Write(message);
+                serialPort1.Write(message + "$");
             }
             catch (Exception x)
             {
@@ -217,8 +217,8 @@ namespace FreeFall_GUI
         }
         public void SendAccZData(float AccZ)
         {
-            string AccData2Send = "9" + "/" + AccZ.ToString() +"$";
-            serialPort1.Write(AccData2Send); // r is the funtion code
+            string AccData2Send = "9" + "/" + AccZ.ToString();
+            SendMessage(AccData2Send); // r is the funtion code
         } 
         public void SetCOMParam (int _BauRate, int _DataBits, string _StopBits, string _Parity)
         {
@@ -327,19 +327,26 @@ namespace FreeFall_GUI
             
             if (ReceivedMessage[0] == 'r') // r meean running parameters, check the running parameters
             {
-                ReceivedMessage = (ReceivedMessage.Replace("r", null)).Replace("e", null); // remove the character s in the string
-                string[] RunningParamString = ReceivedMessage.Split('/'); // Split the string
-                
-                try
+                if (_CheckRunningData == null)
                 {
-                    uint ParamCode = uint.Parse(RunningParamString[0]);
-                    float Param = float.Parse(RunningParamString[1]);
-                    _CheckRunningData(ParamCode, Param); // Check if setting is done or not
+                    return;
                 }
-                catch (Exception)
+                else
                 {
-                  
-                }                
+                    ReceivedMessage = (ReceivedMessage.Replace("r", null)).Replace("e", null); // remove the character s in the string
+                    string[] RunningParamString = ReceivedMessage.Split('/'); // Split the string
+
+                    try
+                    {
+                        uint ParamCode = uint.Parse(RunningParamString[0]);
+                        float Param = float.Parse(RunningParamString[1]);
+                        _CheckRunningData(ParamCode, Param); // Check if setting is done or not
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }                                
             }
             if (ReceivedMessage[0] == 'p') // Load running (controller params)
             {

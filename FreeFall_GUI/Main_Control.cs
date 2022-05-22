@@ -147,7 +147,7 @@ namespace FreeFall_GUI
             // An episode is completed
             if (ReceivedMessage[0] == '$') // $ means stm32 completes an episode
             {
-                if (btnStart.Text == "STOP") // if the system is running
+                if (btnStartDropping.Text == "STOP") // if the system is running
                 {
                     ShowCurrentEpisodeLabel(CurrentEpisode + 1, TotalEpisodes);
                     CurrentEpisode++;
@@ -162,8 +162,8 @@ namespace FreeFall_GUI
                     {
                         CurrentEpisode = 0;
                         ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
-                        btnStart.Text = "START";
-                        btnStart.BackColor = Color.Lime;
+                        btnStartDropping.Text = "START";
+                        btnStartDropping.BackColor = Color.Lime;
                         StartWaitingFlag = false; // reset flag
                         WaitingCount = 0; // reset timer count
 
@@ -172,6 +172,22 @@ namespace FreeFall_GUI
                         MessageBox.Show("Running completed");
                         progressBar.Visible = false;                        
                     }
+                }
+            }
+            if (ReceivedMessage[0] == 'j') // Check setting jog speed
+            {
+                ReceivedMessage = (ReceivedMessage.Replace("j", null)).Replace("e", null);
+                try
+                {
+                    uint SettingJogSpeed = uint.Parse(ReceivedMessage);
+                    if (SettingJogSpeed == JogSpeed) // Setting done
+                    {
+                        MessageBox.Show("Setting done");
+                    }
+                }
+                catch (Exception)
+                {
+
                 }
             }
         }
@@ -229,22 +245,22 @@ namespace FreeFall_GUI
         private void btnStop_Click(object sender, EventArgs e)
         {
             Console.WriteLine("> Stop");
-            SendCommand(STOP + "$");
+            SendCommand(STOP);
         }
 
         private void btnResetAlarm_Click(object sender, EventArgs e)
         {
             Console.WriteLine("> Alarm Reset");
-            SendCommand(AlarmReset + "$");
+            SendCommand(AlarmReset);
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
+        private void btnStartDropping_Click(object sender, EventArgs e)
         {
             IsRunning = !IsRunning;
             if (IsRunning) // if is not running > Start running
             {
-                btnStart.BackColor = Color.Orange;
-                btnStart.Text = "STOP";
+                btnStartDropping.BackColor = Color.Orange;
+                btnStartDropping.Text = "STOP";
                 
                 progressBar.Visible = true;
                 TurnOnGraph(); // Turn on the graph
@@ -252,9 +268,9 @@ namespace FreeFall_GUI
             }
             else // If it is running > Stop running
             {
-                btnStart.BackColor = Color.Lime;
-                btnStart.Text = "START";               
-                SendCommand(StopRunning + "$");
+                btnStartDropping.BackColor = Color.Lime;
+                btnStartDropping.Text = "START";               
+                SendCommand(StopRunning);
                 ResetGraph();
                 ProgressBarInit();
             }
@@ -263,32 +279,32 @@ namespace FreeFall_GUI
 
         private void btnEstop_Click(object sender, EventArgs e)
         {
-            SendCommand(ESTOP + "$");
+            SendCommand(ESTOP);
             Console.WriteLine("> Emergency Stop");
         }
 
         private void btnMoveUp_MouseDown(object sender, MouseEventArgs e)
         {
             Console.WriteLine("> Jog Move Up");
-            SendCommand(JogUp + "$");
+            SendCommand(JogUp  );
         }
 
         private void btnMoveUp_MouseUp(object sender, MouseEventArgs e)
         {
             Console.WriteLine("> Stop");
-            SendCommand(STOP + "$");
+            SendCommand(STOP  );
         }
 
         private void btnMoveDown_MouseDown(object sender, MouseEventArgs e)
         {
             Console.WriteLine("> Jog Move Down");
-            SendCommand(JogDown + "$");
+            SendCommand(JogDown  );
         }
 
         private void btnMoveDown_MouseUp(object sender, MouseEventArgs e)
         {
             Console.WriteLine("> Stop");
-            SendCommand(STOP + "$");
+            SendCommand(STOP  );
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -298,7 +314,7 @@ namespace FreeFall_GUI
                 try
                 {
                     JogSpeed = uint.Parse(txtSetSpeed.Text);
-                    string Command = "5" + "/" +  JogSpeed.ToString() + "$";
+                    string Command = "5" + "/" +  JogSpeed.ToString()  ;
                     SendCommand(Command);
                     Console.WriteLine("> Set Speed: " + Command);
                 }
@@ -314,7 +330,7 @@ namespace FreeFall_GUI
                 try
                 {
                     value = float.Parse(txtSetSpeed.Text);
-                    string Command = "5" + "/" + "1" + "/" + RegisterAddress.ToString() + "/" + value.ToString() + "$";
+                    string Command = "5" + "/" + "1" + "/" + RegisterAddress.ToString() + "/" + value.ToString()  ;
                     SendCommand(Command);
                     Console.WriteLine("> Set Speed: " + Command);
                 }
@@ -688,7 +704,7 @@ namespace FreeFall_GUI
             {
                 GraphOn = true;
                 btnGraphOn.Text = "Graph OFF";
-                SendCommand("6/1" + "$"); // command to turn on
+                SendCommand("6/1"  ); // command to turn on
                 timer1.Enabled = true;
                 TickStart = Environment.TickCount;
                 if (SpeedGraph.GraphPane.CurveList.Count <= 0) // Neu chua co duong Curve thi khoi tao
@@ -712,11 +728,11 @@ namespace FreeFall_GUI
             timer1.Enabled = false;
             GraphOn = false;
             btnGraphOn.Text = "Graph ON";
-            SendCommand("6/0" + "$");
+            SendCommand("6/0"  );
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //SendCommand("12" + "$"); // 12 means request StE03 = Motor Speed
+            //SendCommand("12"  ); // 12 means request StE03 = Motor Speed
             timercount++;
             time = (timercount * timer1.Interval) / 1000.0;  // to seconds
             Draw(time, MotorSpeed, SpdCommand, AccelerationX, AccelerationY, AccelerationZ);
@@ -730,7 +746,7 @@ namespace FreeFall_GUI
                 {
                     StartWaitingFlag = false;
                     WaitingCount = 0;
-                    SendCommand(StartRunning + "$"); // Send command to STM32 to run next episode
+                    SendCommand(StartRunning  ); // Send command to STM32 to run next episode
                 }
             }
             if (WaitingBeforeRunning)
@@ -740,7 +756,7 @@ namespace FreeFall_GUI
                 {
                     WaitingBeforeRunning = false;
                     CountBeforeRunning = 0;
-                    SendCommand(StartRunning + "$"); // Send command to start running
+                    SendCommand(StartRunning); // Send command to start running
                 }                
             }
         }
@@ -748,13 +764,13 @@ namespace FreeFall_GUI
         {
             btnGraphOn.Text = "Graph ON";
             GraphOn = false;
-            //SendCommand("6/0" + "$"); // Stop transmit speed data;
+            //SendCommand("6/0" ); // Stop transmit speed data;
             timer1.Enabled = false; // Stop receive speed data            
             timer1.Interval = SampleTime; //ms Sample time 
             timercount = 0;
             time = 0;
 
-            SendCommand("6/0" + "$"); // turn off receiving
+            SendCommand("6/0" ); // turn off receiving
 
             SpeedGraph.GraphPane.CurveList.Clear(); // Xoa do thi
 
@@ -827,7 +843,7 @@ namespace FreeFall_GUI
             if (Response == DialogResult.OK)
             {
                 Console.WriteLine("> Emergency Stop");
-                SendCommand(ESTOP + "$");
+                SendCommand(ESTOP );
                 ServerOff();
             }
             else
@@ -840,11 +856,11 @@ namespace FreeFall_GUI
         {
             if (cbReadOutputs.CheckState == CheckState.Checked) // request reading output data
             {
-                SendCommand("8/1" + "$"); // 8/1 = request output data
+                SendCommand("8/1" ); // 8/1 = request output data
             }
             else
             {
-                SendCommand("8/0" + "$"); // 8/1 = stop Reading output data
+                SendCommand("8/0" ); // 8/1 = stop Reading output data
                 lb_Type.BackColor = Color.Gray;
 
                 lbBrake.BackColor = Color.Gray;
@@ -869,7 +885,7 @@ namespace FreeFall_GUI
         {
             if (int.TryParse(txtTotalEpisodes.Text, out TotalEpisodes))
             {
-                SendCommand("9" + "/" + TotalEpisodes.ToString() + "$");
+                SendCommand("9" + "/" + TotalEpisodes.ToString() );
                 // 9 is the function code indicates setting the total number of episodes.               
                 progressBar.Maximum = TotalEpisodes;
                 ShowCurrentEpisodeLabel(CurrentEpisode,TotalEpisodes);
@@ -904,6 +920,7 @@ namespace FreeFall_GUI
         {
             gbJogControl.Enabled = true;
             btnMoveDown.Enabled = true;
+            btnMoveUp.Enabled = true;
             btnSetJogSpeed.Enabled = true;
             txtSetSpeed.Enabled = true;
 
@@ -960,23 +977,18 @@ namespace FreeFall_GUI
 
         private void btnRstMcu_Click(object sender, EventArgs e)
         {
-            SendCommand("17$");
-        }
-
-        private void buttonBrake_Click(object sender, EventArgs e)
-        {
-
+            SendCommand("17");
         }
 
         private void rjToggleButton1_CheckedChanged(object sender, EventArgs e)
         {
             if (toggleServoEnable.CheckState == CheckState.Checked) // Servo Enable ON
             {
-                SendCommand("18/1$");
+                SendCommand("18/1");
             }
             else
             {
-                SendCommand("18/1$");
+                SendCommand("18/0");
             }
         }
 
@@ -984,12 +996,113 @@ namespace FreeFall_GUI
         {
             if (toggleControlMode.CheckState == CheckState.Checked) // Position Control Mode
             {
-                SendCommand(PositionMode + "$");
+                SendCommand(PositionMode );
             }
             else // Speed Mode
             {
-                SendCommand(SpeedMode + "$");
+                SendCommand(SpeedMode );
             }
+        }
+
+        private void toglPF_CheckedChanged(object sender, EventArgs e)
+        {
+            if (toglPF.CheckState == CheckState.Checked)
+            {
+                SendCommand("19/1" );
+            }
+            else
+            {
+                SendCommand("19/0" );
+            }            
+        }
+
+        private void toglPR_CheckedChanged(object sender, EventArgs e)
+        {
+            if (toglPR.CheckState == CheckState.Checked)
+            {
+                SendCommand("20/1" );
+            }
+            else
+            {
+                SendCommand("20/0" );
+            }
+        }
+
+        private void toglePLSCLR_CheckedChanged(object sender, EventArgs e)
+        {
+            if (toglePLSCLR.CheckState == CheckState.Checked)
+            {
+                SendCommand("21/1");
+            }
+            else
+            {
+                SendCommand("21/0");
+            }
+        }
+
+        private void togleSPLIM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (togleSPLIM.CheckState == CheckState.Checked)
+            {
+                SendCommand("22/1");
+            }
+            else
+            {
+                SendCommand("22/0");
+            }
+        }
+
+        private void toglePLSINH_CheckedChanged(object sender, EventArgs e)
+        {
+            if (toglePLSINH.CheckState == CheckState.Checked)
+            {
+                SendCommand("23/1");
+            }
+            else
+            {
+                SendCommand("23/0");
+            }
+        }
+
+        private void togleCWLIM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (togleCWLIM.CheckState == CheckState.Checked)
+            {
+                SendCommand("24/1");
+            }
+            else
+            {
+                SendCommand("24/0");
+            }
+        }
+
+        private void togleCCWLIM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (togleCCWLIM.CheckState == CheckState.Checked)
+            {
+                SendCommand("25/1");
+            }
+            else
+            {
+                SendCommand("25/0");
+            }
+        }
+
+        private void rjToggleButton1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (togleDIR.CheckState == CheckState.Checked)
+            {
+                SendCommand("26/1");
+            }
+            else
+            {
+                SendCommand("26/0");
+            }
+        }
+
+        private void btnStartPulling_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
