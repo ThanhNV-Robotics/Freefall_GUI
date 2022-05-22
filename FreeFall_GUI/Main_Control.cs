@@ -890,6 +890,7 @@ namespace FreeFall_GUI
         {
             gbJogControl.Enabled = true;
             btnMoveDown.Enabled = true;
+            btnMoveUp.Enabled = true;
             btnSetJogSpeed.Enabled = true;
             txtSetSpeed.Enabled = true;
 
