@@ -1107,5 +1107,15 @@ namespace FreeFall_GUI
         {
 
         }
+
+        private void btnMoveDown_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnMoveUp_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

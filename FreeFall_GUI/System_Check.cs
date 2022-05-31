@@ -216,16 +216,13 @@ namespace FreeFall_GUI
         {
             try
             {
-                SampleTime = uint.Parse(txtSampleTime.Text);
-                _SetSampleTime((int)SampleTime); // Set Sample Time for data recording => MainControl form, timer1 interval
+                SampleTime = uint.Parse(txtSampleTime.Text);                
                 _SendCommand("16" + "/" + SampleTime.ToString() + "$");
             }
             catch
             {
                 MessageBox.Show("Invalid Input Type");
             }
-        }
-
-       
+        }       
     }
 }

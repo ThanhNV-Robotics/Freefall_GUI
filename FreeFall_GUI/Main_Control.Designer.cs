@@ -58,12 +58,22 @@
             this.labelCcwTorqueLim = new System.Windows.Forms.Label();
             this.labelAlarm = new System.Windows.Forms.Label();
             this.labelTorqueLimit = new System.Windows.Forms.Label();
+            this.lbZeroSpeedReach = new FreeFall_GUI.Elip_Label();
+            this.lbCwTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbCcwTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbAlarm = new FreeFall_GUI.Elip_Label();
+            this.lbTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbSpeedReach = new FreeFall_GUI.Elip_Label();
+            this.lbReady = new FreeFall_GUI.Elip_Label();
+            this.lbBrake = new FreeFall_GUI.Elip_Label();
+            this.lb_Type = new FreeFall_GUI.Elip_Label();
             this.lbReach = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.toggleControlMode = new FreeFall_GUI.RJControls.RJToggleButton();
             this.label13 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.txtTotalEpisodes = new System.Windows.Forms.TextBox();
@@ -103,30 +113,20 @@
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.toglPR = new FreeFall_GUI.RJControls.RJToggleButton();
+            this.toglPF = new FreeFall_GUI.RJControls.RJToggleButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.btnStartPulling = new System.Windows.Forms.Button();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
             this.togleDIR = new FreeFall_GUI.RJControls.RJToggleButton();
             this.toglePLSCLR = new FreeFall_GUI.RJControls.RJToggleButton();
             this.togleSPLIM = new FreeFall_GUI.RJControls.RJToggleButton();
             this.togleCCWLIM = new FreeFall_GUI.RJControls.RJToggleButton();
             this.togleCWLIM = new FreeFall_GUI.RJControls.RJToggleButton();
             this.toglePLSINH = new FreeFall_GUI.RJControls.RJToggleButton();
-            this.toglPR = new FreeFall_GUI.RJControls.RJToggleButton();
-            this.toglPF = new FreeFall_GUI.RJControls.RJToggleButton();
+            this.label20 = new System.Windows.Forms.Label();
+            this.btnStartPulling = new System.Windows.Forms.Button();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
             this.toggleServoEnable = new FreeFall_GUI.RJControls.RJToggleButton();
-            this.toggleControlMode = new FreeFall_GUI.RJControls.RJToggleButton();
-            this.lbZeroSpeedReach = new FreeFall_GUI.Elip_Label();
-            this.lbCwTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbCcwTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbAlarm = new FreeFall_GUI.Elip_Label();
-            this.lbTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbSpeedReach = new FreeFall_GUI.Elip_Label();
-            this.lbReady = new FreeFall_GUI.Elip_Label();
-            this.lbBrake = new FreeFall_GUI.Elip_Label();
-            this.lb_Type = new FreeFall_GUI.Elip_Label();
             this.btnEstop = new FreeFall_GUI.ButtonEllipse();
             this.gbJogControl.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -165,6 +165,7 @@
             this.btnMoveUp.Size = new System.Drawing.Size(63, 78);
             this.btnMoveUp.TabIndex = 4;
             this.btnMoveUp.UseVisualStyleBackColor = false;
+            this.btnMoveUp.Click += new System.EventHandler(this.btnMoveUp_Click);
             this.btnMoveUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseDown);
             this.btnMoveUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseUp);
             // 
@@ -179,6 +180,7 @@
             this.btnMoveDown.Size = new System.Drawing.Size(63, 78);
             this.btnMoveDown.TabIndex = 5;
             this.btnMoveDown.UseVisualStyleBackColor = false;
+            this.btnMoveDown.Click += new System.EventHandler(this.btnMoveDown_Click);
             this.btnMoveDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseDown);
             this.btnMoveDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseUp);
             // 
@@ -485,6 +487,97 @@
             this.labelTorqueLimit.TabIndex = 21;
             this.labelTorqueLimit.Text = "Torque Limit";
             // 
+            // lbZeroSpeedReach
+            // 
+            this.lbZeroSpeedReach.AutoEllipsis = true;
+            this.lbZeroSpeedReach.BackColor = System.Drawing.Color.Gray;
+            this.lbZeroSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbZeroSpeedReach.Location = new System.Drawing.Point(9, 369);
+            this.lbZeroSpeedReach.Name = "lbZeroSpeedReach";
+            this.lbZeroSpeedReach.Size = new System.Drawing.Size(31, 31);
+            this.lbZeroSpeedReach.TabIndex = 20;
+            // 
+            // lbCwTorqueLimit
+            // 
+            this.lbCwTorqueLimit.AutoEllipsis = true;
+            this.lbCwTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbCwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbCwTorqueLimit.Location = new System.Drawing.Point(9, 327);
+            this.lbCwTorqueLimit.Name = "lbCwTorqueLimit";
+            this.lbCwTorqueLimit.Size = new System.Drawing.Size(31, 31);
+            this.lbCwTorqueLimit.TabIndex = 19;
+            // 
+            // lbCcwTorqueLimit
+            // 
+            this.lbCcwTorqueLimit.AutoEllipsis = true;
+            this.lbCcwTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbCcwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbCcwTorqueLimit.Location = new System.Drawing.Point(9, 282);
+            this.lbCcwTorqueLimit.Name = "lbCcwTorqueLimit";
+            this.lbCcwTorqueLimit.Size = new System.Drawing.Size(31, 31);
+            this.lbCcwTorqueLimit.TabIndex = 18;
+            // 
+            // lbAlarm
+            // 
+            this.lbAlarm.AutoEllipsis = true;
+            this.lbAlarm.BackColor = System.Drawing.Color.Gray;
+            this.lbAlarm.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbAlarm.Location = new System.Drawing.Point(9, 237);
+            this.lbAlarm.Name = "lbAlarm";
+            this.lbAlarm.Size = new System.Drawing.Size(31, 31);
+            this.lbAlarm.TabIndex = 17;
+            // 
+            // lbTorqueLimit
+            // 
+            this.lbTorqueLimit.AutoEllipsis = true;
+            this.lbTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbTorqueLimit.Location = new System.Drawing.Point(9, 195);
+            this.lbTorqueLimit.Name = "lbTorqueLimit";
+            this.lbTorqueLimit.Size = new System.Drawing.Size(31, 31);
+            this.lbTorqueLimit.TabIndex = 16;
+            // 
+            // lbSpeedReach
+            // 
+            this.lbSpeedReach.AutoEllipsis = true;
+            this.lbSpeedReach.BackColor = System.Drawing.Color.Gray;
+            this.lbSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbSpeedReach.Location = new System.Drawing.Point(9, 154);
+            this.lbSpeedReach.Name = "lbSpeedReach";
+            this.lbSpeedReach.Size = new System.Drawing.Size(31, 31);
+            this.lbSpeedReach.TabIndex = 15;
+            // 
+            // lbReady
+            // 
+            this.lbReady.AutoEllipsis = true;
+            this.lbReady.BackColor = System.Drawing.Color.Gray;
+            this.lbReady.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbReady.Location = new System.Drawing.Point(9, 113);
+            this.lbReady.Name = "lbReady";
+            this.lbReady.Size = new System.Drawing.Size(31, 31);
+            this.lbReady.TabIndex = 14;
+            this.lbReady.BackColorChanged += new System.EventHandler(this.lbReady_BackColorChanged);
+            // 
+            // lbBrake
+            // 
+            this.lbBrake.AutoEllipsis = true;
+            this.lbBrake.BackColor = System.Drawing.Color.Gray;
+            this.lbBrake.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbBrake.Location = new System.Drawing.Point(9, 69);
+            this.lbBrake.Name = "lbBrake";
+            this.lbBrake.Size = new System.Drawing.Size(31, 31);
+            this.lbBrake.TabIndex = 13;
+            // 
+            // lb_Type
+            // 
+            this.lb_Type.AutoEllipsis = true;
+            this.lb_Type.BackColor = System.Drawing.Color.Gray;
+            this.lb_Type.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lb_Type.Location = new System.Drawing.Point(9, 26);
+            this.lb_Type.Name = "lb_Type";
+            this.lb_Type.Size = new System.Drawing.Size(31, 31);
+            this.lb_Type.TabIndex = 12;
+            // 
             // lbReach
             // 
             this.lbReach.AutoSize = true;
@@ -532,7 +625,7 @@
             this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox3.ForeColor = System.Drawing.Color.Red;
-            this.groupBox3.Location = new System.Drawing.Point(12, 448);
+            this.groupBox3.Location = new System.Drawing.Point(12, 451);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(382, 67);
             this.groupBox3.TabIndex = 9;
@@ -549,6 +642,22 @@
             this.label14.Size = new System.Drawing.Size(138, 19);
             this.label14.TabIndex = 43;
             this.label14.Text = "Position Mode";
+            // 
+            // toggleControlMode
+            // 
+            this.toggleControlMode.Checked = true;
+            this.toggleControlMode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toggleControlMode.Location = new System.Drawing.Point(135, 25);
+            this.toggleControlMode.MinimumSize = new System.Drawing.Size(45, 22);
+            this.toggleControlMode.Name = "toggleControlMode";
+            this.toggleControlMode.OffBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.toggleControlMode.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.toggleControlMode.OnBackColor = System.Drawing.Color.CornflowerBlue;
+            this.toggleControlMode.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.toggleControlMode.Size = new System.Drawing.Size(93, 36);
+            this.toggleControlMode.TabIndex = 41;
+            this.toggleControlMode.UseVisualStyleBackColor = true;
+            this.toggleControlMode.CheckedChanged += new System.EventHandler(this.toggleControlMode_CheckedChanged);
             // 
             // label13
             // 
@@ -942,6 +1051,34 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pulse Test";
             // 
+            // toglPR
+            // 
+            this.toglPR.Location = new System.Drawing.Point(105, 53);
+            this.toglPR.MinimumSize = new System.Drawing.Size(45, 22);
+            this.toglPR.Name = "toglPR";
+            this.toglPR.OffBackColor = System.Drawing.Color.Gray;
+            this.toglPR.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.toglPR.OnBackColor = System.Drawing.Color.MediumSlateBlue;
+            this.toglPR.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.toglPR.Size = new System.Drawing.Size(68, 24);
+            this.toglPR.TabIndex = 43;
+            this.toglPR.UseVisualStyleBackColor = true;
+            this.toglPR.CheckedChanged += new System.EventHandler(this.toglPR_CheckedChanged);
+            // 
+            // toglPF
+            // 
+            this.toglPF.Location = new System.Drawing.Point(105, 21);
+            this.toglPF.MinimumSize = new System.Drawing.Size(45, 22);
+            this.toglPF.Name = "toglPF";
+            this.toglPF.OffBackColor = System.Drawing.Color.Gray;
+            this.toglPF.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.toglPF.OnBackColor = System.Drawing.Color.MediumSlateBlue;
+            this.toglPF.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.toglPF.Size = new System.Drawing.Size(68, 24);
+            this.toglPF.TabIndex = 40;
+            this.toglPF.UseVisualStyleBackColor = true;
+            this.toglPF.CheckedChanged += new System.EventHandler(this.toglPF_CheckedChanged);
+            // 
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.togleDIR);
@@ -962,49 +1099,6 @@
             this.groupBox6.TabIndex = 48;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Driver Input Control";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label20.Location = new System.Drawing.Point(55, 246);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(37, 19);
-            this.label20.TabIndex = 45;
-            this.label20.Text = "DIR";
-            // 
-            // btnStartPulling
-            // 
-            this.btnStartPulling.BackColor = System.Drawing.Color.Lime;
-            this.btnStartPulling.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStartPulling.BackgroundImage")));
-            this.btnStartPulling.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStartPulling.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnStartPulling.Location = new System.Drawing.Point(297, 830);
-            this.btnStartPulling.Name = "btnStartPulling";
-            this.btnStartPulling.Size = new System.Drawing.Size(101, 92);
-            this.btnStartPulling.TabIndex = 49;
-            this.btnStartPulling.UseVisualStyleBackColor = false;
-            this.btnStartPulling.Click += new System.EventHandler(this.btnStartPulling_Click);
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label23.Location = new System.Drawing.Point(151, 933);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(114, 15);
-            this.label23.TabIndex = 50;
-            this.label23.Text = "Start Dropping";
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label24.Location = new System.Drawing.Point(300, 933);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(98, 15);
-            this.label24.TabIndex = 51;
-            this.label24.Text = "Start Pulling";
             // 
             // togleDIR
             // 
@@ -1090,33 +1184,48 @@
             this.toglePLSINH.UseVisualStyleBackColor = true;
             this.toglePLSINH.CheckedChanged += new System.EventHandler(this.toglePLSINH_CheckedChanged);
             // 
-            // toglPR
+            // label20
             // 
-            this.toglPR.Location = new System.Drawing.Point(105, 53);
-            this.toglPR.MinimumSize = new System.Drawing.Size(45, 22);
-            this.toglPR.Name = "toglPR";
-            this.toglPR.OffBackColor = System.Drawing.Color.Gray;
-            this.toglPR.OffToggleColor = System.Drawing.Color.Gainsboro;
-            this.toglPR.OnBackColor = System.Drawing.Color.MediumSlateBlue;
-            this.toglPR.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.toglPR.Size = new System.Drawing.Size(68, 24);
-            this.toglPR.TabIndex = 43;
-            this.toglPR.UseVisualStyleBackColor = true;
-            this.toglPR.CheckedChanged += new System.EventHandler(this.toglPR_CheckedChanged);
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label20.Location = new System.Drawing.Point(55, 246);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(37, 19);
+            this.label20.TabIndex = 45;
+            this.label20.Text = "DIR";
             // 
-            // toglPF
+            // btnStartPulling
             // 
-            this.toglPF.Location = new System.Drawing.Point(105, 21);
-            this.toglPF.MinimumSize = new System.Drawing.Size(45, 22);
-            this.toglPF.Name = "toglPF";
-            this.toglPF.OffBackColor = System.Drawing.Color.Gray;
-            this.toglPF.OffToggleColor = System.Drawing.Color.Gainsboro;
-            this.toglPF.OnBackColor = System.Drawing.Color.MediumSlateBlue;
-            this.toglPF.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.toglPF.Size = new System.Drawing.Size(68, 24);
-            this.toglPF.TabIndex = 40;
-            this.toglPF.UseVisualStyleBackColor = true;
-            this.toglPF.CheckedChanged += new System.EventHandler(this.toglPF_CheckedChanged);
+            this.btnStartPulling.BackColor = System.Drawing.Color.Lime;
+            this.btnStartPulling.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStartPulling.BackgroundImage")));
+            this.btnStartPulling.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStartPulling.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnStartPulling.Location = new System.Drawing.Point(297, 830);
+            this.btnStartPulling.Name = "btnStartPulling";
+            this.btnStartPulling.Size = new System.Drawing.Size(101, 92);
+            this.btnStartPulling.TabIndex = 49;
+            this.btnStartPulling.UseVisualStyleBackColor = false;
+            this.btnStartPulling.Click += new System.EventHandler(this.btnStartPulling_Click);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label23.Location = new System.Drawing.Point(151, 933);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(114, 15);
+            this.label23.TabIndex = 50;
+            this.label23.Text = "Start Dropping";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label24.Location = new System.Drawing.Point(300, 933);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(98, 15);
+            this.label24.TabIndex = 51;
+            this.label24.Text = "Start Pulling";
             // 
             // toggleServoEnable
             // 
@@ -1131,113 +1240,6 @@
             this.toggleServoEnable.TabIndex = 38;
             this.toggleServoEnable.UseVisualStyleBackColor = true;
             this.toggleServoEnable.CheckedChanged += new System.EventHandler(this.rjToggleButton1_CheckedChanged);
-            // 
-            // toggleControlMode
-            // 
-            this.toggleControlMode.Checked = true;
-            this.toggleControlMode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toggleControlMode.Location = new System.Drawing.Point(135, 25);
-            this.toggleControlMode.MinimumSize = new System.Drawing.Size(45, 22);
-            this.toggleControlMode.Name = "toggleControlMode";
-            this.toggleControlMode.OffBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.toggleControlMode.OffToggleColor = System.Drawing.Color.Gainsboro;
-            this.toggleControlMode.OnBackColor = System.Drawing.Color.CornflowerBlue;
-            this.toggleControlMode.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.toggleControlMode.Size = new System.Drawing.Size(93, 36);
-            this.toggleControlMode.TabIndex = 41;
-            this.toggleControlMode.UseVisualStyleBackColor = true;
-            this.toggleControlMode.CheckedChanged += new System.EventHandler(this.toggleControlMode_CheckedChanged);
-            // 
-            // lbZeroSpeedReach
-            // 
-            this.lbZeroSpeedReach.AutoEllipsis = true;
-            this.lbZeroSpeedReach.BackColor = System.Drawing.Color.Gray;
-            this.lbZeroSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbZeroSpeedReach.Location = new System.Drawing.Point(9, 369);
-            this.lbZeroSpeedReach.Name = "lbZeroSpeedReach";
-            this.lbZeroSpeedReach.Size = new System.Drawing.Size(31, 31);
-            this.lbZeroSpeedReach.TabIndex = 20;
-            // 
-            // lbCwTorqueLimit
-            // 
-            this.lbCwTorqueLimit.AutoEllipsis = true;
-            this.lbCwTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbCwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbCwTorqueLimit.Location = new System.Drawing.Point(9, 327);
-            this.lbCwTorqueLimit.Name = "lbCwTorqueLimit";
-            this.lbCwTorqueLimit.Size = new System.Drawing.Size(31, 31);
-            this.lbCwTorqueLimit.TabIndex = 19;
-            // 
-            // lbCcwTorqueLimit
-            // 
-            this.lbCcwTorqueLimit.AutoEllipsis = true;
-            this.lbCcwTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbCcwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbCcwTorqueLimit.Location = new System.Drawing.Point(9, 282);
-            this.lbCcwTorqueLimit.Name = "lbCcwTorqueLimit";
-            this.lbCcwTorqueLimit.Size = new System.Drawing.Size(31, 31);
-            this.lbCcwTorqueLimit.TabIndex = 18;
-            // 
-            // lbAlarm
-            // 
-            this.lbAlarm.AutoEllipsis = true;
-            this.lbAlarm.BackColor = System.Drawing.Color.Gray;
-            this.lbAlarm.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbAlarm.Location = new System.Drawing.Point(9, 237);
-            this.lbAlarm.Name = "lbAlarm";
-            this.lbAlarm.Size = new System.Drawing.Size(31, 31);
-            this.lbAlarm.TabIndex = 17;
-            // 
-            // lbTorqueLimit
-            // 
-            this.lbTorqueLimit.AutoEllipsis = true;
-            this.lbTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbTorqueLimit.Location = new System.Drawing.Point(9, 195);
-            this.lbTorqueLimit.Name = "lbTorqueLimit";
-            this.lbTorqueLimit.Size = new System.Drawing.Size(31, 31);
-            this.lbTorqueLimit.TabIndex = 16;
-            // 
-            // lbSpeedReach
-            // 
-            this.lbSpeedReach.AutoEllipsis = true;
-            this.lbSpeedReach.BackColor = System.Drawing.Color.Gray;
-            this.lbSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbSpeedReach.Location = new System.Drawing.Point(9, 154);
-            this.lbSpeedReach.Name = "lbSpeedReach";
-            this.lbSpeedReach.Size = new System.Drawing.Size(31, 31);
-            this.lbSpeedReach.TabIndex = 15;
-            // 
-            // lbReady
-            // 
-            this.lbReady.AutoEllipsis = true;
-            this.lbReady.BackColor = System.Drawing.Color.Gray;
-            this.lbReady.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbReady.Location = new System.Drawing.Point(9, 113);
-            this.lbReady.Name = "lbReady";
-            this.lbReady.Size = new System.Drawing.Size(31, 31);
-            this.lbReady.TabIndex = 14;
-            this.lbReady.BackColorChanged += new System.EventHandler(this.lbReady_BackColorChanged);
-            // 
-            // lbBrake
-            // 
-            this.lbBrake.AutoEllipsis = true;
-            this.lbBrake.BackColor = System.Drawing.Color.Gray;
-            this.lbBrake.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbBrake.Location = new System.Drawing.Point(9, 69);
-            this.lbBrake.Name = "lbBrake";
-            this.lbBrake.Size = new System.Drawing.Size(31, 31);
-            this.lbBrake.TabIndex = 13;
-            // 
-            // lb_Type
-            // 
-            this.lb_Type.AutoEllipsis = true;
-            this.lb_Type.BackColor = System.Drawing.Color.Gray;
-            this.lb_Type.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lb_Type.Location = new System.Drawing.Point(9, 26);
-            this.lb_Type.Name = "lb_Type";
-            this.lb_Type.Size = new System.Drawing.Size(31, 31);
-            this.lb_Type.TabIndex = 12;
             // 
             // btnEstop
             // 

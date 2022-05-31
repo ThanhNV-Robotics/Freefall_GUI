@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.lb_com_name = new System.Windows.Forms.Label();
             this.lb_baud_rate = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -38,8 +37,10 @@
             this.cb_data_bits = new System.Windows.Forms.ComboBox();
             this.cb_stop_bits = new System.Windows.Forms.ComboBox();
             this.cb_parity_bits = new System.Windows.Forms.ComboBox();
-            this.btn_apply = new System.Windows.Forms.Button();
-            this.btn_ok = new System.Windows.Forms.Button();
+            this.cbPortName = new System.Windows.Forms.ComboBox();
+            this.btn_com_refresh = new System.Windows.Forms.Button();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.btn_com_disconnect = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -51,17 +52,6 @@
             this.label1.Size = new System.Drawing.Size(73, 22);
             this.label1.TabIndex = 0;
             this.label1.Text = "COM port";
-            // 
-            // lb_com_name
-            // 
-            this.lb_com_name.AutoSize = true;
-            this.lb_com_name.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lb_com_name.Font = new System.Drawing.Font("Arial Narrow", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_com_name.Location = new System.Drawing.Point(164, 34);
-            this.lb_com_name.Name = "lb_com_name";
-            this.lb_com_name.Size = new System.Drawing.Size(88, 24);
-            this.lb_com_name.TabIndex = 1;
-            this.lb_com_name.Text = "COM name";
             // 
             // lb_baud_rate
             // 
@@ -152,36 +142,60 @@
             this.cb_parity_bits.Size = new System.Drawing.Size(121, 23);
             this.cb_parity_bits.TabIndex = 9;
             // 
-            // btn_apply
+            // cbPortName
             // 
-            this.btn_apply.Font = new System.Drawing.Font("Arial Narrow", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_apply.Location = new System.Drawing.Point(12, 298);
-            this.btn_apply.Name = "btn_apply";
-            this.btn_apply.Size = new System.Drawing.Size(98, 32);
-            this.btn_apply.TabIndex = 10;
-            this.btn_apply.Text = "APPLY";
-            this.btn_apply.UseVisualStyleBackColor = true;
-            this.btn_apply.Click += new System.EventHandler(this.btn_apply_Click);
+            this.cbPortName.FormattingEnabled = true;
+            this.cbPortName.Location = new System.Drawing.Point(145, 36);
+            this.cbPortName.Name = "cbPortName";
+            this.cbPortName.Size = new System.Drawing.Size(121, 23);
+            this.cbPortName.TabIndex = 12;
+            this.cbPortName.SelectedIndexChanged += new System.EventHandler(this.cbPortName_SelectedIndexChanged);
             // 
-            // btn_ok
+            // btn_com_refresh
             // 
-            this.btn_ok.Font = new System.Drawing.Font("Arial Narrow", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_ok.Location = new System.Drawing.Point(164, 298);
-            this.btn_ok.Name = "btn_ok";
-            this.btn_ok.Size = new System.Drawing.Size(98, 32);
-            this.btn_ok.TabIndex = 11;
-            this.btn_ok.Text = "OK";
-            this.btn_ok.UseVisualStyleBackColor = true;
-            this.btn_ok.Click += new System.EventHandler(this.btn_ok_Click);
+            this.btn_com_refresh.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_com_refresh.Location = new System.Drawing.Point(284, 34);
+            this.btn_com_refresh.Name = "btn_com_refresh";
+            this.btn_com_refresh.Size = new System.Drawing.Size(88, 29);
+            this.btn_com_refresh.TabIndex = 13;
+            this.btn_com_refresh.Text = "Reresh";
+            this.btn_com_refresh.UseVisualStyleBackColor = true;
+            this.btn_com_refresh.Click += new System.EventHandler(this.btn_com_refresh_Click);
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnConnect.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnConnect.Location = new System.Drawing.Point(10, 273);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(88, 29);
+            this.btnConnect.TabIndex = 4;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = false;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // btn_com_disconnect
+            // 
+            this.btn_com_disconnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.btn_com_disconnect.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_com_disconnect.Location = new System.Drawing.Point(152, 273);
+            this.btn_com_disconnect.Name = "btn_com_disconnect";
+            this.btn_com_disconnect.Size = new System.Drawing.Size(114, 29);
+            this.btn_com_disconnect.TabIndex = 14;
+            this.btn_com_disconnect.Text = "Disconnect";
+            this.btn_com_disconnect.UseVisualStyleBackColor = false;
+            this.btn_com_disconnect.Click += new System.EventHandler(this.btn_com_disconnect_Click);
             // 
             // COM_Config
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(286, 342);
-            this.Controls.Add(this.btn_ok);
-            this.Controls.Add(this.btn_apply);
+            this.ClientSize = new System.Drawing.Size(386, 326);
+            this.Controls.Add(this.btn_com_disconnect);
+            this.Controls.Add(this.btn_com_refresh);
+            this.Controls.Add(this.cbPortName);
             this.Controls.Add(this.cb_parity_bits);
+            this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.cb_stop_bits);
             this.Controls.Add(this.cb_data_bits);
             this.Controls.Add(this.cb_baud_rate);
@@ -189,7 +203,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lb_baud_rate);
-            this.Controls.Add(this.lb_com_name);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -212,8 +225,9 @@
         private System.Windows.Forms.ComboBox cb_data_bits;
         private System.Windows.Forms.ComboBox cb_stop_bits;
         private System.Windows.Forms.ComboBox cb_parity_bits;
-        private System.Windows.Forms.Button btn_apply;
-        private System.Windows.Forms.Button btn_ok;
-        public System.Windows.Forms.Label lb_com_name;
+        private System.Windows.Forms.ComboBox cbPortName;
+        private System.Windows.Forms.Button btn_com_refresh;
+        private System.Windows.Forms.Button btnConnect;
+        private System.Windows.Forms.Button btn_com_disconnect;
     }
 }
