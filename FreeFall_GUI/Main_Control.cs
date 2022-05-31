@@ -114,10 +114,11 @@ namespace FreeFall_GUI
                 {
                     try
                     {
-                        MotorSpeed = float.Parse(ExtractReceivedMessage[1]);
-                        EncoderPulse = int.Parse(ExtractReceivedMessage[2]);
-                        lbMotorSpeed.Text = ExtractReceivedMessage[1];
-                        lbEncoderPulses.Text = ExtractReceivedMessage[2];
+                        MotorSpeed = -float.Parse(ExtractReceivedMessage[1]);
+                        SpdCommand = float.Parse(ExtractReceivedMessage[2]);
+                        EncoderPulse = int.Parse(ExtractReceivedMessage[3]);
+                        lbMotorSpeed.Text = MotorSpeed.ToString();
+                        lbEncoderPulses.Text = EncoderPulse.ToString();
                     }
                     catch { }                  
                 }
@@ -593,7 +594,8 @@ namespace FreeFall_GUI
                 listData.Items[listData.Items.Count - 1].EnsureVisible(); // Hiện thị dòng được gán gần nhất ở ListView, tức là mình cuộn ListView theo dữ liệu gần nhất đó
             }
         }
-        private void Draw(double time, double speed, double spdcmd, double accelerationX, double accelerationY, double accelerationZ)
+        //private void Draw(double time, double speed, double spdcmd, double accelerationX, double accelerationY, double accelerationZ)
+        private void Draw(double time, double speed, double spdcmd)
         {
             if (SpeedGraph.GraphPane.CurveList.Count <= 0) // neu ko co duong du lieu dc khoi tao
             {
@@ -620,37 +622,37 @@ namespace FreeFall_GUI
                 SpdCmdList.Add(time, spdcmd);
             }
 
-            if (AccXView)
-            {
-                LineItem AccelerationCurveX = SpeedGraph.GraphPane.CurveList[2] as LineItem;
-                AccelerationCurveX.IsY2Axis = true; // associate the acceleration curve with y2 axis
-                if (AccelerationCurveX == null) return;
-                IPointListEdit AccelerationListX = AccelerationCurveX.Points as IPointListEdit;
-                if (AccelerationListX == null) return;
-                //time = (Environment.TickCount - TickStart) / 1000.0;
-                AccelerationListX.Add(time, accelerationX);
-            }
+            //if (AccXView)
+            //{
+            //    LineItem AccelerationCurveX = SpeedGraph.GraphPane.CurveList[2] as LineItem;
+            //    AccelerationCurveX.IsY2Axis = true; // associate the acceleration curve with y2 axis
+            //    if (AccelerationCurveX == null) return;
+            //    IPointListEdit AccelerationListX = AccelerationCurveX.Points as IPointListEdit;
+            //    if (AccelerationListX == null) return;
+            //    //time = (Environment.TickCount - TickStart) / 1000.0;
+            //    AccelerationListX.Add(time, accelerationX);
+            //}
 
-            if (AccYView)
-            {
-                LineItem AccelerationCurveY = SpeedGraph.GraphPane.CurveList[3] as LineItem;
-                AccelerationCurveY.IsY2Axis = true; // associate the acceleration curve with y2 axis
-                if (AccelerationCurveY == null) return;
-                IPointListEdit AccelerationListY = AccelerationCurveY.Points as IPointListEdit;
-                if (AccelerationListY == null) return;
-                //time = (Environment.TickCount - TickStart) / 1000.0;
-                AccelerationListY.Add(time, accelerationY);
-            }
-            if (AccZView)
-            {
-                LineItem AccelerationCurveZ = SpeedGraph.GraphPane.CurveList[4] as LineItem;
-                AccelerationCurveZ.IsY2Axis = true; // associate the acceleration curve with y2 axis
-                if (AccelerationCurveZ == null) return;
-                IPointListEdit AccelerationListZ = AccelerationCurveZ.Points as IPointListEdit;
-                if (AccelerationListZ == null) return;
-                //time = (Environment.TickCount - TickStart) / 1000.0;
-                AccelerationListZ.Add(time, accelerationZ);
-            }
+            //if (AccYView)
+            //{
+            //    LineItem AccelerationCurveY = SpeedGraph.GraphPane.CurveList[3] as LineItem;
+            //    AccelerationCurveY.IsY2Axis = true; // associate the acceleration curve with y2 axis
+            //    if (AccelerationCurveY == null) return;
+            //    IPointListEdit AccelerationListY = AccelerationCurveY.Points as IPointListEdit;
+            //    if (AccelerationListY == null) return;
+            //    //time = (Environment.TickCount - TickStart) / 1000.0;
+            //    AccelerationListY.Add(time, accelerationY);
+            //}
+            //if (AccZView)
+            //{
+            //    LineItem AccelerationCurveZ = SpeedGraph.GraphPane.CurveList[4] as LineItem;
+            //    AccelerationCurveZ.IsY2Axis = true; // associate the acceleration curve with y2 axis
+            //    if (AccelerationCurveZ == null) return;
+            //    IPointListEdit AccelerationListZ = AccelerationCurveZ.Points as IPointListEdit;
+            //    if (AccelerationListZ == null) return;
+            //    //time = (Environment.TickCount - TickStart) / 1000.0;
+            //    AccelerationListZ.Add(time, accelerationZ);
+            //}
 
             Scale xScale = SpeedGraph.GraphPane.XAxis.Scale;
             if (time > xScale.Max - xScale.MajorStep)
@@ -735,7 +737,8 @@ namespace FreeFall_GUI
             //SendCommand("12"  ); // 12 means request StE03 = Motor Speed
             timercount++;
             time = (timercount * timer1.Interval) / 1000.0;  // to seconds
-            Draw(time, MotorSpeed, SpdCommand, AccelerationX, AccelerationY, AccelerationZ);
+            //Draw(time, MotorSpeed, SpdCommand, AccelerationX, AccelerationY, AccelerationZ);
+            Draw(time, MotorSpeed, SpdCommand);
             //Draw(time, MotorSpeed, 1, 2, 3);
             Data_Listview(); // view data to the list view
 

@@ -350,9 +350,12 @@ namespace FreeFall_GUI
             }
             if (ReceivedMessage[0] == 'p') // Load running (controller params)
             {
+                if (LoadData == null)
+                    return;
                 ReceivedMessage = (ReceivedMessage.Replace("p", null)).Replace("e", null); // remove the character s in the string
                 string[] RunningParamString = ReceivedMessage.Split('/'); // Split the string
                 float[] RunningParamFloat = new float[6];
+
                 try
                 {
                     for (int i = 0; i < RunningParamFloat.Length; i++)
