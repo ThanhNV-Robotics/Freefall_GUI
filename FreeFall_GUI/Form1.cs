@@ -34,6 +34,68 @@ namespace FreeFall_GUI
         // Delegate to load the saved params to the ParamSetting Form
         public delegate void LoadDataToParamSettingForm(float _AccelerationTime, float MaxSpeed, float kp, float Ki, float AccRef, uint SampleTime);
         public LoadDataToParamSettingForm LoadData; // creat an instance
+
+        //# is the charater indicating the ending of the frame
+        // '/' is the spliting character: function code/value
+        private const string STOP = "1/1";
+        private const string ESTOP = "0/0";
+        private const string AlarmReset = "0/1";
+        private const string PositionMode = "2/0";
+        private const string SpeedMode = "2/1";
+        private const string JogUp = "3/1";
+        private const string JogDown = "3/0";
+        private const string StartRunning = "4/1";
+        private const string StopRunning = "4/0";
+        private const string StopPulse = "28/1";
+
+        private bool TYPEOUT;
+        private bool BRAKE;
+        private bool RDY;
+        private bool CmdReach;
+        private bool TorqueLimit;
+        private bool Alarm;
+        private bool CcwTorqueLimit;
+        private bool CwTorqueLimit;
+        private bool ZeroSpeedReach;
+
+        private bool ControlMode = true; // De
+        private bool RunningMode;
+
+        private int TotalEpisodes = 1; // default value is 1
+        private int CurrentEpisode;
+        private bool StartWaitingFlag = false; // Flag to wait for running next episode
+        private uint WaitingCount; // To count the timer for waiting
+        private uint CountBeforeRunning;
+        private bool WaitingBeforeRunning = false;
+
+        private volatile int timercount; // to measure the timer counter
+
+        private int SampleTime = 50;
+
+        double time;
+
+        double TickStart;
+
+        bool ViewMode = true; // SCROLL view mode
+        bool GraphOn = false;
+        bool SpeedView = false;
+        bool SpdCmdView = false;
+
+
+        float MotorSpeed; // Motor speed
+        float SpdCommand; // Speed Command
+        int EncoderPulse;
+        private const int EncoderResolution = 2048; // Encoder Resolution
+        private float ObjectPosition;
+
+        uint DriverOutput;
+        uint JogSpeed;
+
+        private GraphPane MyPane = new GraphPane();
+        private bool IsRunning = false;
+
+        private string FolderPath;
+
         #endregion
 
         public Form1()
@@ -164,11 +226,42 @@ namespace FreeFall_GUI
             if (!serialPort1.IsOpen)
             {
                 lb_com_status.BackColor = Color.Yellow;
-                lb_com_status.Text = "Require connect to the MCU";
+                lb_com_status.Text = "Require connection to the MCU";
             }
         }
         #endregion
+        private void Main_Control_Load()
+        {
+            GraphInit();
+            ProgressBarInit();
+            //DisableJogControl();
+            TickStart = Environment.TickCount;
 
+            // Consider to get the driver status from the board
+            ControlMode = true; // Default is Position Control Mode
+
+            timer2.Interval = SampleTime; //ms
+            timer2.Enabled = false;
+            ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
+            //Initial output states color
+            lbAlarm.BackColor = Color.Gray;
+            lbBrake.BackColor = Color.Gray;
+            lbCcwTorqueLimit.BackColor = Color.Gray;
+            lbCwTorqueLimit.BackColor = Color.Gray;
+            lbReady.BackColor = Color.Gray;
+            lbSpeedReach.BackColor = Color.Gray;
+            lbTorqueLimit.BackColor = Color.Gray;
+
+            cbReadOutputs.CheckState = CheckState.Unchecked; // output driver requirement
+
+            tongleRunningMode.CheckState = CheckState.Unchecked;
+            gbEpisode.Enabled = false;
+            TotalEpisodes = 1; // Set default #of Episodes to 1
+
+            // Data checkbox
+            cbSpeed.CheckState = CheckState.Checked;
+            cbSpdCmd.CheckState = CheckState.Checked;
+        }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -191,6 +284,8 @@ namespace FreeFall_GUI
                 ReceivedMessage = null;
             }
         }
+        public delegate void ShowFeedbackDriverDataFrame(string DataFrame);
+        public ShowFeedbackDriverDataFrame _ShowFeedbackDriverDataFrame; // create an instance of delegate
         private void ProcessMessage(object sender, EventArgs e)
         {
             ReceivedMessage = ReceivedMessage.Replace("\n", null).Replace("\r", null);
@@ -239,43 +334,73 @@ namespace FreeFall_GUI
 
                 }
             }
+            if (ReceivedMessage[0] == 'w') // Driver send a feedback frame due to Writing to a Register
+            {                
+                ReceivedMessage = (ReceivedMessage.Replace("w", null)).Replace("e", null); // remove the character s in the string
+                if (_ShowFeedbackDriverDataFrame == null)
+                {
+                    return; // if null, then exit
+                }
+                else
+                {
+                    _ShowFeedbackDriverDataFrame(ReceivedMessage);
+                }
+            }
             if (ReceivedMessage[0] == '<')
             {
                 COM_Testing.instance._lbReceivedMessage.Text = ReceivedMessage;
                 COM_Testing.instance.txtReceivedData.Text = ReceivedMessage;
-                Console.WriteLine(ReceivedMessage); // Print the message to the Console Window
+                //Console.WriteLine(ReceivedMessage); // Print the message to the Console Window
             }
             if (ReceivedMessage[0] == 's') // s means data from the driver
             {
                 ReceivedMessage = (ReceivedMessage.Replace("s", null)).Replace("e", null); // remove the character s in the string
                 // After remove 's' and 'e': functioncode/data1/data2
                 string[] ExtractReceivedMessage = ReceivedMessage.Split('/');
-                if (ExtractReceivedMessage[0] == "2") // Only the speed data
+                //if (ExtractReceivedMessage[0] == "2") // Only the speed data
+                //{
+                if (ControlMode) // Position Mode
                 {
                     try
                     {
-                        MotorSpeed = -float.Parse(ExtractReceivedMessage[1]);
-                        SpdCommand = float.Parse(ExtractReceivedMessage[2]);
-                        EncoderPulse = int.Parse(ExtractReceivedMessage[3]);
+                        MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
+                        SpdCommand = float.Parse(ExtractReceivedMessage[1]);
+                        EncoderPulse = int.Parse(ExtractReceivedMessage[2]);
+                        ObjectPosition = float.Parse(ExtractReceivedMessage[3]);
+
                         lbMotorSpeed.Text = MotorSpeed.ToString();
                         lbEncoderPulses.Text = EncoderPulse.ToString();
+                        lbObjectPosition.Text = ObjectPosition.ToString();
                     }
                     catch { }
                 }
-                if (ExtractReceivedMessage[0] == "3") // both Driver output and speed data
+                else // Speed Mode
                 {
                     try
                     {
-                        //Console.WriteLine(ExtractReceivedMessage[1].ToString());
-                        MotorSpeed = float.Parse(ExtractReceivedMessage[1]);
-                        EncoderPulse = int.Parse(ExtractReceivedMessage[2]); // Speed command
-                        DriverOutput = uint.Parse(ExtractReceivedMessage[3]);
-                        //ShowDriverOutput(DriverOutput);
-                        lbMotorSpeed.Text = ExtractReceivedMessage[1];
-                        lbEncoderPulses.Text = ExtractReceivedMessage[2];
+                        MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
+                        SpdCommand = float.Parse(ExtractReceivedMessage[1]);                        
+
+                        lbMotorSpeed.Text = MotorSpeed.ToString();                        
                     }
                     catch { }
                 }
+                
+                //}
+                //if (ExtractReceivedMessage[0] == "3") // both Driver output and speed data
+                //{
+                //    try
+                //    {
+                //        //Console.WriteLine(ExtractReceivedMessage[1].ToString());
+                //        MotorSpeed = float.Parse(ExtractReceivedMessage[1]);
+                //        EncoderPulse = int.Parse(ExtractReceivedMessage[2]); // Speed command
+                //        DriverOutput = uint.Parse(ExtractReceivedMessage[3]);
+                //        //ShowDriverOutput(DriverOutput);
+                //        lbMotorSpeed.Text = ExtractReceivedMessage[1];
+                //        lbEncoderPulses.Text = ExtractReceivedMessage[2];
+                //    }
+                //    catch { }
+                //}
             }
             if (ReceivedMessage[0] == 'o') // Only the driver outputs
             {
@@ -362,20 +487,7 @@ namespace FreeFall_GUI
                 serialPort1.Write("7" + "/" + Param2Send + "$"); // r is the funtion code                
             }
             else return;
-        }
-        private void btnConsole_Click(object sender, EventArgs e)
-        {
-            AllocConsole();
-            this.Show();
-            // Just call the console related methods in here
-        }
-
-
-        private void btnHideConsole_Click(object sender, EventArgs e)
-        {
-            AllocConsole();
-            this.Hide();
-        }
+        }        
         public void InitCOMConfig()
         {
             _COM_Config = new COM_Config();
@@ -419,163 +531,15 @@ namespace FreeFall_GUI
             }            
         }
         #region Main_Control
-        //# is the charater indicating the ending of the frame
-        // '/' is the spliting character: function code/value
-        private const string STOP = "1/1";
-        private const string ESTOP = "0/0";
-        private const string AlarmReset = "0/1";
-        private const string PositionMode = "2/0";
-        private const string SpeedMode = "2/1";
-        private const string JogUp = "3/1";
-        private const string JogDown = "3/0";
-        private const string StartRunning = "4/1";
-        private const string StopRunning = "4/0";
-
-        private bool TYPEOUT;
-        private bool BRAKE;
-        private bool RDY;
-        private bool CmdReach;
-        private bool TorqueLimit;
-        private bool Alarm;
-        private bool CcwTorqueLimit;
-        private bool CwTorqueLimit;
-        private bool ZeroSpeedReach;
-        
-        private bool PositionControlMode;
-
-        private int TotalEpisodes;
-        private int CurrentEpisode;
-        private bool StartWaitingFlag = false; // Flag to wait for running next episode
-        private uint WaitingCount; // To count the timer for waiting
-        private uint CountBeforeRunning;
-        private bool WaitingBeforeRunning = false;
-
-        private volatile int timercount; // to measure the timer counter
-
-        private int SampleTime = 50;
-
-        double time;
-
-        double TickStart;
-
-        bool ViewMode = false;
-        bool GraphOn = false;
-        bool SpeedView = false;
-        bool SpdCmdView = false;
+          
         
 
-        float MotorSpeed; // Motor speed
-        float SpdCommand; // Speed Command
-        int EncoderPulse;
-        private const int EncoderResolution = 2048; // Encoder Resolution
+        // User functions
         
-        uint DriverOutput;
-        uint JogSpeed;
-
-        private GraphPane MyPane = new GraphPane();
-        private bool IsRunning = false;        
-        
-
-        // User function
-        public void ProcessMessage(string ReceivedMessage) // Process data received from STM32
-        {
-            if (ReceivedMessage[0] == '<')
-            {
-                COM_Testing.instance._lbReceivedMessage.Text = ReceivedMessage;
-                COM_Testing.instance.txtReceivedData.Text = ReceivedMessage;
-                Console.WriteLine(ReceivedMessage); // Print the message to the Console Window
-            }
-            if (ReceivedMessage[0] == 's') // s means data from the driver
-            {
-                ReceivedMessage = (ReceivedMessage.Replace("s", null)).Replace("e", null); // remove the character s in the string
-                // After remove 's' and 'e': functioncode/data1/data2
-                string[] ExtractReceivedMessage = ReceivedMessage.Split('/');
-                if (ExtractReceivedMessage[0] == "2") // Only the speed data
-                {
-                    try
-                    {
-                        MotorSpeed = -float.Parse(ExtractReceivedMessage[1]);
-                        SpdCommand = float.Parse(ExtractReceivedMessage[2]);
-                        EncoderPulse = int.Parse(ExtractReceivedMessage[3]);
-                        lbMotorSpeed.Text = MotorSpeed.ToString();
-                        lbEncoderPulses.Text = EncoderPulse.ToString();
-                    }
-                    catch { }
-                }
-                if (ExtractReceivedMessage[0] == "3") // both Driver output and speed data
-                {
-                    try
-                    {
-                        //Console.WriteLine(ExtractReceivedMessage[1].ToString());
-                        MotorSpeed = float.Parse(ExtractReceivedMessage[1]);
-                        EncoderPulse = int.Parse(ExtractReceivedMessage[2]); // Speed command
-                        DriverOutput = uint.Parse(ExtractReceivedMessage[3]);
-                        //ShowDriverOutput(DriverOutput);
-                        lbMotorSpeed.Text = ExtractReceivedMessage[1];
-                        lbEncoderPulses.Text = ExtractReceivedMessage[2];
-                    }
-                    catch { }
-                }
-            }
-            if (ReceivedMessage[0] == 'o') // Only the driver outputs
-            {
-                ReceivedMessage = (ReceivedMessage.Replace("o", null)).Replace("e", null);
-                if (uint.TryParse(ReceivedMessage, out DriverOutput)) // Neu du lieu truyen len la speed
-                {
-                    ShowDriverOutput(DriverOutput);
-                }
-            }
-            // An episode is completed
-            if (ReceivedMessage[0] == '$') // $ means stm32 completes an episode
-            {
-                if (btnStartDropping.Text == "STOP") // if the system is running
-                {
-                    ShowCurrentEpisodeLabel(CurrentEpisode + 1, TotalEpisodes);
-                    CurrentEpisode++;
-                    //progressBar.Value = CurrentEpisode;
-                    SaveToExcel(CurrentEpisode); // Save data for the current episode
-                    ResetGraph(); // Reset the graph
-                    TurnOnGraph(); // Turn on the graph
-                    progressBar.PerformStep(); // visual the progress
-                    StartWaitingFlag = true;
-
-                    if (CurrentEpisode >= TotalEpisodes) // Complete all the episodes
-                    {
-                        CurrentEpisode = 0;
-                        ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
-                        btnStartDropping.Text = "START";
-                        btnStartDropping.BackColor = Color.Lime;
-                        StartWaitingFlag = false; // reset flag
-                        WaitingCount = 0; // reset timer count
-
-                        TurnOffGraph(); // Turn off the graph
-                        ProgressBarInit();
-                        MessageBox.Show("Running completed");
-                        progressBar.Visible = false;
-                    }
-                }
-            }
-            if (ReceivedMessage[0] == 'j') // Check setting jog speed
-            {
-                ReceivedMessage = (ReceivedMessage.Replace("j", null)).Replace("e", null);
-                try
-                {
-                    uint SettingJogSpeed = uint.Parse(ReceivedMessage);
-                    if (SettingJogSpeed == JogSpeed) // Setting done
-                    {
-                        MessageBox.Show("Setting done");
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
-            }
-        }
         public void SetSampleTime(int _SampleTime)
         {
             SampleTime = _SampleTime;
-            timer1.Interval = SampleTime;
+            timer2.Interval = SampleTime;
         }
         private void ShowDriverOutput(uint DriverOutput) // Visual the driver's output
         {
@@ -603,16 +567,16 @@ namespace FreeFall_GUI
                 if (!CmdReach) { lbSpeedReach.BackColor = Color.Lime; }
                 else { lbSpeedReach.BackColor = Color.Gray; }
 
-                if (!TorqueLimit) { lbTorqueLimit.BackColor = Color.Lime; }
+                if (!TorqueLimit) { lbTorqueLimit.BackColor = Color.Yellow; }
                 else { lbTorqueLimit.BackColor = Color.Gray; }
 
                 if (!Alarm) { lbAlarm.BackColor = Color.Gray; }
                 else { lbAlarm.BackColor = Color.Yellow; }
 
-                if (!CcwTorqueLimit) { lbCcwTorqueLimit.BackColor = Color.Lime; }
+                if (!CcwTorqueLimit) { lbCcwTorqueLimit.BackColor = Color.Yellow; }
                 else { lbCcwTorqueLimit.BackColor = Color.Gray; }
 
-                if (!CwTorqueLimit) { lbCwTorqueLimit.BackColor = Color.Lime; }
+                if (!CwTorqueLimit) { lbCwTorqueLimit.BackColor = Color.Yellow; }
                 else { lbCwTorqueLimit.BackColor = Color.Gray; }
 
                 if (!ZeroSpeedReach) { lbZeroSpeedReach.BackColor = Color.Lime; }
@@ -622,36 +586,27 @@ namespace FreeFall_GUI
         public bool GetBit(uint b, int bitNumber)
         {
             return (b & (1 << bitNumber)) != 0;
-        }
-               
-        private void btnMoveDown_MouseDown(object sender, MouseEventArgs e)
-        {
-            Console.WriteLine("> Jog Move Down");
-            SendMessage(JogDown);
-        }
+        }              
 
-        private void btnMoveDown_MouseUp(object sender, MouseEventArgs e)
-        {
-            Console.WriteLine("> Stop");
-            SendMessage(STOP);
-        }
+        
         private void btnSetJogSpeed_Click(object sender, EventArgs e)
         {
-            if (PositionControlMode)
+            if (ControlMode) // Position Control Mode
             {
                 try
                 {
                     JogSpeed = uint.Parse(txtSetSpeed.Text);
                     string Command = "5" + "/" + JogSpeed.ToString();
                     SendMessage(Command);
-                    Console.WriteLine("> Set Speed: " + Command);
+                    lbCmdOut.Text = "> Set Speed";
+                    //Console.WriteLine("> Set Speed: " + Command);
                 }
                 catch (Exception)
                 {
                     MessageBox.Show("Invalid Input data type");
                 }
             }
-            else
+            else // Speed Mode
             {
                 int RegisterAddress = 401; //  P4-02, Speed Command
                 float value;
@@ -660,7 +615,8 @@ namespace FreeFall_GUI
                     value = float.Parse(txtSetSpeed.Text);
                     string Command = "5" + "/" + "1" + "/" + RegisterAddress.ToString() + "/" + value.ToString();
                     SendMessage(Command);
-                    Console.WriteLine("> Set Speed: " + Command);
+                    lbCmdOut.Text = "> Set Speed";
+                    //Console.WriteLine("> Set Speed: " + Command);
                 }
                 catch (Exception)
                 {
@@ -705,34 +661,7 @@ namespace FreeFall_GUI
         {
             lbCurrentEpisode.Text = currenteps.ToString() + "/" + totaleps.ToString();
         }
-        private void Main_Control_Load()
-        {
-            GraphInit();
-            ProgressBarInit();
-            //DisableJogControl();
-            TickStart = Environment.TickCount;
-
-            // Consider to get the driver status from the board
-            PositionControlMode = true;
-
-            timer1.Interval = SampleTime; //ms
-            timer1.Enabled = false;
-            ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
-            //Initial output states color
-            lbAlarm.BackColor = Color.Gray;
-            lbBrake.BackColor = Color.Gray;
-            lbCcwTorqueLimit.BackColor = Color.Gray;
-            lbCwTorqueLimit.BackColor = Color.Gray;
-            lbReady.BackColor = Color.Gray;
-            lbSpeedReach.BackColor = Color.Gray;
-            lbTorqueLimit.BackColor = Color.Gray;
-
-            cbReadOutputs.CheckState = CheckState.Checked;
-            // Data checkbox
-
-            cbSpeed.CheckState = CheckState.Unchecked;
-            cbSpdCmd.CheckState = CheckState.Unchecked;     
-        }      
+             
         
         private void SaveToExcel(int index)
         {
@@ -763,14 +692,16 @@ namespace FreeFall_GUI
                 j = 1;
                 i++;
             }
-            string DataPath = @"C:\Users\thanh\OneDrive\문서\Liintech\Data\Episode" + index.ToString() + ".xlsx";
+            string DataPath = FolderPath + index.ToString() + ".xlsx";
             try
             {
                 wb.SaveAs(DataPath);
                 wb.Close();
             }
             catch
-            { }
+            {
+                MessageBox.Show("Saving Fail! Check the Folder's Path");
+            }
 
         }
         private void Data_Listview()
@@ -780,7 +711,8 @@ namespace FreeFall_GUI
             else
             {
                 ListViewItem item = new ListViewItem(time.ToString()); // Gán biến realtime vào cột đầu tiên của ListView
-                item.SubItems.Add(MotorSpeed.ToString());                
+                item.SubItems.Add(MotorSpeed.ToString());
+                item.SubItems.Add(SpdCommand.ToString());
 
                 listData.Items.Add(item); // Gán biến datas vào cột tiếp theo của ListView
                                           // Không nên gán string SDatas vì khi xuất dữ liệu sang Excel sẽ là dạng string, không thực hiện các phép toán được
@@ -819,12 +751,12 @@ namespace FreeFall_GUI
             Scale xScale = SpeedGraph.GraphPane.XAxis.Scale;
             if (time > xScale.Max - xScale.MajorStep)
             {
-                if (ViewMode)
+                if (ViewMode) // SCROLL view Mode
                 {
                     xScale.Max = time + xScale.MajorStep;
                     xScale.Min = time - xScale.MajorStep;
                 }
-                else
+                else // COMPACR view Mode
                 {
                     xScale.Max = time + xScale.MajorStep;
                     xScale.Min = 0;
@@ -833,19 +765,19 @@ namespace FreeFall_GUI
             Scale YScale = SpeedGraph.GraphPane.YAxis.Scale;
             if (speed > YScale.Max) // Auto scale the Speed axis
             {
-                YScale.Max = speed + YScale.MinorStep;
+                YScale.Max = speed + 2*YScale.MinorStep;
             }
             if (spdcmd > YScale.Max) // Auto scale the Speed axis
             {
-                YScale.Max = spdcmd + YScale.MinorStep;
+                YScale.Max = spdcmd + 2*YScale.MinorStep;
             }
             if (speed < YScale.Min) // Auto scale the Speed axis
             {
-                YScale.Min = speed - YScale.MinorStep;
+                YScale.Min = speed - 2*YScale.MinorStep;
             }
             if (spdcmd < YScale.Min) // Auto scale the Speed axis
             {
-                YScale.Max = spdcmd + YScale.MinorStep;
+                YScale.Max = spdcmd + 2*YScale.MinorStep;
             }
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
@@ -856,7 +788,7 @@ namespace FreeFall_GUI
             {
                 GraphOn = true;
                 btnGraphOn.Text = "Graph OFF";
-                SendMessage("6/1"); // command to turn on
+                SendMessage("6/1"); // command to get the data
                 timer2.Enabled = true;
                 TickStart = Environment.TickCount;
                 if (SpeedGraph.GraphPane.CurveList.Count <= 0) // Neu chua co duong Curve thi khoi tao
@@ -879,14 +811,13 @@ namespace FreeFall_GUI
         {
             timer2.Enabled = false;
             GraphOn = false;
-            btnGraphOn.Text = "Graph ON";
-            SendMessage("6/0");
+            btnGraphOn.Text = "Graph ON";            
         }
         private void timer2_Tick(object sender, EventArgs e)
         {
             //SendMessage("12"  ); // 12 means request StE03 = Motor Speed
             timercount++;
-            time = (timercount * timer1.Interval) / 1000.0;  // to seconds
+            time = (timercount * timer2.Interval) / 1000.0;  // to seconds
             //Draw(time, MotorSpeed, SpdCommand, AccelerationX, AccelerationY, AccelerationZ);
             Draw(time, MotorSpeed, SpdCommand);
             //Draw(time, MotorSpeed, 1, 2, 3);
@@ -921,9 +852,7 @@ namespace FreeFall_GUI
             timer2.Enabled = false; // Stop receive speed data            
             timer2.Interval = SampleTime; //ms Sample time 
             timercount = 0;
-            time = 0;
-
-            SendMessage("6/0"); // turn off receiving
+            time = 0;            
 
             SpeedGraph.GraphPane.CurveList.Clear(); // Xoa do thi
 
@@ -957,8 +886,9 @@ namespace FreeFall_GUI
             Response = MessageBox.Show("Do you want to exit? ESTOP will be triggered on", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (Response == DialogResult.OK)
             {
-                Console.WriteLine("> Emergency Stop");
+                
                 SendMessage(ESTOP);
+                lbCmdOut.Text = "> Emergency Stop";
             }
             else
             {
@@ -1030,11 +960,6 @@ namespace FreeFall_GUI
             btnSetJogSpeed.BackColor = Color.FromArgb(192, 255, 192);
         }
 
-        private void btnRstMcu_Click(object sender, EventArgs e)
-        {
-            SendMessage("17");
-        }
-
         private void rjToggleButton1_CheckedChanged(object sender, EventArgs e)
         {
             if (toggleServoEnable.CheckState == CheckState.Checked) // Servo Enable ON
@@ -1045,79 +970,7 @@ namespace FreeFall_GUI
             {
                 SendMessage("18/0");
             }
-        }        
-
-        private void toglePLSCLR_CheckedChanged(object sender, EventArgs e)
-        {
-            if (toglePLSCLR.CheckState == CheckState.Checked)
-            {
-                SendMessage("21/1");
-            }
-            else
-            {
-                SendMessage("21/0");
-            }
-        }
-
-        private void togleSPLIM_CheckedChanged(object sender, EventArgs e)
-        {
-            if (togleSPLIM.CheckState == CheckState.Checked)
-            {
-                SendMessage("22/1");
-            }
-            else
-            {
-                SendMessage("22/0");
-            }
-        }
-
-        private void toglePLSINH_CheckedChanged(object sender, EventArgs e)
-        {
-            if (toglePLSINH.CheckState == CheckState.Checked)
-            {
-                SendMessage("23/1");
-            }
-            else
-            {
-                SendMessage("23/0");
-            }
-        }
-
-        private void togleCWLIM_CheckedChanged(object sender, EventArgs e)
-        {
-            if (togleCWLIM.CheckState == CheckState.Checked)
-            {
-                SendMessage("24/1");
-            }
-            else
-            {
-                SendMessage("24/0");
-            }
-        }
-
-        private void togleCCWLIM_CheckedChanged(object sender, EventArgs e)
-        {
-            if (togleCCWLIM.CheckState == CheckState.Checked)
-            {
-                SendMessage("25/1");
-            }
-            else
-            {
-                SendMessage("25/0");
-            }
-        }
-
-        private void rjToggleButton1_CheckedChanged_1(object sender, EventArgs e)
-        {
-            if (togleDIR.CheckState == CheckState.Checked)
-            {
-                SendMessage("26/1");
-            }
-            else
-            {
-                SendMessage("26/0");
-            }
-        }
+        }       
         #endregion
 
         private void timer2_Tick_1(object sender, EventArgs e)
@@ -1171,15 +1024,16 @@ namespace FreeFall_GUI
         }
 
         private void btnResetAlarm_Click_1(object sender, EventArgs e)
-        {
-            Console.WriteLine("> Alarm Reset");
+        {            
             SendMessage(AlarmReset);
+            lbCmdOut.Text = "> Arm Reset";
         }
 
         private void btnEstop_Click_1(object sender, EventArgs e)
         {
             SendMessage(ESTOP);
-            Console.WriteLine("> Emergency Stop");
+            lbCmdOut.Text = "> Emergency Stop";
+            //Console.WriteLine("> Emergency Stop");
         }
 
         private void btnStartDropping_Click_1(object sender, EventArgs e)
@@ -1212,13 +1066,21 @@ namespace FreeFall_GUI
 
         private void btnStop_Click_1(object sender, EventArgs e)
         {
-            Console.WriteLine("> Stop");
+            //Console.WriteLine("> Stop");
             SendMessage(STOP);
+            lbCmdOut.Text = "> Stop";
         }
 
         private void toggleServoEnable_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (toggleServoEnable.CheckState == CheckState.Checked) // Servo Enable ON
+            {
+                SendMessage("18/1");
+            }
+            else
+            {
+                SendMessage("18/0");
+            }
         }
 
         private void btnSetEpisode_Click_1(object sender, EventArgs e)
@@ -1230,6 +1092,10 @@ namespace FreeFall_GUI
                 progressBar.Maximum = TotalEpisodes;
                 ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
                 MessageBox.Show("Setting done");
+            }
+            else
+            {
+                MessageBox.Show("Invalid input data type");
             }
         }
 
@@ -1258,25 +1124,45 @@ namespace FreeFall_GUI
         }
 
         private void btnMoveDown_MouseDown_1(object sender, MouseEventArgs e)
-        {
-
+        {            
+            SendMessage(JogDown);
+            lbCmdOut.Text = "> Jog DOWN";
+            //Console.WriteLine("> Jog Move Down");
         }
 
         private void btnMoveDown_MouseUp_1(object sender, MouseEventArgs e)
         {
-
+            if (ControlMode) // Position mode
+            {
+                SendMessage(StopPulse); // Stop generating Pulses;
+            }
+            else // Speed Mode
+            {
+                SendMessage(STOP);
+            }
+            lbCmdOut.Text = "> Stop";
+            //Console.WriteLine("> Stop");
         }
 
         private void btnMoveUp_MouseDown_1(object sender, MouseEventArgs e)
         {
-            Console.WriteLine("> Jog Move Up");
+            //Console.WriteLine("> Jog Move Up");
             SendMessage(JogUp);
+            lbCmdOut.Text = "> Jog Move Up";
         }
 
         private void btnMoveUp_MouseUp_1(object sender, MouseEventArgs e)
         {
-            Console.WriteLine("> Stop");
-            SendMessage(STOP);
+            if (ControlMode) // Position mode
+            {
+                SendMessage(StopPulse); // Stop generating Pulses;
+            }
+            else // Speed Mode
+            {
+                SendMessage(STOP);
+            }
+            //Console.WriteLine("> Stop");
+            lbCmdOut.Text = "> Stop";
         }
 
         private void cbSpeed_CheckedChanged_1(object sender, EventArgs e)
@@ -1305,7 +1191,10 @@ namespace FreeFall_GUI
             // Assign the delegate to a function in Paramseting Form
             LoadData = new LoadDataToParamSettingForm(_ParamSetting.LoadSavedParams);           
             _ParamSetting._SendCommand = new ParamSetting.SendCommand(SendMessage);
-            _ParamSetting.Show();
+
+            _ShowFeedbackDriverDataFrame = new ShowFeedbackDriverDataFrame(_ParamSetting.ShowDriverDataFrame);
+
+            _ParamSetting.ShowDialog();
             // Load the data at the beginning
             try
             {
@@ -1316,5 +1205,227 @@ namespace FreeFall_GUI
                 MessageBox.Show("Can not load the parameters. Check the Communication");
             }
         }
+
+        private void cbReadOutputs_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (cbReadOutputs.CheckState == CheckState.Checked) // request reading output data
+            {
+                SendMessage("8/1"); // 8/1 = request output data
+            }
+            else
+            {
+                SendMessage("8/0"); // 8/1 = stop Reading output data
+                lb_Type.BackColor = Color.Gray;
+
+                lbBrake.BackColor = Color.Gray;
+
+                lbReady.BackColor = Color.Gray;
+
+                lbSpeedReach.BackColor = Color.Gray;
+
+                lbTorqueLimit.BackColor = Color.Gray;
+
+                lbAlarm.BackColor = Color.Gray;
+
+                lbCcwTorqueLimit.BackColor = Color.Gray;
+
+                lbCwTorqueLimit.BackColor = Color.Gray;
+
+                lbZeroSpeedReach.BackColor = Color.Gray;
+            }
+        }
+
+        private void ToggleRunningMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tongleRunningMode.CheckState == CheckState.Checked) // Automatic Running
+            {
+                SendMessage("27/1");
+                RunningMode = true;
+                gbEpisode.Enabled = true;
+                lbRunningMode.Text = "Automatic";
+                
+            }
+            else // Manual Running
+            {
+                SendMessage("27/0");                
+                RunningMode = false;
+                lbRunningMode.Text = "Manual";
+                TotalEpisodes = 1; // Set to default value
+                CurrentEpisode = 0; // Set to default value
+                lbCurrentEpisode.Text = CurrentEpisode.ToString() + "/" + TotalEpisodes.ToString();
+                txtTotalEpisodes.Text = "1";
+                gbEpisode.Enabled = false;
+            }
+        }
+
+        private void toglePLSCLR_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (togleCN1_14.CheckState == CheckState.Checked)
+            {
+                SendMessage("21/1");
+            }
+            else
+            {
+                SendMessage("21/0");
+            }
+        }
+
+        private void togleSPLIM_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (togleCN1_15.CheckState == CheckState.Checked)
+            {
+                SendMessage("22/1");
+            }
+            else
+            {
+                SendMessage("22/0");
+            }
+        }
+
+        private void toglePLSINH_CheckedChanged(object sender, EventArgs e)
+        {
+            if (togleCN1_39.CheckState == CheckState.Checked)
+            {
+                SendMessage("23/1");
+            }
+            else
+            {
+                SendMessage("23/0");
+            }
+        }
+
+        private void togleCWLIM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (togleCN1_38.CheckState == CheckState.Checked)
+            {
+                SendMessage("24/1");
+            }
+            else
+            {
+                SendMessage("24/0");
+            }
+        }
+
+        private void togleCCWLIM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (togleCN1_13.CheckState == CheckState.Checked)
+            {
+                SendMessage("25/1");
+            }
+            else
+            {
+                SendMessage("25/0");
+            }
+        }
+
+        private void togleDIR_CheckedChanged(object sender, EventArgs e)
+        {
+            if (togleCN1_40.CheckState == CheckState.Checked)
+            {
+                SendMessage("26/1");
+            }
+            else
+            {
+                SendMessage("26/0");
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbDataOn.CheckState == CheckState.Checked)
+            {
+                SendMessage("6/1"); // Request data from MCU
+                
+            }
+            else
+            {
+                SendMessage("6/0");
+                lbMotorSpeed.Text = null;
+                lbEncoderPulses.Text = null;
+                lbObjectPosition.Text = null;
+            }
+        }
+
+        private void btnRstMcu_Click_1(object sender, EventArgs e)
+        {
+            SendMessage("17"); // Reset MCU
+        }
+
+        private void selectFolderToSaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderToSaveDiag.ShowDialog();
+            FolderPath = FolderToSaveDiag.SelectedPath;
+        }
+        private void ControlDriverInputPanel(bool _ControlMode)
+        {
+            if (_ControlMode) // Position Mode
+            {
+                lbCN1_13.Visible = true;
+                lbCN1_13.Text = "CCWLIM-CN1 13";
+                togleCN1_13.Visible = true;
+
+                lbCN1_14.Visible = true;
+                lbCN1_14.Text = "PLSCLR-CN1 14";
+                togleCN1_14.Visible = true;
+
+                lbCN1_15.Visible = true;
+                lbCN1_15.Text = "SP/T LIM-CN1 15";
+                togleCN1_15.Visible = true;
+
+                lbCN1_38.Visible = true;
+                lbCN1_38.Text = "CWLIM-CN1 38";
+                togleCN1_38.Visible = true;
+
+                lbCN1_39.Visible = true;
+                lbCN1_39.Text = "PLSINH-CN1 39";
+                togleCN1_39.Visible = true;
+
+                lbCN1_40.Visible = true;
+                lbCN1_40.Text = "DIR-CN1 40";
+                togleCN1_40.Visible = true;
+            }
+            else // Speed Mode
+            {
+                lbCN1_13.Visible = true;
+                lbCN1_13.Text = "CWLIM-CN1 13";
+
+                lbCN1_14.Visible = true;
+                lbCN1_14.Text = "DIR-CN1 14";                
+
+                lbCN1_15.Visible = false;
+                togleCN1_15.Visible = false;
+
+
+                lbCN1_38.Visible = true;
+                lbCN1_38.Text = "SPDLIM-CN1 38";
+
+                lbCN1_39.Visible = true;
+                lbCN1_39.Text = "CCWLIM-CN1 39";
+
+                lbCN1_40.Visible = false;
+                togleCN1_40.Visible = false;
+            }
+        }
+        private void rdSpeedMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdSpeedMode.Checked) // Use Speed Mode
+            {
+                ControlMode = false; // False = SpeedMode
+                rdPositionMode.Checked = false;
+                ControlDriverInputPanel(ControlMode);
+                SendMessage("2/0"); // Set MCU to Speed Control Mode
+            }
+        }
+        
+        private void rdPositionMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdPositionMode.Checked) // Use Speed Mode
+            {
+                ControlMode = true; // true = Position Mode
+                rdSpeedMode.Checked = false;
+                ControlDriverInputPanel(ControlMode);
+                SendMessage("2/1"); // Set MCU to Position Control Mode
+            }
+        }        
     }
 }
