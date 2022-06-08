@@ -98,13 +98,7 @@ namespace FreeFall_GUI
 
         // User function
         public void ProcessMessage(string ReceivedMessage) // Process data received from STM32
-        {
-            if (ReceivedMessage[0] == '<')
-            {
-                COM_Testing.instance._lbReceivedMessage.Text = ReceivedMessage;
-                COM_Testing.instance.txtReceivedData.Text = ReceivedMessage;
-                Console.WriteLine(ReceivedMessage); // Print the message to the Console Window
-            }
+        {            
             if (ReceivedMessage[0] == 's') // s means data from the driver
             {
                 ReceivedMessage = (ReceivedMessage.Replace("s", null)).Replace("e", null); // remove the character s in the string

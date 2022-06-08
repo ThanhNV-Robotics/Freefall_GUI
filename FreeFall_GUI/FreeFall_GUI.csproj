@@ -62,20 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accelerometter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Accelerometter.Designer.cs">
-      <DependentUpon>Accelerometter.cs</DependentUpon>
-    </Compile>
     <Compile Include="ButtonEllipse.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="COM Testing.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="COM Testing.Designer.cs">
-      <DependentUpon>COM Testing.cs</DependentUpon>
     </Compile>
     <Compile Include="COM_Config.cs">
       <SubType>Form</SubType>
@@ -103,18 +91,18 @@
     <Compile Include="RJControls\RJToggleButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="StepPositionControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StepPositionControl.Designer.cs">
+      <DependentUpon>StepPositionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="System_Check.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="System_Check.Designer.cs">
       <DependentUpon>System_Check.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Accelerometter.resx">
-      <DependentUpon>Accelerometter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="COM Testing.resx">
-      <DependentUpon>COM Testing.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="COM_Config.resx">
       <DependentUpon>COM_Config.cs</DependentUpon>
     </EmbeddedResource>
@@ -134,6 +122,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="StepPositionControl.resx">
+      <DependentUpon>StepPositionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="System_Check.resx">
       <DependentUpon>System_Check.cs</DependentUpon>
     </EmbeddedResource>

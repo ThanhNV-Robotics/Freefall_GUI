@@ -68,10 +68,7 @@
             this.btnMoveDown = new System.Windows.Forms.Button();
             this.btnMoveUp = new System.Windows.Forms.Button();
             this.btnSetHome = new System.Windows.Forms.Button();
-            this.label25 = new System.Windows.Forms.Label();
             this.lbEncoderPulses = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.lbMotorSpeed = new System.Windows.Forms.Label();
             this.btnResetAlarm = new System.Windows.Forms.Button();
             this.lbServoEnable = new System.Windows.Forms.Label();
@@ -98,7 +95,9 @@
             this.btnEstop = new FreeFall_GUI.ButtonEllipse();
             this.toggleServoEnable = new FreeFall_GUI.RJControls.RJToggleButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.cbDataOn = new System.Windows.Forms.CheckBox();
+            this.cbEncoderON = new System.Windows.Forms.CheckBox();
+            this.cbSpeedON = new System.Windows.Forms.CheckBox();
+            this.cbPositionON = new System.Windows.Forms.CheckBox();
             this.lbObjectPosition = new System.Windows.Forms.Label();
             this.gbEpisode = new System.Windows.Forms.GroupBox();
             this.lbCurrentEpisode = new System.Windows.Forms.Label();
@@ -202,13 +201,14 @@
             // pulseTestToolStripMenuItem
             // 
             this.pulseTestToolStripMenuItem.Name = "pulseTestToolStripMenuItem";
-            this.pulseTestToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
-            this.pulseTestToolStripMenuItem.Text = "Pulse Test";
+            this.pulseTestToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
+            this.pulseTestToolStripMenuItem.Text = "Pulse Command Test";
+            this.pulseTestToolStripMenuItem.Click += new System.EventHandler(this.pulseTestToolStripMenuItem_Click);
             // 
             // parameterSettingToolStripMenuItem
             // 
             this.parameterSettingToolStripMenuItem.Name = "parameterSettingToolStripMenuItem";
-            this.parameterSettingToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.parameterSettingToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
             this.parameterSettingToolStripMenuItem.Text = "Parameter Setting";
             this.parameterSettingToolStripMenuItem.Click += new System.EventHandler(this.parameterSettingToolStripMenuItem_Click);
             // 
@@ -519,64 +519,32 @@
             this.btnSetHome.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.btnSetHome.Font = new System.Drawing.Font("Gulim", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnSetHome.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSetHome.Location = new System.Drawing.Point(27, 105);
+            this.btnSetHome.Location = new System.Drawing.Point(9, 34);
             this.btnSetHome.Name = "btnSetHome";
             this.btnSetHome.Size = new System.Drawing.Size(100, 30);
             this.btnSetHome.TabIndex = 53;
             this.btnSetHome.Text = "Set Home";
             this.btnSetHome.UseVisualStyleBackColor = false;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label25.ForeColor = System.Drawing.Color.Black;
-            this.label25.Location = new System.Drawing.Point(18, 82);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(121, 20);
-            this.label25.TabIndex = 52;
-            this.label25.Text = "Position (m)";
-            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnSetHome.Click += new System.EventHandler(this.btnSetHome_Click);
             // 
             // lbEncoderPulses
             // 
             this.lbEncoderPulses.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lbEncoderPulses.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbEncoderPulses.Location = new System.Drawing.Point(155, 224);
+            this.lbEncoderPulses.Location = new System.Drawing.Point(170, 258);
             this.lbEncoderPulses.Name = "lbEncoderPulses";
-            this.lbEncoderPulses.Size = new System.Drawing.Size(131, 38);
+            this.lbEncoderPulses.Size = new System.Drawing.Size(116, 38);
             this.lbEncoderPulses.TabIndex = 17;
             this.lbEncoderPulses.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label12
-            // 
-            this.label12.Font = new System.Drawing.Font("Gulim", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label12.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label12.Location = new System.Drawing.Point(6, 230);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(162, 32);
-            this.label12.TabIndex = 16;
-            this.label12.Text = "Encoder Pulses";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label3
-            // 
-            this.label3.Font = new System.Drawing.Font("Gulim", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label3.Location = new System.Drawing.Point(14, 158);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(144, 57);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Motor\'s Speed \r\n(rpm)";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbMotorSpeed
             // 
             this.lbMotorSpeed.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lbMotorSpeed.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbMotorSpeed.Location = new System.Drawing.Point(155, 164);
+            this.lbMotorSpeed.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbMotorSpeed.Location = new System.Drawing.Point(170, 146);
             this.lbMotorSpeed.Name = "lbMotorSpeed";
-            this.lbMotorSpeed.Size = new System.Drawing.Size(130, 44);
+            this.lbMotorSpeed.Size = new System.Drawing.Size(116, 62);
             this.lbMotorSpeed.TabIndex = 11;
             this.lbMotorSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -911,42 +879,65 @@
             // groupBox3
             // 
             this.groupBox3.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox3.Controls.Add(this.cbDataOn);
+            this.groupBox3.Controls.Add(this.cbEncoderON);
+            this.groupBox3.Controls.Add(this.cbSpeedON);
+            this.groupBox3.Controls.Add(this.cbPositionON);
             this.groupBox3.Controls.Add(this.btnSetHome);
             this.groupBox3.Controls.Add(this.lbObjectPosition);
-            this.groupBox3.Controls.Add(this.label25);
             this.groupBox3.Controls.Add(this.lbEncoderPulses);
-            this.groupBox3.Controls.Add(this.label12);
-            this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.lbMotorSpeed);
             this.groupBox3.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox3.ForeColor = System.Drawing.Color.Red;
-            this.groupBox3.Location = new System.Drawing.Point(356, 362);
+            this.groupBox3.Location = new System.Drawing.Point(356, 337);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(292, 289);
+            this.groupBox3.Size = new System.Drawing.Size(292, 354);
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Motion Status";
             // 
-            // cbDataOn
+            // cbEncoderON
             // 
-            this.cbDataOn.AutoSize = true;
-            this.cbDataOn.ForeColor = System.Drawing.Color.Black;
-            this.cbDataOn.Location = new System.Drawing.Point(174, 50);
-            this.cbDataOn.Name = "cbDataOn";
-            this.cbDataOn.Size = new System.Drawing.Size(111, 24);
-            this.cbDataOn.TabIndex = 54;
-            this.cbDataOn.Text = "Data ON";
-            this.cbDataOn.UseVisualStyleBackColor = true;
-            this.cbDataOn.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.cbEncoderON.AutoSize = true;
+            this.cbEncoderON.ForeColor = System.Drawing.Color.Black;
+            this.cbEncoderON.Location = new System.Drawing.Point(9, 266);
+            this.cbEncoderON.Name = "cbEncoderON";
+            this.cbEncoderON.Size = new System.Drawing.Size(137, 24);
+            this.cbEncoderON.TabIndex = 56;
+            this.cbEncoderON.Text = "Enc Pulses";
+            this.cbEncoderON.UseVisualStyleBackColor = true;
+            // 
+            // cbSpeedON
+            // 
+            this.cbSpeedON.AutoSize = true;
+            this.cbSpeedON.ForeColor = System.Drawing.Color.Black;
+            this.cbSpeedON.Location = new System.Drawing.Point(9, 166);
+            this.cbSpeedON.Name = "cbSpeedON";
+            this.cbSpeedON.Size = new System.Drawing.Size(148, 24);
+            this.cbSpeedON.TabIndex = 55;
+            this.cbSpeedON.Text = "Speed (rpm)";
+            this.cbSpeedON.UseVisualStyleBackColor = true;
+            // 
+            // cbPositionON
+            // 
+            this.cbPositionON.AutoSize = true;
+            this.cbPositionON.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.cbPositionON.ForeColor = System.Drawing.Color.Black;
+            this.cbPositionON.Location = new System.Drawing.Point(9, 76);
+            this.cbPositionON.Name = "cbPositionON";
+            this.cbPositionON.Size = new System.Drawing.Size(143, 24);
+            this.cbPositionON.TabIndex = 54;
+            this.cbPositionON.Text = "Position (m)";
+            this.cbPositionON.UseVisualStyleBackColor = true;
+            this.cbPositionON.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // lbObjectPosition
             // 
             this.lbObjectPosition.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lbObjectPosition.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbObjectPosition.Location = new System.Drawing.Point(155, 87);
+            this.lbObjectPosition.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbObjectPosition.Location = new System.Drawing.Point(158, 34);
             this.lbObjectPosition.Name = "lbObjectPosition";
-            this.lbObjectPosition.Size = new System.Drawing.Size(131, 48);
+            this.lbObjectPosition.Size = new System.Drawing.Size(127, 62);
             this.lbObjectPosition.TabIndex = 53;
             this.lbObjectPosition.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -1311,13 +1302,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox gbJogControl;
         private System.Windows.Forms.Button btnSetHome;
-        private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label lbEncoderPulses;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnSetJogSpeed;
         private System.Windows.Forms.TextBox txtSetSpeed;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbMotorSpeed;
         private System.Windows.Forms.Button btnMoveDown;
         private System.Windows.Forms.Button btnMoveUp;
@@ -1371,11 +1359,13 @@
         private RJControls.RJToggleButton tongleRunningMode;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbRunningMode;
-        private System.Windows.Forms.CheckBox cbDataOn;
+        private System.Windows.Forms.CheckBox cbPositionON;
         private System.Windows.Forms.FolderBrowserDialog FolderToSaveDiag;
         private System.Windows.Forms.RadioButton rdSpeedMode;
         private System.Windows.Forms.RadioButton rdPositionMode;
         private System.Windows.Forms.Label lbCmdOut;
+        private System.Windows.Forms.CheckBox cbEncoderON;
+        private System.Windows.Forms.CheckBox cbSpeedON;
     }
 }
 

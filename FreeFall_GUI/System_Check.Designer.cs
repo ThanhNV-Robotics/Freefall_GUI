@@ -256,7 +256,7 @@
             this.groupBox1.Controls.Add(this.btnLoad);
             this.groupBox1.Controls.Add(this.btnSave);
             this.groupBox1.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.groupBox1.Location = new System.Drawing.Point(874, 13);
+            this.groupBox1.Location = new System.Drawing.Point(812, 14);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
@@ -541,10 +541,10 @@
             // btnSetDriverParam
             // 
             this.btnSetDriverParam.AllowDrop = true;
-            this.btnSetDriverParam.Location = new System.Drawing.Point(692, 41);
+            this.btnSetDriverParam.Location = new System.Drawing.Point(569, 52);
             this.btnSetDriverParam.Margin = new System.Windows.Forms.Padding(4);
             this.btnSetDriverParam.Name = "btnSetDriverParam";
-            this.btnSetDriverParam.Size = new System.Drawing.Size(114, 35);
+            this.btnSetDriverParam.Size = new System.Drawing.Size(89, 35);
             this.btnSetDriverParam.TabIndex = 17;
             this.btnSetDriverParam.Text = "SET";
             this.btnSetDriverParam.UseVisualStyleBackColor = true;
@@ -555,7 +555,7 @@
             this.lbSetingValue.AutoSize = true;
             this.lbSetingValue.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbSetingValue.ForeColor = System.Drawing.Color.Black;
-            this.lbSetingValue.Location = new System.Drawing.Point(426, 50);
+            this.lbSetingValue.Location = new System.Drawing.Point(344, 56);
             this.lbSetingValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbSetingValue.Name = "lbSetingValue";
             this.lbSetingValue.Size = new System.Drawing.Size(113, 19);
@@ -564,10 +564,10 @@
             // 
             // txtSetingValue
             // 
-            this.txtSetingValue.Location = new System.Drawing.Point(548, 46);
+            this.txtSetingValue.Location = new System.Drawing.Point(466, 52);
             this.txtSetingValue.Margin = new System.Windows.Forms.Padding(4);
             this.txtSetingValue.Name = "txtSetingValue";
-            this.txtSetingValue.Size = new System.Drawing.Size(124, 29);
+            this.txtSetingValue.Size = new System.Drawing.Size(85, 29);
             this.txtSetingValue.TabIndex = 7;
             // 
             // gbSetDriverParam
@@ -583,21 +583,22 @@
             this.gbSetDriverParam.Controls.Add(this.btnSetDriverParam);
             this.gbSetDriverParam.Controls.Add(this.txtSetingValue);
             this.gbSetDriverParam.Controls.Add(this.lbSetingValue);
-            this.gbSetDriverParam.Location = new System.Drawing.Point(15, 505);
+            this.gbSetDriverParam.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.gbSetDriverParam.Location = new System.Drawing.Point(15, 460);
             this.gbSetDriverParam.Margin = new System.Windows.Forms.Padding(4);
             this.gbSetDriverParam.Name = "gbSetDriverParam";
             this.gbSetDriverParam.Padding = new System.Windows.Forms.Padding(4);
-            this.gbSetDriverParam.Size = new System.Drawing.Size(841, 190);
+            this.gbSetDriverParam.Size = new System.Drawing.Size(774, 204);
             this.gbSetDriverParam.TabIndex = 18;
             this.gbSetDriverParam.TabStop = false;
-            this.gbSetDriverParam.Text = "groupBox5";
+            this.gbSetDriverParam.Text = "Driver Setting";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label11.ForeColor = System.Drawing.Color.Black;
-            this.label11.Location = new System.Drawing.Point(782, 161);
+            this.label11.Location = new System.Drawing.Point(700, 167);
             this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(59, 19);
@@ -609,7 +610,7 @@
             this.lbFeedbackValueFloat.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbFeedbackValueFloat.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbFeedbackValueFloat.ForeColor = System.Drawing.Color.Black;
-            this.lbFeedbackValueFloat.Location = new System.Drawing.Point(688, 152);
+            this.lbFeedbackValueFloat.Location = new System.Drawing.Point(606, 158);
             this.lbFeedbackValueFloat.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbFeedbackValueFloat.Name = "lbFeedbackValueFloat";
             this.lbFeedbackValueFloat.Size = new System.Drawing.Size(86, 28);
@@ -620,7 +621,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(641, 161);
+            this.label7.Location = new System.Drawing.Point(559, 167);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(39, 19);
@@ -632,7 +633,7 @@
             this.lbFeedbackValueInt.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbFeedbackValueInt.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbFeedbackValueInt.ForeColor = System.Drawing.Color.Black;
-            this.lbFeedbackValueInt.Location = new System.Drawing.Point(547, 152);
+            this.lbFeedbackValueInt.Location = new System.Drawing.Point(465, 158);
             this.lbFeedbackValueInt.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbFeedbackValueInt.Name = "lbFeedbackValueInt";
             this.lbFeedbackValueInt.Size = new System.Drawing.Size(86, 28);
@@ -643,7 +644,7 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label10.ForeColor = System.Drawing.Color.Black;
-            this.label10.Location = new System.Drawing.Point(350, 161);
+            this.label10.Location = new System.Drawing.Point(268, 167);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(189, 19);
@@ -655,10 +656,10 @@
             this.lbFeedbackFrame.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbFeedbackFrame.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbFeedbackFrame.ForeColor = System.Drawing.Color.Black;
-            this.lbFeedbackFrame.Location = new System.Drawing.Point(547, 106);
+            this.lbFeedbackFrame.Location = new System.Drawing.Point(465, 112);
             this.lbFeedbackFrame.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbFeedbackFrame.Name = "lbFeedbackFrame";
-            this.lbFeedbackFrame.Size = new System.Drawing.Size(259, 28);
+            this.lbFeedbackFrame.Size = new System.Drawing.Size(227, 28);
             this.lbFeedbackFrame.TabIndex = 19;
             // 
             // label8
@@ -666,7 +667,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(344, 110);
+            this.label8.Location = new System.Drawing.Point(262, 116);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(195, 19);
@@ -675,9 +676,9 @@
             // 
             // ParamSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1505, 794);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(1440, 690);
             this.Controls.Add(this.gbSetDriverParam);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lstParam);

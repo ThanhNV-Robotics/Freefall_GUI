@@ -25,7 +25,7 @@ namespace FreeFall_GUI
         private string AccelDataToSend;
 
         COM_Config _COM_Config = new COM_Config();
-        COM_Testing TestCOM = new COM_Testing();
+        
         Main_Control _MainCOntrol = new Main_Control();
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
@@ -84,8 +84,11 @@ namespace FreeFall_GUI
 
         float MotorSpeed; // Motor speed
         float SpdCommand; // Speed Command
-        int EncoderPulse;
-        private const int EncoderResolution = 2048; // Encoder Resolution
+        int CurrentPulse = 0;
+        int PreviousPulse = 0;
+        float DrumRadius = (float)0.4; //m
+        
+        private const int EncoderResolution = 8192; // =2048*4, quarter count Encoder Resolution
         private float ObjectPosition;
 
         uint DriverOutput;
@@ -307,9 +310,9 @@ namespace FreeFall_GUI
                         float Param = float.Parse(RunningParamString[1]);
                         _CheckRunningData(ParamCode, Param); // Check if setting is done or not
                     }
-                    catch (Exception)
+                    catch 
                     {
-                        throw;
+                        return;
                     }
                 }                                
             }
@@ -333,6 +336,7 @@ namespace FreeFall_GUI
                 {
 
                 }
+                return;
             }
             if (ReceivedMessage[0] == 'w') // Driver send a feedback frame due to Writing to a Register
             {                
@@ -345,13 +349,9 @@ namespace FreeFall_GUI
                 {
                     _ShowFeedbackDriverDataFrame(ReceivedMessage);
                 }
+                return;
             }
-            if (ReceivedMessage[0] == '<')
-            {
-                COM_Testing.instance._lbReceivedMessage.Text = ReceivedMessage;
-                COM_Testing.instance.txtReceivedData.Text = ReceivedMessage;
-                //Console.WriteLine(ReceivedMessage); // Print the message to the Console Window
-            }
+            
             if (ReceivedMessage[0] == 's') // s means data from the driver
             {
                 ReceivedMessage = (ReceivedMessage.Replace("s", null)).Replace("e", null); // remove the character s in the string
@@ -365,11 +365,16 @@ namespace FreeFall_GUI
                     {
                         MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
                         SpdCommand = float.Parse(ExtractReceivedMessage[1]);
-                        EncoderPulse = int.Parse(ExtractReceivedMessage[2]);
-                        ObjectPosition = float.Parse(ExtractReceivedMessage[3]);
+                        CurrentPulse = int.Parse(ExtractReceivedMessage[2]);
+
+                        //            ObjectPosition += ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse - (float)PreviousPulse) / (float)EncoderResolution));
+                        ObjectPosition = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse) / (float)EncoderResolution));
+                        ObjectPosition = (float)Math.Round((double)ObjectPosition, 1);
+                        PreviousPulse = CurrentPulse;
+                        //ObjectPosition = float.Parse(ExtractReceivedMessage[3]);
 
                         lbMotorSpeed.Text = MotorSpeed.ToString();
-                        lbEncoderPulses.Text = EncoderPulse.ToString();
+                        lbEncoderPulses.Text = CurrentPulse.ToString();
                         lbObjectPosition.Text = ObjectPosition.ToString();
                     }
                     catch { }
@@ -385,22 +390,7 @@ namespace FreeFall_GUI
                     }
                     catch { }
                 }
-                
-                //}
-                //if (ExtractReceivedMessage[0] == "3") // both Driver output and speed data
-                //{
-                //    try
-                //    {
-                //        //Console.WriteLine(ExtractReceivedMessage[1].ToString());
-                //        MotorSpeed = float.Parse(ExtractReceivedMessage[1]);
-                //        EncoderPulse = int.Parse(ExtractReceivedMessage[2]); // Speed command
-                //        DriverOutput = uint.Parse(ExtractReceivedMessage[3]);
-                //        //ShowDriverOutput(DriverOutput);
-                //        lbMotorSpeed.Text = ExtractReceivedMessage[1];
-                //        lbEncoderPulses.Text = ExtractReceivedMessage[2];
-                //    }
-                //    catch { }
-                //}
+                return;
             }
             if (ReceivedMessage[0] == 'o') // Only the driver outputs
             {
@@ -409,6 +399,7 @@ namespace FreeFall_GUI
                 {
                     ShowDriverOutput(DriverOutput);
                 }
+                return;
             }
             // An episode is completed
             if (ReceivedMessage[0] == '$') // $ means stm32 completes an episode
@@ -439,8 +430,9 @@ namespace FreeFall_GUI
                         progressBar.Visible = false;
                     }
                 }
+                return;
             }
-            if (ReceivedMessage[0] == 'j') // Check setting jog speed
+            if (ReceivedMessage[0] == 'j') // Check setting jog speed setting
             {
                 ReceivedMessage = (ReceivedMessage.Replace("j", null)).Replace("e", null);
                 try
@@ -455,6 +447,7 @@ namespace FreeFall_GUI
                 {
 
                 }
+                return;
             }
         }
         public delegate void CheckRunningData(uint Code, float Param);
@@ -1047,6 +1040,11 @@ namespace FreeFall_GUI
                 progressBar.Visible = true;
                 TurnOnGraph(); // Turn on the graph
                 WaitingBeforeRunning = true;
+
+                gbJogControl.Enabled = false;
+                btnMoveDown.Enabled = false;
+                btnMoveUp.Enabled = false;
+                btnSetJogSpeed.Enabled = false;
             }
             else // If it is running > Stop running
             {
@@ -1055,8 +1053,14 @@ namespace FreeFall_GUI
                 SendMessage(StopRunning);
                 ResetGraph();
                 ProgressBarInit();
+
+                gbJogControl.Enabled = true;
+                btnMoveDown.Enabled = true;
+                btnMoveUp.Enabled = true;
+                btnSetJogSpeed.Enabled = true;
             }
-            Console.WriteLine("> Start Running");
+            lbCmdOut.Text = "> Start Dropping";
+            
         }
 
         private void btnStartPulling_Click_1(object sender, EventArgs e)
@@ -1076,10 +1080,12 @@ namespace FreeFall_GUI
             if (toggleServoEnable.CheckState == CheckState.Checked) // Servo Enable ON
             {
                 SendMessage("18/1");
+                lbCmdOut.Text = "> Servo ON";
             }
             else
             {
                 SendMessage("18/0");
+                lbCmdOut.Text = "> Servo OFF";
             }
         }
 
@@ -1332,7 +1338,7 @@ namespace FreeFall_GUI
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbDataOn.CheckState == CheckState.Checked)
+            if (cbPositionON.CheckState == CheckState.Checked)
             {
                 SendMessage("6/1"); // Request data from MCU
                 
@@ -1426,6 +1432,21 @@ namespace FreeFall_GUI
                 ControlDriverInputPanel(ControlMode);
                 SendMessage("2/1"); // Set MCU to Position Control Mode
             }
-        }        
+        }
+
+        private void pulseTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StepPositionControl _StepPositionControl = new StepPositionControl();
+            _StepPositionControl._SendCommand = new StepPositionControl.SendCommand(SendMessage); // Assign the delegate
+            _StepPositionControl.Show();
+        }
+
+        private void btnSetHome_Click(object sender, EventArgs e)
+        {
+            ObjectPosition = 0;
+            CurrentPulse = 0;
+            PreviousPulse = 0;
+            lbObjectPosition.Text = ObjectPosition.ToString();
+        }
     }
 }
