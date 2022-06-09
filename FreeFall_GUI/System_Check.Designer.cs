@@ -28,111 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-01",
-            "Control Mode",
-            "200",
-            "Int",
-            "-",
-            "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-03",
-            "CCW TRQ LMT",
-            "202",
-            "Float",
-            "-",
-            "%"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-04",
-            "CW TRQ LMT",
-            "203",
-            "Float",
-            "-",
-            "%"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-05",
-            "CW Speed LMT",
-            "204",
-            "Float",
-            "-",
-            "rpm"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem19 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-06",
-            "CW Speed LMT",
-            "205",
-            "Float",
-            "-",
-            "rpm"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem20 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-07",
-            "Brake Speed",
-            "206",
-            "Float",
-            "-",
-            "rpm"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem21 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-08",
-            "Brake Time",
-            "207",
-            "Float",
-            "-",
-            "ms"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem22 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-09",
-            "DB Mode",
-            "208",
-            "Int",
-            "-",
-            "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P02-19",
-            "Inertial Ratio",
-            "218",
-            "Float",
-            "-",
-            "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P03-10",
-            "ACCEL Time",
-            "309",
-            "Float",
-            "-",
-            "ms"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem25 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P03-11",
-            "DECEL Time",
-            "310",
-            "FLoat",
-            "-",
-            "ms"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem26 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P05-02",
-            "POS Pulse Type",
-            "501",
-            "Int",
-            "-",
-            "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem27 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P07-01",
-            "CN1-Input Type",
-            "700",
-            "Int",
-            "-",
-            "-"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem28 = new System.Windows.Forms.ListViewItem(new string[] {
-            "P08-01",
-            "CN1-Output Type",
-            "800",
-            "Int",
-            "-",
-            "-"}, -1);
-            this.Register = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.RegisName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Address = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.DataType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.CurrentValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Unit = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lstParam = new System.Windows.Forms.ListView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnSampleTimeSet = new System.Windows.Forms.Button();
             this.btnRefAccSet = new System.Windows.Forms.Button();
@@ -176,70 +71,6 @@
             this.gbSetDriverParam.SuspendLayout();
             this.SuspendLayout();
             // 
-            // Register
-            // 
-            this.Register.Text = "Register";
-            this.Register.Width = 93;
-            // 
-            // RegisName
-            // 
-            this.RegisName.Text = "Name";
-            this.RegisName.Width = 180;
-            // 
-            // Address
-            // 
-            this.Address.Text = "Address";
-            this.Address.Width = 100;
-            // 
-            // DataType
-            // 
-            this.DataType.Text = "Data Type";
-            this.DataType.Width = 114;
-            // 
-            // CurrentValue
-            // 
-            this.CurrentValue.Text = "Current Value";
-            this.CurrentValue.Width = 140;
-            // 
-            // Unit
-            // 
-            this.Unit.Text = "Unit";
-            this.Unit.Width = 56;
-            // 
-            // lstParam
-            // 
-            this.lstParam.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Register,
-            this.RegisName,
-            this.Address,
-            this.DataType,
-            this.CurrentValue,
-            this.Unit});
-            this.lstParam.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lstParam.HideSelection = false;
-            this.lstParam.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem15,
-            listViewItem16,
-            listViewItem17,
-            listViewItem18,
-            listViewItem19,
-            listViewItem20,
-            listViewItem21,
-            listViewItem22,
-            listViewItem23,
-            listViewItem24,
-            listViewItem25,
-            listViewItem26,
-            listViewItem27,
-            listViewItem28});
-            this.lstParam.Location = new System.Drawing.Point(15, 14);
-            this.lstParam.Margin = new System.Windows.Forms.Padding(4);
-            this.lstParam.Name = "lstParam";
-            this.lstParam.Size = new System.Drawing.Size(740, 438);
-            this.lstParam.TabIndex = 3;
-            this.lstParam.UseCompatibleStateImageBehavior = false;
-            this.lstParam.View = System.Windows.Forms.View.Details;
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnSampleTimeSet);
@@ -256,11 +87,11 @@
             this.groupBox1.Controls.Add(this.btnLoad);
             this.groupBox1.Controls.Add(this.btnSave);
             this.groupBox1.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.groupBox1.Location = new System.Drawing.Point(812, 14);
+            this.groupBox1.Location = new System.Drawing.Point(13, 235);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(589, 541);
+            this.groupBox1.Size = new System.Drawing.Size(589, 502);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Running Params";
@@ -268,7 +99,7 @@
             // btnSampleTimeSet
             // 
             this.btnSampleTimeSet.AllowDrop = true;
-            this.btnSampleTimeSet.Location = new System.Drawing.Point(464, 413);
+            this.btnSampleTimeSet.Location = new System.Drawing.Point(467, 393);
             this.btnSampleTimeSet.Margin = new System.Windows.Forms.Padding(4);
             this.btnSampleTimeSet.Name = "btnSampleTimeSet";
             this.btnSampleTimeSet.Size = new System.Drawing.Size(114, 35);
@@ -280,7 +111,7 @@
             // btnRefAccSet
             // 
             this.btnRefAccSet.AllowDrop = true;
-            this.btnRefAccSet.Location = new System.Drawing.Point(464, 335);
+            this.btnRefAccSet.Location = new System.Drawing.Point(465, 319);
             this.btnRefAccSet.Margin = new System.Windows.Forms.Padding(4);
             this.btnRefAccSet.Name = "btnRefAccSet";
             this.btnRefAccSet.Size = new System.Drawing.Size(114, 35);
@@ -292,7 +123,7 @@
             // btnKiSet
             // 
             this.btnKiSet.AllowDrop = true;
-            this.btnKiSet.Location = new System.Drawing.Point(464, 246);
+            this.btnKiSet.Location = new System.Drawing.Point(462, 229);
             this.btnKiSet.Margin = new System.Windows.Forms.Padding(4);
             this.btnKiSet.Name = "btnKiSet";
             this.btnKiSet.Size = new System.Drawing.Size(114, 35);
@@ -304,7 +135,7 @@
             // btnKpSet
             // 
             this.btnKpSet.AllowDrop = true;
-            this.btnKpSet.Location = new System.Drawing.Point(464, 200);
+            this.btnKpSet.Location = new System.Drawing.Point(462, 181);
             this.btnKpSet.Margin = new System.Windows.Forms.Padding(4);
             this.btnKpSet.Name = "btnKpSet";
             this.btnKpSet.Size = new System.Drawing.Size(114, 35);
@@ -316,7 +147,7 @@
             // btnMaxDistSet
             // 
             this.btnMaxDistSet.AllowDrop = true;
-            this.btnMaxDistSet.Location = new System.Drawing.Point(464, 118);
+            this.btnMaxDistSet.Location = new System.Drawing.Point(462, 94);
             this.btnMaxDistSet.Margin = new System.Windows.Forms.Padding(4);
             this.btnMaxDistSet.Name = "btnMaxDistSet";
             this.btnMaxDistSet.Size = new System.Drawing.Size(114, 35);
@@ -328,7 +159,7 @@
             // btnDrumRadiusSet
             // 
             this.btnDrumRadiusSet.AllowDrop = true;
-            this.btnDrumRadiusSet.Location = new System.Drawing.Point(464, 76);
+            this.btnDrumRadiusSet.Location = new System.Drawing.Point(462, 51);
             this.btnDrumRadiusSet.Margin = new System.Windows.Forms.Padding(4);
             this.btnDrumRadiusSet.Name = "btnDrumRadiusSet";
             this.btnDrumRadiusSet.Size = new System.Drawing.Size(114, 35);
@@ -339,7 +170,7 @@
             // 
             // txtSampleTime
             // 
-            this.txtSampleTime.Location = new System.Drawing.Point(331, 413);
+            this.txtSampleTime.Location = new System.Drawing.Point(331, 393);
             this.txtSampleTime.Margin = new System.Windows.Forms.Padding(4);
             this.txtSampleTime.Name = "txtSampleTime";
             this.txtSampleTime.Size = new System.Drawing.Size(124, 29);
@@ -349,7 +180,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(106, 425);
+            this.label2.Location = new System.Drawing.Point(9, 396);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(171, 19);
@@ -361,7 +192,7 @@
             this.groupBox4.Controls.Add(this.label4);
             this.groupBox4.Controls.Add(this.txtAccRef);
             this.groupBox4.ForeColor = System.Drawing.Color.Red;
-            this.groupBox4.Location = new System.Drawing.Point(12, 301);
+            this.groupBox4.Location = new System.Drawing.Point(13, 285);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(4);
@@ -396,7 +227,7 @@
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.txtKi);
             this.groupBox3.ForeColor = System.Drawing.Color.Red;
-            this.groupBox3.Location = new System.Drawing.Point(12, 174);
+            this.groupBox3.Location = new System.Drawing.Point(12, 157);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
@@ -450,7 +281,7 @@
             this.groupBox2.Controls.Add(this.txtMaxDistance);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.ForeColor = System.Drawing.Color.Red;
-            this.groupBox2.Location = new System.Drawing.Point(12, 49);
+            this.groupBox2.Location = new System.Drawing.Point(11, 30);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
@@ -500,7 +331,7 @@
             // btnLoad
             // 
             this.btnLoad.AllowDrop = true;
-            this.btnLoad.Location = new System.Drawing.Point(464, 491);
+            this.btnLoad.Location = new System.Drawing.Point(465, 445);
             this.btnLoad.Margin = new System.Windows.Forms.Padding(4);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(114, 43);
@@ -512,7 +343,7 @@
             // btnSave
             // 
             this.btnSave.AllowDrop = true;
-            this.btnSave.Location = new System.Drawing.Point(12, 491);
+            this.btnSave.Location = new System.Drawing.Point(12, 445);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(114, 43);
@@ -535,7 +366,7 @@
             this.cbRegister.Location = new System.Drawing.Point(8, 47);
             this.cbRegister.Margin = new System.Windows.Forms.Padding(4);
             this.cbRegister.Name = "cbRegister";
-            this.cbRegister.Size = new System.Drawing.Size(313, 26);
+            this.cbRegister.Size = new System.Drawing.Size(328, 26);
             this.cbRegister.TabIndex = 5;
             // 
             // btnSetDriverParam
@@ -584,7 +415,7 @@
             this.gbSetDriverParam.Controls.Add(this.txtSetingValue);
             this.gbSetDriverParam.Controls.Add(this.lbSetingValue);
             this.gbSetDriverParam.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.gbSetDriverParam.Location = new System.Drawing.Point(15, 460);
+            this.gbSetDriverParam.Location = new System.Drawing.Point(13, 23);
             this.gbSetDriverParam.Margin = new System.Windows.Forms.Padding(4);
             this.gbSetDriverParam.Name = "gbSetDriverParam";
             this.gbSetDriverParam.Padding = new System.Windows.Forms.Padding(4);
@@ -678,10 +509,9 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1440, 690);
+            this.ClientSize = new System.Drawing.Size(836, 739);
             this.Controls.Add(this.gbSetDriverParam);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.lstParam);
             this.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -704,13 +534,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.ColumnHeader Register;
-        private System.Windows.Forms.ColumnHeader RegisName;
-        private System.Windows.Forms.ColumnHeader Address;
-        private System.Windows.Forms.ColumnHeader DataType;
-        private System.Windows.Forms.ColumnHeader CurrentValue;
-        private System.Windows.Forms.ColumnHeader Unit;
-        private System.Windows.Forms.ListView lstParam;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtMaxDistance;
         private System.Windows.Forms.TextBox txtDrumRadius;

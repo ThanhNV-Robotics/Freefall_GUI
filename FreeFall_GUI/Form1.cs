@@ -69,6 +69,8 @@ namespace FreeFall_GUI
         private bool WaitingBeforeRunning = false;
 
         private volatile int timercount; // to measure the timer counter
+        int CurrentTime;
+        int PreviousTime;
 
         private int SampleTime = 50;
 
@@ -224,7 +226,7 @@ namespace FreeFall_GUI
             serialPort1.DataBits = 8; // default value
             serialPort1.StopBits = StopBits.One;// default value
             serialPort1.Parity = Parity.None;// default value
-                                             // 
+            cbExperimentMode.SelectedIndex = 0; // Dropping Mode 
             Main_Control_Load();
             if (!serialPort1.IsOpen)
             {
@@ -366,11 +368,14 @@ namespace FreeFall_GUI
                         MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
                         SpdCommand = float.Parse(ExtractReceivedMessage[1]);
                         CurrentPulse = int.Parse(ExtractReceivedMessage[2]);
-
-                        //            ObjectPosition += ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse - (float)PreviousPulse) / (float)EncoderResolution));
+                        
                         ObjectPosition = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse) / (float)EncoderResolution));
                         ObjectPosition = (float)Math.Round((double)ObjectPosition, 1);
-                        PreviousPulse = CurrentPulse;
+
+                        //CurrentTime = Environment.TickCount;                        
+                        //MotorSpeed = (float)60*1000*((float)CurrentPulse - (float)PreviousPulse) / ((CurrentTime - PreviousTime) * EncoderResolution);
+                        //PreviousPulse = CurrentPulse;
+                        //PreviousTime = CurrentTime;
                         //ObjectPosition = float.Parse(ExtractReceivedMessage[3]);
 
                         lbMotorSpeed.Text = MotorSpeed.ToString();
@@ -1031,20 +1036,28 @@ namespace FreeFall_GUI
 
         private void btnStartDropping_Click_1(object sender, EventArgs e)
         {
+
             IsRunning = !IsRunning;
             if (IsRunning) // if is not running > Start running
             {
-                btnStartDropping.BackColor = Color.Orange;
-                btnStartDropping.Text = "STOP";
+                if (Math.Abs(ObjectPosition) >= 1)
+                {
+                    MessageBox.Show("Homing is required");
+                }
+                else
+                {
+                    btnStartDropping.BackColor = Color.Orange;
+                    btnStartDropping.Text = "STOP";
 
-                progressBar.Visible = true;
-                TurnOnGraph(); // Turn on the graph
-                WaitingBeforeRunning = true;
+                    progressBar.Visible = true;
+                    TurnOnGraph(); // Turn on the graph
+                    WaitingBeforeRunning = true;
 
-                gbJogControl.Enabled = false;
-                btnMoveDown.Enabled = false;
-                btnMoveUp.Enabled = false;
-                btnSetJogSpeed.Enabled = false;
+                    gbJogControl.Enabled = false;
+                    btnMoveDown.Enabled = false;
+                    btnMoveUp.Enabled = false;
+                    btnSetJogSpeed.Enabled = false;
+                }                
             }
             else // If it is running > Stop running
             {
@@ -1060,7 +1073,6 @@ namespace FreeFall_GUI
                 btnSetJogSpeed.Enabled = true;
             }
             lbCmdOut.Text = "> Start Dropping";
-            
         }
 
         private void btnStartPulling_Click_1(object sender, EventArgs e)
@@ -1259,7 +1271,7 @@ namespace FreeFall_GUI
                 TotalEpisodes = 1; // Set to default value
                 CurrentEpisode = 0; // Set to default value
                 lbCurrentEpisode.Text = CurrentEpisode.ToString() + "/" + TotalEpisodes.ToString();
-                txtTotalEpisodes.Text = "1";
+                txtTotalEpisodes.Text = "1";                
                 gbEpisode.Enabled = false;
             }
         }
@@ -1340,6 +1352,7 @@ namespace FreeFall_GUI
         {
             if (cbPositionON.CheckState == CheckState.Checked)
             {
+                PreviousTime = Environment.TickCount; // Initialize 
                 SendMessage("6/1"); // Request data from MCU
                 
             }
@@ -1447,6 +1460,22 @@ namespace FreeFall_GUI
             CurrentPulse = 0;
             PreviousPulse = 0;
             lbObjectPosition.Text = ObjectPosition.ToString();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbExperimentMode.SelectedIndex == 0) // Dropping Mode
+            {
+                SendMessage("31/1");
+            }
+            if (cbExperimentMode.SelectedIndex == 1) // Pulling Mode
+            {
+                SendMessage("31/2");
+            }
+            if (cbExperimentMode.SelectedIndex == 2) // Pulling Mode
+            {
+                SendMessage("31/3");
+            }
         }
     }
 }

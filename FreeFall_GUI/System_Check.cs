@@ -178,14 +178,12 @@ namespace FreeFall_GUI
         {
             ImageList imgList = new ImageList();
             imgList.ImageSize = new Size(1, 24);// Set the width and height of ImageList
-            lstParam.SmallImageList = imgList;
+            
         }
         private void System_Check_Load(object sender, EventArgs e)
         {
             // Visualize parameter
-            SetLineHeight();
-            lstParam.FullRowSelect = true;
-            lstParam.GridLines = true;
+            SetLineHeight();            
         }
 
         private void btnSave_Click_1(object sender, EventArgs e)
