@@ -29,3 +29,4 @@ C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Main_Control.resources
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.ParamSetting.resources
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.StepPositionControl.resources
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.DriverInputControl.resources

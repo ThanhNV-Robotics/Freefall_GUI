@@ -23,19 +23,25 @@ namespace FreeFall_GUI
         {
 
         }
-
+        
+        public delegate int GetCurrentPosition();
+        public GetCurrentPosition _GetCurrentPosition;
         private void btnSetPulseCmd_Click(object sender, EventArgs e)
         {
             try
             {
-                int PulseCmd = int.Parse(txtPulseCmd.Text);
-                if (PulseCmd>=0) // CW direction
+                int CurrentPositionPulse = _GetCurrentPosition();
+                int PositionPulseCmd = int.Parse(txtPulseCmd.Text);
+
+                int DeltaPulseCmd = (PositionPulseCmd - CurrentPositionPulse);
+
+                if (DeltaPulseCmd >= 0) // CW direction
                 {
-                    _SendCommand("20/1/" + PulseCmd.ToString()); // 1 mean CW dir
+                    _SendCommand("20/1/" + DeltaPulseCmd.ToString()); // 1 mean CW dir
                 }
                 else // CCW Direction
                 {
-                    _SendCommand("20/0/" + PulseCmd.ToString()); // 0 mean CCW dir
+                    _SendCommand("20/0/" + DeltaPulseCmd.ToString()); // 0 mean CCW dir
                 }
                 
             }

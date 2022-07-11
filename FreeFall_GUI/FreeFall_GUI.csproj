@@ -71,6 +71,12 @@
     <Compile Include="COM_Config.Designer.cs">
       <DependentUpon>COM_Config.cs</DependentUpon>
     </Compile>
+    <Compile Include="DriverInputControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DriverInputControl.Designer.cs">
+      <DependentUpon>DriverInputControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Elip_Label.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -105,6 +111,9 @@
     </Compile>
     <EmbeddedResource Include="COM_Config.resx">
       <DependentUpon>COM_Config.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DriverInputControl.resx">
+      <DependentUpon>DriverInputControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
