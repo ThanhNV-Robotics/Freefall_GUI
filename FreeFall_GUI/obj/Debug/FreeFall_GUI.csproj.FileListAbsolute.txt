@@ -30,3 +30,5 @@ C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.ParamSetting.resources
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.StepPositionControl.resources
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.DriverInputControl.resources
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.TCPServer.resources
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\SimpleTCP.dll

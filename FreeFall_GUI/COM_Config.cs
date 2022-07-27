@@ -13,15 +13,16 @@ namespace FreeFall_GUI
     public partial class COM_Config : Form
     {
         bool IsApplied;
+        string PortName;
         public COM_Config()
         {
             InitializeComponent();
             IsApplied = false;
         }
         
-        public delegate void SetCOM(string PortName, int _BauRate, int _DataBits, string _StopBits, string _Parity);
-        public delegate bool COMConnect();
-        public delegate bool COMDisconnect();
+        public delegate void SetCOM(int index, string PortName, int _BauRate, int _DataBits, string _StopBits, string _Parity);
+        public delegate bool COMConnect(int index);
+        public delegate bool COMDisconnect(int index);
         public delegate string[] COMRefresh();
 
         public SetCOM _SetCOM; // tao mot ham uy quyen
@@ -45,12 +46,12 @@ namespace FreeFall_GUI
 
         private void SetCOMParams()
         {
-            string _PortName = cbPortName.SelectedItem.ToString();
+            //string _PortName = cbPortName.SelectedItem.ToString();
             int _BaudRate = int.Parse(cb_baud_rate.SelectedItem.ToString());
             int _DataBits = int.Parse(cb_data_bits.SelectedItem.ToString());
             string _StopBits = cb_stop_bits.SelectedItem.ToString();
             string _Parity = cb_parity_bits.SelectedItem.ToString();
-            _SetCOM(_PortName, _BaudRate, _DataBits, _StopBits, _Parity);
+            _SetCOM(cbPortName.SelectedIndex ,PortName, _BaudRate, _DataBits, _StopBits, _Parity);
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
@@ -59,7 +60,7 @@ namespace FreeFall_GUI
         }
         private void DisableControl ()
         {
-            cbPortName.Enabled = false;
+            //cbPortName.Enabled = false;
             cb_baud_rate.Enabled = false;
             cb_data_bits.Enabled = false;
             cb_parity_bits.Enabled = false;
@@ -75,7 +76,7 @@ namespace FreeFall_GUI
         }
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            bool COMIsOpen = _COMConnect();
+            bool COMIsOpen = _COMConnect(cbPortName.SelectedIndex);
             if (COMIsOpen)
             {
                 DisableControl();
@@ -84,7 +85,7 @@ namespace FreeFall_GUI
 
         private void btn_com_disconnect_Click(object sender, EventArgs e)
         {
-            bool  COMIsOpen  = _COMDisconnect(); // thuc hien uy quyen
+            bool  COMIsOpen  = _COMDisconnect(cbPortName.SelectedIndex); // thuc hien uy quyen
             if (!COMIsOpen)
             {
                 EnabaleControl();
@@ -100,7 +101,9 @@ namespace FreeFall_GUI
 
         private void cbPortName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetCOMParams();
+            PortName = cbPortName.SelectedItem.ToString();
+            EnabaleControl();
+            SetCOMParams();            
         }
     }
 }

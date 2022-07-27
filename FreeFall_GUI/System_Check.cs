@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZedGraph;
+using System.IO;
 namespace FreeFall_GUI
 {
 
@@ -19,7 +20,7 @@ namespace FreeFall_GUI
         private UInt16 StoppingTime;
        
         private uint SampleTime;
-        float kbrake;
+        
         private float FloatFeedbackValue;
         private int IntFeedbackValue;
         // delegate to set parameters using serialport1 of the main UI
@@ -236,30 +237,30 @@ namespace FreeFall_GUI
                 //    }
                 //    break;
 
-                case 41:
-                    if (kbrake == Param)
-                    {
-                        MessageBox.Show("Successfully Set kbrake");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Setting Failed! Set Again");
-                    }
-                    break;
+                //case 41:
+                //    if (kbrake == Param)
+                //    {
+                //        MessageBox.Show("Successfully Set kbrake");
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("Setting Failed! Set Again");
+                //    }
+                //    break;
                 default:
                     break;
             }
         }
-        private void SetLineHeight()
-        {
-            ImageList imgList = new ImageList();
-            imgList.ImageSize = new Size(1, 24);// Set the width and height of ImageList
-            
-        }
+        
         private void System_Check_Load(object sender, EventArgs e)
         {
-            // Visualize parameter
-            SetLineHeight();            
+            MOb = 5; // kg
+            Jd = 2.9; // kgm2
+            Fs = 1.2;
+
+            txtJd.Text = Jd.ToString();
+            txtMOb.Text = MOb.ToString();
+            txtFs.Text = Fs.ToString();
         }
 
         private void btnSave_Click_1(object sender, EventArgs e)
@@ -444,6 +445,20 @@ namespace FreeFall_GUI
 
         double MaxSpeed; // rpm
         double TotalDistance; // m
+
+        double DropAccTorque; //Nm
+        double DropDecelTorque; //Nm
+
+        double PullAccTorque; // Nm
+        double PullDecelTorque; // Nm
+
+        double MaxTorque; // Nm
+
+        double Jd; // kgm2 , drum's moment of inertial
+        double MOb; // kg , object's mass
+        double Fs; // Safety factor
+
+        const double g = 9.8; // m/s2 gravity acc
         //public delegate void
         private void CalculateRunningParameters ()
         {
@@ -461,6 +476,9 @@ namespace FreeFall_GUI
                 PullingAccel = double.Parse(txtPullingAccRef.Text); // m/s2
                 PullingDecel = double.Parse(txtPullingDecel.Text); // m/s2
 
+                Jd = double.Parse(txtJd.Text);
+                MOb = double.Parse(txtMOb.Text);
+                Fs = double.Parse(txtFs.Text);
 
                 // Dropping stage calculation
                 DroppingAccleratingTime = Math.Round(Math.Sqrt(2 * DroppingAccelDistance / DroppingAccel), 1); // s
@@ -484,8 +502,24 @@ namespace FreeFall_GUI
 
                 PullingTotalDistance = PullingDecelDistance + PullingAccelDistance;
 
+                //Torque calculation
+                DropAccTorque = -Jd * DroppingAccel / DrumRadius - MOb * (DroppingAccel - g) * DrumRadius;
+                DropDecelTorque = Jd * DroppingDecel / DrumRadius - MOb * (-DroppingDecel - g) * DrumRadius;
+                DropAccTorque = Math.Abs(Math.Round(Fs * DropAccTorque, 1));
+                DropDecelTorque = Math.Abs(Math.Round(Fs * DropDecelTorque, 1));
+
+                PullAccTorque = Jd * PullingAccel / DrumRadius - MOb * (-PullingAccel - g) * DrumRadius;
+                PullDecelTorque = -Jd * PullingDecel / DrumRadius - MOb * (PullingDecel - g) * DrumRadius;
+                PullAccTorque = Math.Abs(Math.Round(Fs * PullAccTorque, 1));
+                PullDecelTorque = Math.Abs(Math.Round(Fs * PullDecelTorque, 1));
+
+                
+                // Max Values
                 MaxSpeed = Math.Max(PullingMaxSpeed, DroppingMaxSpeed);
                 TotalDistance = Math.Max(PullingTotalDistance, DroppingTotalDistance);
+                MaxTorque = Math.Max(Math.Max(PullAccTorque, PullDecelTorque), Math.Max(DropAccTorque, DropDecelTorque));
+
+
                 // Visualize the data
                 // Dropping Stage
                 lbDropAcceleratingTime.Text = DroppingAccleratingTime.ToString();
@@ -501,9 +535,17 @@ namespace FreeFall_GUI
                 lbPullingBrakingTime.Text = PullingDecelTime.ToString();
                 lbPullingTotalDis.Text = PullingTotalDistance.ToString();
 
+                // Torque
+                lbDropAccTorque.Text = DropAccTorque.ToString();
+                lbDropDecelTorque.Text = DropDecelTorque.ToString();
+
+                lbPullAccTorque.Text = PullAccTorque.ToString();
+                lbPullDecelTorque.Text = PullDecelTorque.ToString();
+
                 // Max Speed and Total Distance
                 lbMaxSpeed.Text = MaxSpeed.ToString() + " rpm";
                 lbTotalDistance.Text = TotalDistance.ToString() + " m";
+                lbMaxTorque.Text = MaxTorque.ToString() + " Nm";               
             }
             catch
             {
@@ -593,6 +635,26 @@ namespace FreeFall_GUI
         }
 
         private void txtPullingDecel_TextChanged(object sender, EventArgs e)
+        {
+            CalculateRunningParameters();
+        }
+
+        private void txtJd_TextChanged(object sender, EventArgs e)
+        {
+            CalculateRunningParameters();
+        }
+
+        private void txtMOb_TextChanged(object sender, EventArgs e)
+        {
+            CalculateRunningParameters();
+        }
+
+        private void txtFs_TextChanged(object sender, EventArgs e)
+        {
+            CalculateRunningParameters();
+        }
+
+        private void txtDrumRadius_TextChanged(object sender, EventArgs e)
         {
             CalculateRunningParameters();
         }

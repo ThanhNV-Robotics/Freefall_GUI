@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
+            this.txtJd = new System.Windows.Forms.TextBox();
+            this.label42 = new System.Windows.Forms.Label();
+            this.txtMOb = new System.Windows.Forms.TextBox();
+            this.label37 = new System.Windows.Forms.Label();
+            this.txtFs = new System.Windows.Forms.TextBox();
+            this.label34 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnSampleTimeSet = new System.Windows.Forms.Button();
@@ -59,8 +67,13 @@
             this.label10 = new System.Windows.Forms.Label();
             this.lbFeedbackFrame = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.bnCalculate = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.lbDropDecelTorque = new System.Windows.Forms.Label();
+            this.lbDropAccTorque = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.lbDropMaxSpeed = new System.Windows.Forms.Label();
@@ -82,6 +95,12 @@
             this.txtDropDecel = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.lbPullDecelTorque = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.lbPullAccTorque = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.label35 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -110,6 +129,8 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.lbMaxSpeed = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.lbMaxTorque = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.gbSetDriverParam.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -121,6 +142,14 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Bisque;
+            this.groupBox1.Controls.Add(this.label48);
+            this.groupBox1.Controls.Add(this.label46);
+            this.groupBox1.Controls.Add(this.txtJd);
+            this.groupBox1.Controls.Add(this.label42);
+            this.groupBox1.Controls.Add(this.txtMOb);
+            this.groupBox1.Controls.Add(this.label37);
+            this.groupBox1.Controls.Add(this.txtFs);
+            this.groupBox1.Controls.Add(this.label34);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.btnSampleTimeSet);
@@ -139,10 +168,92 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(394, 188);
+            this.groupBox1.Size = new System.Drawing.Size(394, 313);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Params";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.ForeColor = System.Drawing.Color.Black;
+            this.label48.Location = new System.Drawing.Point(290, 248);
+            this.label48.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(30, 19);
+            this.label48.TabIndex = 24;
+            this.label48.Text = "kg";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.ForeColor = System.Drawing.Color.Black;
+            this.label46.Location = new System.Drawing.Point(278, 206);
+            this.label46.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(71, 19);
+            this.label46.TabIndex = 23;
+            this.label46.Text = "(kgm2)";
+            // 
+            // txtJd
+            // 
+            this.txtJd.Location = new System.Drawing.Point(194, 202);
+            this.txtJd.Margin = new System.Windows.Forms.Padding(4);
+            this.txtJd.Name = "txtJd";
+            this.txtJd.Size = new System.Drawing.Size(76, 29);
+            this.txtJd.TabIndex = 22;
+            this.txtJd.TextChanged += new System.EventHandler(this.txtJd_TextChanged);
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.ForeColor = System.Drawing.Color.Black;
+            this.label42.Location = new System.Drawing.Point(70, 206);
+            this.label42.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(123, 19);
+            this.label42.TabIndex = 21;
+            this.label42.Text = "Drum Inertia ";
+            // 
+            // txtMOb
+            // 
+            this.txtMOb.Location = new System.Drawing.Point(194, 239);
+            this.txtMOb.Margin = new System.Windows.Forms.Padding(4);
+            this.txtMOb.Name = "txtMOb";
+            this.txtMOb.Size = new System.Drawing.Size(76, 29);
+            this.txtMOb.TabIndex = 20;
+            this.txtMOb.TextChanged += new System.EventHandler(this.txtMOb_TextChanged);
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.ForeColor = System.Drawing.Color.Black;
+            this.label37.Location = new System.Drawing.Point(38, 242);
+            this.label37.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(148, 19);
+            this.label37.TabIndex = 19;
+            this.label37.Text = "Module\'s Mass";
+            // 
+            // txtFs
+            // 
+            this.txtFs.Location = new System.Drawing.Point(194, 276);
+            this.txtFs.Margin = new System.Windows.Forms.Padding(4);
+            this.txtFs.Name = "txtFs";
+            this.txtFs.Size = new System.Drawing.Size(76, 29);
+            this.txtFs.TabIndex = 18;
+            this.txtFs.TextChanged += new System.EventHandler(this.txtFs_TextChanged);
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.ForeColor = System.Drawing.Color.Black;
+            this.label34.Location = new System.Drawing.Point(66, 281);
+            this.label34.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(119, 19);
+            this.label34.TabIndex = 17;
+            this.label34.Text = "Safty Factor";
             // 
             // label1
             // 
@@ -170,7 +281,7 @@
             // 
             this.btnSampleTimeSet.AllowDrop = true;
             this.btnSampleTimeSet.ForeColor = System.Drawing.Color.Black;
-            this.btnSampleTimeSet.Location = new System.Drawing.Point(282, 138);
+            this.btnSampleTimeSet.Location = new System.Drawing.Point(282, 136);
             this.btnSampleTimeSet.Margin = new System.Windows.Forms.Padding(4);
             this.btnSampleTimeSet.Name = "btnSampleTimeSet";
             this.btnSampleTimeSet.Size = new System.Drawing.Size(86, 35);
@@ -186,6 +297,7 @@
             this.txtDrumRadius.Name = "txtDrumRadius";
             this.txtDrumRadius.Size = new System.Drawing.Size(76, 29);
             this.txtDrumRadius.TabIndex = 6;
+            this.txtDrumRadius.TextChanged += new System.EventHandler(this.txtDrumRadius_TextChanged);
             // 
             // txtPullingSpeed
             // 
@@ -344,7 +456,7 @@
             // 
             this.btnLoad.AllowDrop = true;
             this.btnLoad.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnLoad.Location = new System.Drawing.Point(17, 461);
+            this.btnLoad.Location = new System.Drawing.Point(12, 559);
             this.btnLoad.Margin = new System.Windows.Forms.Padding(4);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(114, 43);
@@ -357,7 +469,7 @@
             // 
             this.btnSave.AllowDrop = true;
             this.btnSave.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnSave.Location = new System.Drawing.Point(157, 461);
+            this.btnSave.Location = new System.Drawing.Point(152, 559);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(114, 43);
@@ -428,7 +540,7 @@
             this.gbSetDriverParam.Controls.Add(this.txtSetingValue);
             this.gbSetDriverParam.Controls.Add(this.lbSetingValue);
             this.gbSetDriverParam.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.gbSetDriverParam.Location = new System.Drawing.Point(832, 265);
+            this.gbSetDriverParam.Location = new System.Drawing.Point(832, 344);
             this.gbSetDriverParam.Margin = new System.Windows.Forms.Padding(4);
             this.gbSetDriverParam.Name = "gbSetDriverParam";
             this.gbSetDriverParam.Padding = new System.Windows.Forms.Padding(4);
@@ -494,20 +606,15 @@
             this.label8.TabIndex = 18;
             this.label8.Text = "Feedback Frame";
             // 
-            // bnCalculate
-            // 
-            this.bnCalculate.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.bnCalculate.Location = new System.Drawing.Point(293, 461);
-            this.bnCalculate.Name = "bnCalculate";
-            this.bnCalculate.Size = new System.Drawing.Size(104, 41);
-            this.bnCalculate.TabIndex = 19;
-            this.bnCalculate.Text = "Calculate";
-            this.bnCalculate.UseVisualStyleBackColor = true;
-            this.bnCalculate.Click += new System.EventHandler(this.bnCalculate_Click);
-            // 
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.Color.LightBlue;
+            this.groupBox2.Controls.Add(this.label40);
+            this.groupBox2.Controls.Add(this.label39);
+            this.groupBox2.Controls.Add(this.lbDropDecelTorque);
+            this.groupBox2.Controls.Add(this.lbDropAccTorque);
+            this.groupBox2.Controls.Add(this.label33);
+            this.groupBox2.Controls.Add(this.label32);
             this.groupBox2.Controls.Add(this.label22);
             this.groupBox2.Controls.Add(this.label25);
             this.groupBox2.Controls.Add(this.lbDropMaxSpeed);
@@ -526,16 +633,78 @@
             this.groupBox2.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox2.Location = new System.Drawing.Point(15, 142);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(380, 279);
+            this.groupBox2.Size = new System.Drawing.Size(380, 357);
             this.groupBox2.TabIndex = 20;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Running Params";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.ForeColor = System.Drawing.Color.Black;
+            this.label40.Location = new System.Drawing.Point(290, 307);
+            this.label40.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(52, 19);
+            this.label40.TabIndex = 36;
+            this.label40.Text = "(Nm)";
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.ForeColor = System.Drawing.Color.Black;
+            this.label39.Location = new System.Drawing.Point(291, 266);
+            this.label39.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(52, 19);
+            this.label39.TabIndex = 35;
+            this.label39.Text = "(Nm)";
+            // 
+            // lbDropDecelTorque
+            // 
+            this.lbDropDecelTorque.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbDropDecelTorque.Location = new System.Drawing.Point(204, 299);
+            this.lbDropDecelTorque.Name = "lbDropDecelTorque";
+            this.lbDropDecelTorque.Size = new System.Drawing.Size(80, 34);
+            this.lbDropDecelTorque.TabIndex = 34;
+            this.lbDropDecelTorque.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbDropAccTorque
+            // 
+            this.lbDropAccTorque.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbDropAccTorque.Location = new System.Drawing.Point(204, 258);
+            this.lbDropAccTorque.Name = "lbDropAccTorque";
+            this.lbDropAccTorque.Size = new System.Drawing.Size(80, 34);
+            this.lbDropAccTorque.TabIndex = 33;
+            this.lbDropAccTorque.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.ForeColor = System.Drawing.Color.Black;
+            this.label33.Location = new System.Drawing.Point(6, 307);
+            this.label33.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(200, 19);
+            this.label33.TabIndex = 32;
+            this.label33.Text = "Deccelerating Torque";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.ForeColor = System.Drawing.Color.Black;
+            this.label32.Location = new System.Drawing.Point(6, 266);
+            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(190, 19);
+            this.label32.TabIndex = 31;
+            this.label32.Text = "Accelerating Torque";
             // 
             // label22
             // 
             this.label22.AutoSize = true;
             this.label22.ForeColor = System.Drawing.Color.Black;
-            this.label22.Location = new System.Drawing.Point(289, 241);
+            this.label22.Location = new System.Drawing.Point(290, 203);
             this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(57, 19);
@@ -546,7 +715,7 @@
             // 
             this.label25.AutoSize = true;
             this.label25.ForeColor = System.Drawing.Color.Black;
-            this.label25.Location = new System.Drawing.Point(291, 172);
+            this.label25.Location = new System.Drawing.Point(290, 154);
             this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(39, 19);
@@ -556,7 +725,7 @@
             // lbDropMaxSpeed
             // 
             this.lbDropMaxSpeed.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbDropMaxSpeed.Location = new System.Drawing.Point(202, 236);
+            this.lbDropMaxSpeed.Location = new System.Drawing.Point(203, 194);
             this.lbDropMaxSpeed.Name = "lbDropMaxSpeed";
             this.lbDropMaxSpeed.Size = new System.Drawing.Size(80, 34);
             this.lbDropMaxSpeed.TabIndex = 23;
@@ -566,7 +735,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.Color.Black;
-            this.label12.Location = new System.Drawing.Point(7, 241);
+            this.label12.Location = new System.Drawing.Point(7, 202);
             this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(196, 19);
@@ -588,7 +757,7 @@
             // 
             this.label23.AutoSize = true;
             this.label23.ForeColor = System.Drawing.Color.Black;
-            this.label23.Location = new System.Drawing.Point(291, 133);
+            this.label23.Location = new System.Drawing.Point(290, 115);
             this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(39, 19);
@@ -609,7 +778,7 @@
             // lbDropTotalDistance
             // 
             this.lbDropTotalDistance.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbDropTotalDistance.Location = new System.Drawing.Point(204, 167);
+            this.lbDropTotalDistance.Location = new System.Drawing.Point(203, 149);
             this.lbDropTotalDistance.Name = "lbDropTotalDistance";
             this.lbDropTotalDistance.Size = new System.Drawing.Size(80, 34);
             this.lbDropTotalDistance.TabIndex = 25;
@@ -618,7 +787,7 @@
             // lbDropDecelDistance
             // 
             this.lbDropDecelDistance.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbDropDecelDistance.Location = new System.Drawing.Point(204, 126);
+            this.lbDropDecelDistance.Location = new System.Drawing.Point(203, 108);
             this.lbDropDecelDistance.Name = "lbDropDecelDistance";
             this.lbDropDecelDistance.Size = new System.Drawing.Size(80, 34);
             this.lbDropDecelDistance.TabIndex = 24;
@@ -629,7 +798,7 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label13.ForeColor = System.Drawing.Color.Black;
-            this.label13.Location = new System.Drawing.Point(7, 135);
+            this.label13.Location = new System.Drawing.Point(6, 117);
             this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(184, 19);
@@ -669,7 +838,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.ForeColor = System.Drawing.Color.Black;
-            this.label14.Location = new System.Drawing.Point(8, 171);
+            this.label14.Location = new System.Drawing.Point(6, 157);
             this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(179, 19);
@@ -706,7 +875,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox3.Size = new System.Drawing.Size(413, 427);
+            this.groupBox3.Size = new System.Drawing.Size(413, 506);
             this.groupBox3.TabIndex = 17;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Dropping Stage Params";
@@ -764,7 +933,7 @@
             this.groupBox4.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox4.Size = new System.Drawing.Size(384, 425);
+            this.groupBox4.Size = new System.Drawing.Size(384, 504);
             this.groupBox4.TabIndex = 21;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Pulling Stage Params";
@@ -772,6 +941,12 @@
             // groupBox5
             // 
             this.groupBox5.BackColor = System.Drawing.Color.LightBlue;
+            this.groupBox5.Controls.Add(this.label47);
+            this.groupBox5.Controls.Add(this.lbPullDecelTorque);
+            this.groupBox5.Controls.Add(this.label45);
+            this.groupBox5.Controls.Add(this.label43);
+            this.groupBox5.Controls.Add(this.lbPullAccTorque);
+            this.groupBox5.Controls.Add(this.label41);
             this.groupBox5.Controls.Add(this.label28);
             this.groupBox5.Controls.Add(this.label35);
             this.groupBox5.Controls.Add(this.label17);
@@ -790,16 +965,78 @@
             this.groupBox5.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox5.Location = new System.Drawing.Point(3, 138);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(375, 287);
+            this.groupBox5.Size = new System.Drawing.Size(375, 359);
             this.groupBox5.TabIndex = 20;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Running Params";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.ForeColor = System.Drawing.Color.Black;
+            this.label47.Location = new System.Drawing.Point(302, 309);
+            this.label47.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(52, 19);
+            this.label47.TabIndex = 46;
+            this.label47.Text = "(Nm)";
+            // 
+            // lbPullDecelTorque
+            // 
+            this.lbPullDecelTorque.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbPullDecelTorque.Location = new System.Drawing.Point(215, 301);
+            this.lbPullDecelTorque.Name = "lbPullDecelTorque";
+            this.lbPullDecelTorque.Size = new System.Drawing.Size(80, 34);
+            this.lbPullDecelTorque.TabIndex = 45;
+            this.lbPullDecelTorque.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.ForeColor = System.Drawing.Color.Black;
+            this.label45.Location = new System.Drawing.Point(8, 309);
+            this.label45.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(200, 19);
+            this.label45.TabIndex = 37;
+            this.label45.Text = "Deccelerating Torque";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.ForeColor = System.Drawing.Color.Black;
+            this.label43.Location = new System.Drawing.Point(302, 268);
+            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(52, 19);
+            this.label43.TabIndex = 37;
+            this.label43.Text = "(Nm)";
+            // 
+            // lbPullAccTorque
+            // 
+            this.lbPullAccTorque.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbPullAccTorque.Location = new System.Drawing.Point(215, 260);
+            this.lbPullAccTorque.Name = "lbPullAccTorque";
+            this.lbPullAccTorque.Size = new System.Drawing.Size(80, 34);
+            this.lbPullAccTorque.TabIndex = 44;
+            this.lbPullAccTorque.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.ForeColor = System.Drawing.Color.Black;
+            this.label41.Location = new System.Drawing.Point(7, 268);
+            this.label41.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(190, 19);
+            this.label41.TabIndex = 37;
+            this.label41.Text = "Accelerating Torque";
             // 
             // label28
             // 
             this.label28.AutoSize = true;
             this.label28.ForeColor = System.Drawing.Color.Black;
-            this.label28.Location = new System.Drawing.Point(8, 135);
+            this.label28.Location = new System.Drawing.Point(8, 119);
             this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(162, 19);
@@ -810,7 +1047,7 @@
             // 
             this.label35.AutoSize = true;
             this.label35.ForeColor = System.Drawing.Color.Black;
-            this.label35.Location = new System.Drawing.Point(3, 252);
+            this.label35.Location = new System.Drawing.Point(8, 207);
             this.label35.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(174, 19);
@@ -821,7 +1058,7 @@
             // 
             this.label17.AutoSize = true;
             this.label17.ForeColor = System.Drawing.Color.Black;
-            this.label17.Location = new System.Drawing.Point(285, 176);
+            this.label17.Location = new System.Drawing.Point(302, 158);
             this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(39, 19);
@@ -832,7 +1069,7 @@
             // 
             this.label18.AutoSize = true;
             this.label18.ForeColor = System.Drawing.Color.Black;
-            this.label18.Location = new System.Drawing.Point(285, 77);
+            this.label18.Location = new System.Drawing.Point(302, 75);
             this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(34, 19);
@@ -854,7 +1091,7 @@
             // 
             this.label44.AutoSize = true;
             this.label44.ForeColor = System.Drawing.Color.Black;
-            this.label44.Location = new System.Drawing.Point(6, 176);
+            this.label44.Location = new System.Drawing.Point(6, 160);
             this.label44.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(157, 19);
@@ -864,7 +1101,7 @@
             // lbPullingBrakingTime
             // 
             this.lbPullingBrakingTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPullingBrakingTime.Location = new System.Drawing.Point(198, 67);
+            this.lbPullingBrakingTime.Location = new System.Drawing.Point(215, 68);
             this.lbPullingBrakingTime.Name = "lbPullingBrakingTime";
             this.lbPullingBrakingTime.Size = new System.Drawing.Size(80, 34);
             this.lbPullingBrakingTime.TabIndex = 24;
@@ -874,7 +1111,7 @@
             // 
             this.label19.AutoSize = true;
             this.label19.ForeColor = System.Drawing.Color.Black;
-            this.label19.Location = new System.Drawing.Point(285, 135);
+            this.label19.Location = new System.Drawing.Point(302, 117);
             this.label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(39, 19);
@@ -885,7 +1122,7 @@
             // 
             this.label20.AutoSize = true;
             this.label20.ForeColor = System.Drawing.Color.Black;
-            this.label20.Location = new System.Drawing.Point(285, 252);
+            this.label20.Location = new System.Drawing.Point(302, 205);
             this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(57, 19);
@@ -896,7 +1133,7 @@
             // 
             this.label26.AutoSize = true;
             this.label26.ForeColor = System.Drawing.Color.Black;
-            this.label26.Location = new System.Drawing.Point(285, 38);
+            this.label26.Location = new System.Drawing.Point(302, 36);
             this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(34, 19);
@@ -906,7 +1143,7 @@
             // lbPullingTotalDis
             // 
             this.lbPullingTotalDis.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPullingTotalDis.Location = new System.Drawing.Point(198, 168);
+            this.lbPullingTotalDis.Location = new System.Drawing.Point(215, 153);
             this.lbPullingTotalDis.Name = "lbPullingTotalDis";
             this.lbPullingTotalDis.Size = new System.Drawing.Size(80, 34);
             this.lbPullingTotalDis.TabIndex = 25;
@@ -915,7 +1152,7 @@
             // lbPullingBrakingDis
             // 
             this.lbPullingBrakingDis.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPullingBrakingDis.Location = new System.Drawing.Point(198, 125);
+            this.lbPullingBrakingDis.Location = new System.Drawing.Point(215, 110);
             this.lbPullingBrakingDis.Name = "lbPullingBrakingDis";
             this.lbPullingBrakingDis.Size = new System.Drawing.Size(80, 34);
             this.lbPullingBrakingDis.TabIndex = 24;
@@ -924,7 +1161,7 @@
             // lbPullingMaxSpeed
             // 
             this.lbPullingMaxSpeed.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPullingMaxSpeed.Location = new System.Drawing.Point(198, 243);
+            this.lbPullingMaxSpeed.Location = new System.Drawing.Point(215, 197);
             this.lbPullingMaxSpeed.Name = "lbPullingMaxSpeed";
             this.lbPullingMaxSpeed.Size = new System.Drawing.Size(80, 34);
             this.lbPullingMaxSpeed.TabIndex = 23;
@@ -933,7 +1170,7 @@
             // lbPullingAccTime
             // 
             this.lbPullingAccTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPullingAccTime.Location = new System.Drawing.Point(198, 27);
+            this.lbPullingAccTime.Location = new System.Drawing.Point(215, 28);
             this.lbPullingAccTime.Name = "lbPullingAccTime";
             this.lbPullingAccTime.Size = new System.Drawing.Size(80, 34);
             this.lbPullingAccTime.TabIndex = 22;
@@ -1055,11 +1292,11 @@
             // lbTotalDistance
             // 
             this.lbTotalDistance.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbTotalDistance.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbTotalDistance.Font = new System.Drawing.Font("Gulim", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbTotalDistance.ForeColor = System.Drawing.Color.Red;
-            this.lbTotalDistance.Location = new System.Drawing.Point(649, 460);
+            this.lbTotalDistance.Location = new System.Drawing.Point(482, 551);
             this.lbTotalDistance.Name = "lbTotalDistance";
-            this.lbTotalDistance.Size = new System.Drawing.Size(136, 58);
+            this.lbTotalDistance.Size = new System.Drawing.Size(112, 54);
             this.lbTotalDistance.TabIndex = 31;
             this.lbTotalDistance.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -1068,7 +1305,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Gulim", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label11.ForeColor = System.Drawing.Color.Black;
-            this.label11.Location = new System.Drawing.Point(445, 474);
+            this.label11.Location = new System.Drawing.Point(287, 569);
             this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(188, 25);
@@ -1080,7 +1317,7 @@
             this.label30.AutoSize = true;
             this.label30.Font = new System.Drawing.Font("Gulim", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label30.ForeColor = System.Drawing.Color.Black;
-            this.label30.Location = new System.Drawing.Point(846, 479);
+            this.label30.Location = new System.Drawing.Point(627, 569);
             this.label30.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(149, 25);
@@ -1090,26 +1327,50 @@
             // lbMaxSpeed
             // 
             this.lbMaxSpeed.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbMaxSpeed.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbMaxSpeed.Font = new System.Drawing.Font("Gulim", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbMaxSpeed.ForeColor = System.Drawing.Color.Red;
-            this.lbMaxSpeed.Location = new System.Drawing.Point(1016, 461);
+            this.lbMaxSpeed.Location = new System.Drawing.Point(783, 549);
             this.lbMaxSpeed.Name = "lbMaxSpeed";
-            this.lbMaxSpeed.Size = new System.Drawing.Size(210, 58);
+            this.lbMaxSpeed.Size = new System.Drawing.Size(116, 56);
             this.lbMaxSpeed.TabIndex = 33;
             this.lbMaxSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Gulim", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(938, 570);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(157, 25);
+            this.label7.TabIndex = 34;
+            this.label7.Text = "Max Torque";
+            // 
+            // lbMaxTorque
+            // 
+            this.lbMaxTorque.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbMaxTorque.Font = new System.Drawing.Font("Gulim", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbMaxTorque.ForeColor = System.Drawing.Color.Red;
+            this.lbMaxTorque.Location = new System.Drawing.Point(1102, 551);
+            this.lbMaxTorque.Name = "lbMaxTorque";
+            this.lbMaxTorque.Size = new System.Drawing.Size(116, 56);
+            this.lbMaxTorque.TabIndex = 35;
+            this.lbMaxTorque.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ParamSetting
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1238, 527);
+            this.ClientSize = new System.Drawing.Size(1238, 622);
+            this.Controls.Add(this.lbMaxTorque);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.lbMaxSpeed);
             this.Controls.Add(this.label30);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.lbTotalDistance);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.bnCalculate);
             this.Controls.Add(this.gbSetDriverParam);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnLoad);
@@ -1170,7 +1431,6 @@
         private System.Windows.Forms.TextBox txtPullingSpeed;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtStoppingTime;
-        private System.Windows.Forms.Button bnCalculate;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label24;
@@ -1221,5 +1481,27 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label lbMaxSpeed;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label lbDropDecelTorque;
+        private System.Windows.Forms.Label lbDropAccTorque;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label lbPullDecelTorque;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label lbPullAccTorque;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label lbMaxTorque;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.TextBox txtJd;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.TextBox txtMOb;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.TextBox txtFs;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.Label label46;
     }
 }

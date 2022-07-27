@@ -10,6 +10,11 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.Timers;
 using ZedGraph;
+using System.Net.Sockets;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using SimpleTCP;
 
 namespace FreeFall_GUI
 {
@@ -69,7 +74,7 @@ namespace FreeFall_GUI
         private bool WaitingBeforeRunning = false;
         private int PulseCmd; // to count the pulse cmd generate by the mcu
         private float PosCmd; // Position Command
-        private float AccZ; // m/s^2
+        private double AccZ; // m/s^2
 
         private volatile int timercount; // to measure the timer counter
 
@@ -91,6 +96,7 @@ namespace FreeFall_GUI
         float MotorSpeed; // Motor speed
         float SpdCommand; // Speed Command
         int CurrentPulse = 0;
+        int PulseError;
 
         float DrumRadius = (float)0.35; //m - big model
         
@@ -105,7 +111,7 @@ namespace FreeFall_GUI
         private GraphPane MyPane = new GraphPane();
         private bool IsRunning = false;
 
-        private string FolderPath;
+        //private string FolderPath;
 
         #endregion
 
@@ -117,42 +123,68 @@ namespace FreeFall_GUI
         }
  
         #region Button Callback
-        private bool ConnectCOM()
+        private bool ConnectCOM(int index)
         {
             try
             {
-                serialPort1.Open();
-                if (serialPort1.IsOpen)
+                switch (index)
                 {
-                    serialPort1.Write("6/0" + "$");
-                    timer1.Enabled = true;
-                    lb_com_status.Text = serialPort1.PortName.ToString() + " is connected";
-                    lb_com_status.BackColor = Color.Lime;
+                    case 0: // serial 1 com port, for UI control
+                        serialPort1.Open();
+                        if (serialPort1.IsOpen)
+                        {
+                            serialPort1.Write("6/0" + "$");
+                            timer1.Enabled = true;
+                            lb_com_status.Text = serialPort1.PortName.ToString() + " is connected";
+                            lb_com_status.BackColor = Color.Lime;
+                        }
+                        return serialPort1.IsOpen;                        
+                    case 1: // serail 2 com port, for transmit Accel data
+                        serialPort2.Open();
+                        if (serialPort2.IsOpen)
+                        {
+                            lbSerialPort2Status.BackColor = Color.Lime;
+                            lbSerialPort2Status.Text = serialPort2.PortName.ToString() + " is connected";
+                        }
+                        
+                        return serialPort2.IsOpen;                      
+
+                    default:
+                        break;
                 }
+                
             }
             catch (Exception err)
             {
                 MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //throw;
             }
-            return serialPort1.IsOpen;
+            return false;
         }
         private string[] COMRefresh()
         {
             string[] port = SerialPort.GetPortNames();
             return port;
         }
-        private bool COMDisconnect()
+        private bool COMDisconnect(int index)
         {
             try
             {
-                serialPort1.Close();
+                switch (index)
+                {
+                    case 0: // serial1, UI control
+                        serialPort1.Close();
+                        return serialPort1.IsOpen;
+                    case 1: // serial 2, Data transfer
+                        serialPort2.Close();
+                        return serialPort2.IsOpen;
+                    default:
+                        break;
+                }                
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            return serialPort1.IsOpen;
+            catch
+            {  }
+            return true;
         }
         public bool IsFormOpen(Form _form) // Function to check if a form is openned or not
         {
@@ -185,43 +217,85 @@ namespace FreeFall_GUI
             }
             
         }
-        public void SendAccZData(float AccZ)
+
+        //public void SendAccZData(float AccZ)
+        //{
+        //    string AccData2Send = "9" + "/" + AccZ.ToString();
+        //    SendMessage(AccData2Send); // r is the funtion code
+        //} 
+        public void SetCOMParam (int index, string PortName, int _BauRate, int _DataBits, string _StopBits, string _Parity)
         {
-            string AccData2Send = "9" + "/" + AccZ.ToString();
-            SendMessage(AccData2Send); // r is the funtion code
-        } 
-        public void SetCOMParam (string PortName, int _BauRate, int _DataBits, string _StopBits, string _Parity)
-        {
-            serialPort1.PortName = PortName;
-            serialPort1.BaudRate = _BauRate;
-            serialPort1.DataBits = _DataBits;
-            switch (_StopBits)
+            switch (index)
             {
-                case "One":
-                    serialPort1.StopBits = StopBits.One;// default value
+                case 0: // GUI port
+                    serialPort1.PortName = PortName;
+                    serialPort1.BaudRate = _BauRate;
+                    serialPort1.DataBits = _DataBits;
+                    switch (_StopBits)
+                    {
+                        case "One":
+                            serialPort1.StopBits = StopBits.One;// default value
+                            break;
+                        case "Two":
+                            serialPort1.StopBits = StopBits.Two;
+                            break;
+                        default:
+                            serialPort1.StopBits = StopBits.One;// default value
+                            break;
+                    }
+                    switch (_Parity)
+                    {
+                        case "None":
+                            serialPort1.Parity = Parity.None;
+                            break;
+                        case "Even":
+                            serialPort1.Parity = Parity.Even;
+                            break;
+                        case "Odd":
+                            serialPort1.Parity = Parity.Odd;
+                            break;
+                        default:
+                            serialPort1.Parity = Parity.None;
+                            break;
+                    }
                     break;
-                case "Two":
-                    serialPort1.StopBits = StopBits.Two;
+                case 1: // Data port
+                    serialPort2.PortName = PortName;
+                    serialPort2.BaudRate = _BauRate;
+                    serialPort2.DataBits = _DataBits;
+                    switch (_StopBits)
+                    {
+                        case "One":
+                            serialPort2.StopBits = StopBits.One;// default value
+                            break;
+                        case "Two":
+                            serialPort2.StopBits = StopBits.Two;
+                            break;
+                        default:
+                            serialPort2.StopBits = StopBits.One;// default value
+                            break;
+                    }
+                    switch (_Parity)
+                    {
+                        case "None":
+                            serialPort2.Parity = Parity.None;
+                            break;
+                        case "Even":
+                            serialPort2.Parity = Parity.Even;
+                            break;
+                        case "Odd":
+                            serialPort2.Parity = Parity.Odd;
+                            break;
+                        default:
+                            serialPort2.Parity = Parity.None;
+                            break;
+                    }
+                    break;
                     break;
                 default:
-                    serialPort1.StopBits = StopBits.One;// default value
                     break;
             }
-            switch (_Parity)
-            {
-                case "None":
-                    serialPort1.Parity = Parity.None;
-                    break;
-                case "Even":
-                    serialPort1.Parity = Parity.Even;
-                    break;
-                case "Odd":
-                    serialPort1.Parity = Parity.Odd;
-                    break;
-                default:
-                    serialPort1.Parity = Parity.None;
-                    break;
-            }            
+                     
         }
  
 
@@ -232,6 +306,11 @@ namespace FreeFall_GUI
             serialPort1.DataBits = 8; // default value
             serialPort1.StopBits = StopBits.One;// default value
             serialPort1.Parity = Parity.None;// default value
+
+            serialPort2.BaudRate = 9600; // default value
+            serialPort2.DataBits = 8; // default value
+            serialPort2.StopBits = StopBits.One;// default value
+            serialPort2.Parity = Parity.None;// default value
 
             // Disable Start Button
 
@@ -261,7 +340,7 @@ namespace FreeFall_GUI
             // Consider to get the driver status from the board
             ControlMode = true; // Default is Position Control Mode
 
-            timer2.Interval = SampleTime; //ms
+            //timer2.Interval = SampleTime; //ms
             timer2.Enabled = false;
             ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
             //Initial output states color
@@ -282,20 +361,45 @@ namespace FreeFall_GUI
             // Data checkbox
             cbSpeed.CheckState = CheckState.Checked;
             cbSpdCmd.CheckState = CheckState.Checked;
+            cbAccZ.CheckState = CheckState.Checked;
 
             cbDriverType.SelectedIndex = 0;
             cbExperimentMode.SelectedIndex = 0;
+
+            // Load Ip and port
+            // Initialize TCP server parameters
+            IPAddress[] localIP = Dns.GetHostAddresses(Dns.GetHostName()); // Get computers' IP address
+            foreach (IPAddress address in localIP)
+            {
+                if (address.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    IpAddress = address.ToString();
+                    lbServerIP.Text = address.ToString();
+                }
+            }
+            Port = 8000; // Default value
+            lbPort.Text = Port.ToString();
+
+            listener = new TcpListener(IPAddress.Any, Port); // create an instance of the listener
+            InitTcpServer();
         }
+        bool ScanClient = false;
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (!serialPort1.IsOpen)
             {
                 lb_com_status.BackColor = Color.Red;
-                lb_com_status.Text = "COM is disconnected";
-                timer1.Enabled = false;
+                lb_com_status.Text = "GUI COM discon";
+                //timer1.Enabled = false;
                 //gb_System_Check.Enabled = false;
             }
-
+            if (!serialPort2.IsOpen)
+            {
+                lbSerialPort2Status.BackColor = Color.Red;
+                lbSerialPort2Status.Text = "COM data discon";
+                //timer1.Enabled = false;
+                //gb_System_Check.Enabled = false;
+            }
             if (!RDY) // Servo is ready
             {
                 IsEStop = false; // Clear the Estop flag
@@ -308,8 +412,93 @@ namespace FreeFall_GUI
                 lbServoEnable.Enabled = false;
                 toggleServoEnable.CheckState = CheckState.Unchecked;
             }
-        }
 
+            if (IsServerOn)
+            {
+                if (client == null) // no client
+                {
+                    ServerOn();
+                    return;
+                }
+                else
+                {
+                    if (client.Connected)
+                    {
+                        lbStatus.BackColor = Color.Lime;
+                        lbStatus.Text = "Connected";
+                    }
+                    else
+                    {
+                        ServerOn();
+                        return;
+                    }
+                }
+            }
+            
+            if (ScanClient) // Scanning connection is true
+            {
+                try
+                {
+                    if (!isClientConnected())
+                    {
+                        lbStatus.BackColor = Color.LightGray;
+                        lbStatus.Text = "Disconnected";
+                        togServerOnOff.CheckState = CheckState.Unchecked;
+                        ScanClient = false;
+                    }
+                    else
+                    {
+                        lbStatus.BackColor = Color.Lime;
+                        lbStatus.Text = "Connected";
+                    }
+                }
+                catch
+                {
+                    return;
+                }                
+            }
+            //if (client != null)
+            //{
+            //    if (client.Connected)
+            //    {
+            //        lbStatus.BackColor = Color.Lime;
+            //        lbStatus.Text = "Connected";                    
+            //    }
+            //    else
+            //    {
+            //        lbStatus.BackColor = Color.LightGray;
+            //        lbStatus.Text = "Disconnected";
+            //    }                            
+            //}            
+        }
+        public bool isClientConnected()
+        {
+            try
+            {
+                if (client.Client.Poll(0, SelectMode.SelectRead))
+                {
+                    if (!client.Connected) return false;
+                    else
+                    {
+                        byte[] b = new byte[1];
+                        try
+                        {
+                            if (client.Client.Receive(b, SocketFlags.Peek) == 0)
+                            {
+                                // Client disconnected
+                                return false;
+                            }
+                        }
+                        catch { return false; }
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }                    
+        }
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             string TemperoryData = serialPort1.ReadExisting();
@@ -320,6 +509,134 @@ namespace FreeFall_GUI
                 ReceivedMessage = null;
             }
         }
+
+
+        #region Circular Buffer
+        // Implement a circular buffer
+        const int SIZE_OF_SPDCMD_BUFFER = 5; // Size of the buffer
+
+        float[] SpdCmdCircularBuffer; // declare an array for the buffer
+        int SpdCmdBufferLength = 0;
+        int SpdCmdReadIndex = 0; // Reading index
+        int SpdCmdWriteIndex = 0; // Writing index
+
+        float[] SpdCircularBuffer; // declare an array for the buffer
+        int SpdBufferLength = 0;
+        int SpdReadIndex = 0; // Reading index
+        int SpdWriteIndex = 0; // Writing index
+
+        void ResetBuffer ()
+        {
+            SpdCmdBufferLength = 0;
+            SpdCmdReadIndex = 0; 
+            SpdCmdWriteIndex = 0; 
+            SpdCmdCircularBuffer = null;
+
+            SpdCircularBuffer = null; // declare an array for the buffer
+            SpdBufferLength = 0;
+            SpdReadIndex = 0; // Reading index
+            SpdWriteIndex = 0; // Writing index
+        }
+
+        void InitSpdCmdBuffer()
+        {
+            SpdCmdCircularBuffer = new float[SIZE_OF_SPDCMD_BUFFER]; // declare an array for the buffer
+            SpdCmdBufferLength = 0;
+            SpdCmdReadIndex = 0; // Reading index
+            SpdCmdWriteIndex = 0; // Writing index
+
+            SpdCircularBuffer = new float[SIZE_OF_SPDCMD_BUFFER]; // declare an array for the buffer
+            SpdBufferLength = 0;
+            SpdReadIndex = 0; // Reading index
+            SpdWriteIndex = 0; // Writing index
+        }
+        void WriteToSpdCmdBuffer (float value) // Write a value to the buffer
+        {
+
+            if (SpdCmdCircularBuffer == null)
+            {
+                return;
+            }
+            else
+            {
+                if (SpdCmdBufferLength == SIZE_OF_SPDCMD_BUFFER) // Check if the buffer is full or not
+                {
+                    return; // exit the function
+                }
+                SpdCmdCircularBuffer[SpdCmdWriteIndex] = value; // Store the value to the buffer
+
+                SpdCmdBufferLength++;
+                SpdCmdWriteIndex++;
+
+                if (SpdCmdWriteIndex == SIZE_OF_SPDCMD_BUFFER)
+                {
+                    SpdCmdWriteIndex = 0;
+                }
+            }            
+        }
+
+        void WriteToSpdBuffer(float value) // Write a value to the buffer
+        {            
+            if (SpdCircularBuffer == null)
+            {
+                return;
+            }
+            else
+            {
+                if (SpdBufferLength == SIZE_OF_SPDCMD_BUFFER) // Check if the buffer is full or not
+                {
+                    return; // exit the function
+                }
+                SpdCircularBuffer[SpdWriteIndex] = value; // Store the value to the buffer
+
+                SpdBufferLength++;
+                SpdWriteIndex++;
+
+                if (SpdWriteIndex == SIZE_OF_SPDCMD_BUFFER)
+                {
+                    SpdWriteIndex = 0;
+                }
+            }
+        }
+
+        float GetValueOutOfSpdBuffer()
+        {
+            if (SpdBufferLength == 0) // There is no data in the buffer
+            {
+                return 0; // return 0
+            }
+            else
+            {
+                SpdBufferLength--;
+                SpdReadIndex++;
+
+                if (SpdReadIndex == SIZE_OF_SPDCMD_BUFFER)
+                {
+                    SpdReadIndex = 0;
+                }
+                return SpdCircularBuffer[SpdReadIndex];
+            }            
+        }
+
+        float GetValueOutOfSpdCmdBuffer ()
+        {
+            if (SpdCmdBufferLength == 0) // There is no data in the buffer
+            {
+                return 0; // return 0
+            }
+
+            SpdCmdBufferLength--;
+            SpdCmdReadIndex++;
+
+            if (SpdCmdReadIndex == SIZE_OF_SPDCMD_BUFFER)
+            {
+                SpdCmdReadIndex = 0;
+            }
+            return SpdCmdCircularBuffer[SpdCmdReadIndex];
+        }
+        #endregion
+
+        
         public delegate void ShowFeedbackDriverDataFrame(string DataFrame);
         public ShowFeedbackDriverDataFrame _ShowFeedbackDriverDataFrame; // create an instance of delegate
         private void ProcessMessage(object sender, EventArgs e)
@@ -440,10 +757,21 @@ namespace FreeFall_GUI
                         MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
                         SpdCommand = float.Parse(ExtractReceivedMessage[1]);
                         CurrentPulse = int.Parse(ExtractReceivedMessage[2]);
-                        PulseCmd = int.Parse(ExtractReceivedMessage[3]);
+                        PulseError = int.Parse(ExtractReceivedMessage[3]);
+                        AccZ = double.Parse(ExtractReceivedMessage[4]);
 
-                        PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)HIGENEncoderRes));
-                        PosCmd = (float)Math.Round((double)PosCmd, 1);
+                        PulseCmd = CurrentPulse + PulseError;
+
+                        //PulseCmd = int.Parse(ExtractReceivedMessage[3]);
+
+                        //PulseError = PulseCmd - CurrentPulse;
+
+                        //PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)HIGENEncoderRes));
+                        //PosCmd = (float)Math.Round((double)PosCmd, 1);
+
+                        // Write to the Buffer
+                        WriteToSpdCmdBuffer(SpdCommand);
+                        WriteToSpdBuffer(MotorSpeed);
 
                         //AccZ = float.Parse(ExtractReceivedMessage[4]);
 
@@ -451,22 +779,28 @@ namespace FreeFall_GUI
                         {
                             ObjectPosition = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse) / (float)HIGENEncoderRes));
                             ObjectPosition = (float)Math.Round((double)ObjectPosition, 1);
-                            trackBar_Position.Value = -(int)PosCmd; // Position cmd based
+                            //rackBar_Position.Value = -(int)PosCmd; // Position cmd based
+
+                            PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)HIGENEncoderRes));
+                            PosCmd = (float)Math.Round((double)PosCmd, 1);
                         }
                         else // ASDA A3 Driver
                         {
                             ObjectPosition = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse) / (float)ASDAEncoderRes));
                             ObjectPosition = (float)Math.Round((double)ObjectPosition, 1);
 
+                            PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)ASDAEncoderRes));
+                            PosCmd = (float)Math.Round((double)PosCmd, 1);
+
                             trackBar_Position.Value = -(int)ObjectPosition; // Actual position based
                         }                        
 
-                        lbMotorSpeed.Text = MotorSpeed.ToString();
+                        lbMotorSpeed.Text = MotorSpeed.ToString() + " rpm";
                         lbEncoderPulses.Text = CurrentPulse.ToString();
-                        lbObjectPosition.Text = ObjectPosition.ToString();
+                        lbObjectPosition.Text = ObjectPosition.ToString() + " m";
                         lbPulseCmd.Text = PulseCmd.ToString();
                         lbPosCmd.Text = PosCmd.ToString();
-                        lbAccZ.Text = AccZ.ToString();
+                        lbPulseError.Text = PulseError.ToString();
                        
                     }
                     catch { }
@@ -484,6 +818,7 @@ namespace FreeFall_GUI
                 }
                 return;
             }
+            
             if (ReceivedMessage[0] == 'o') // Only the driver outputs
             {
                 ReceivedMessage = (ReceivedMessage.Replace("o", null)).Replace("e", null);
@@ -642,7 +977,7 @@ namespace FreeFall_GUI
         public void SetSampleTime(int _SampleTime)
         {
             SampleTime = _SampleTime;
-            timer2.Interval = SampleTime;
+            //timer2.Interval = SampleTime;
         }
         private void ShowDriverOutput(uint DriverOutput) // Visual the driver's output
         {
@@ -751,10 +1086,10 @@ namespace FreeFall_GUI
             myPane.YAxis.Scale.Max = 100;
 
             
-            myPane.Y2Axis.Title.Text = "AccZ(m/s2)";
+            myPane.Y2Axis.Title.Text = "AccZ (m/s2)";
             myPane.Y2Axis.Scale.Min = -10;
             myPane.Y2Axis.Scale.Max = 10;
-            myPane.Y2Axis.Scale.MinorStep = 1;
+            myPane.Y2Axis.Scale.MinorStep = 5;
             myPane.Y2Axis.Scale.FontSpec.FontColor = Color.Blue;
             myPane.Y2Axis.Title.FontSpec.FontColor = Color.Blue;
             myPane.Y2Axis.IsVisible = true;
@@ -832,11 +1167,58 @@ namespace FreeFall_GUI
             }
             catch
             {
-                MessageBox.Show("Saving Fail! Check the Folder's Path");
+                MessageBox.Show("Saving Failed!");
+            }
+
+        }
+
+        private void SaveToExcel(string DataPath)
+        {
+            Microsoft.Office.Interop.Excel.Application xla = new Microsoft.Office.Interop.Excel.Application();
+            xla.Visible = false;
+            Microsoft.Office.Interop.Excel.Workbook wb = xla.Workbooks.Add(Microsoft.Office.Interop.Excel.XlSheetType.xlWorksheet);
+            Microsoft.Office.Interop.Excel.Worksheet ws = (Microsoft.Office.Interop.Excel.Worksheet)xla.ActiveSheet;
+
+            // Đặt tên cho hai ô A1. B1 lần lượt là "Thời gian (s)" và "Dữ liệu", sau đó tự động dãn độ rộng
+            Microsoft.Office.Interop.Excel.Range rg = (Microsoft.Office.Interop.Excel.Range)ws.get_Range("A1", "B1");
+            ws.Cells[1, 1] = "time (s)";
+            ws.Cells[1, 2] = "Speed (rpm)";
+            ws.Cells[1, 3] = "Ref Speed (rpm)";
+            ws.Cells[1, 4] = "AccZ";
+            ws.Cells[1, 5] = "Local Time";
+            rg.Columns.AutoFit();
+
+            // Lưu từ ô đầu tiên của dòng thứ 2, tức ô A2
+            int i = 2; // Row index
+            int j = 1; // Column index
+
+            foreach (ListViewItem comp in listData.Items)
+            {
+                ws.Cells[i, j] = comp.Text.ToString();
+                foreach (ListViewItem.ListViewSubItem drv in comp.SubItems)
+                {
+                    ws.Cells[i, j] = drv.Text.ToString();
+                    j++;
+                }
+                j = 1;
+                i++;
+            }
+
+            //string FullDataPath = DataPath + "\" + FileName;
+
+            try
+            {
+                wb.SaveAs(DataPath);
+                wb.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Saving Failed!");
             }
 
         }
         private DateTime LocalTime;
+        string TimeString;
         private void Data_Listview()
         {
             if (!GraphOn)
@@ -845,12 +1227,17 @@ namespace FreeFall_GUI
             {                
                 ListViewItem item = new ListViewItem(time.ToString()); // Gán biến realtime vào cột đầu tiên của ListView
                 item.SubItems.Add(MotorSpeed.ToString());
-                item.SubItems.Add(SpdCommand.ToString());
+                item.SubItems.Add(SpdCmdData.ToString());
                 item.SubItems.Add(AccZ.ToString());
 
-                LocalTime = DateTime.Now;
-                item.SubItems.Add(LocalTime.ToString("h:mm:ss tt"));
-                
+                //LocalTime = DateTime.Now;
+
+                TimeString = System.DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt");
+
+                //item.SubItems.Add(LocalTime.ToString("h:mm:ss tt"));
+
+                item.SubItems.Add(TimeString);
+
                 listData.Items.Add(item); // Gán biến datas vào cột tiếp theo của ListView
                                           // Không nên gán string SDatas vì khi xuất dữ liệu sang Excel sẽ là dạng string, không thực hiện các phép toán được
 
@@ -858,7 +1245,7 @@ namespace FreeFall_GUI
             }
         }
         //private void Draw(double time, double speed, double spdcmd, double accelerationX, double accelerationY, double accelerationZ)
-        private void Draw(double time, double speed, double spdcmd, double AccelZ)
+        private void Draw(double time, double speed, double spdcmd, double _AccZ)
         {
             if (SpeedGraph.GraphPane.CurveList.Count <= 0) // neu ko co duong du lieu dc khoi tao
             {
@@ -893,7 +1280,7 @@ namespace FreeFall_GUI
                 if (AccZList == null) return;
                 //time = (Environment.TickCount - TickStart) / 1000.0;
                 AccZCurve.IsY2Axis = true;
-                AccZList.Add(time, AccelZ);
+                AccZList.Add(time, _AccZ);
             }
 
             Scale xScale = SpeedGraph.GraphPane.XAxis.Scale;
@@ -910,23 +1297,35 @@ namespace FreeFall_GUI
                     xScale.Min = 0;
                 }
             }
-            Scale YScale = SpeedGraph.GraphPane.YAxis.Scale;
-            if (speed > YScale.Max) // Auto scale the Speed axis
+            Scale Y1Scale = SpeedGraph.GraphPane.YAxis.Scale;
+            Scale Y2Scale = SpeedGraph.GraphPane.Y2Axis.Scale;
+
+            if (speed > Y1Scale.Max) // Auto scale the Speed axis
             {
-                YScale.Max = speed + 2*YScale.MajorStep;
+                Y1Scale.Max = speed + 2*Y1Scale.MajorStep;
             }
-            if (spdcmd > YScale.Max) // Auto scale the Speed axis
+            if (spdcmd > Y1Scale.Max) // Auto scale the Speed axis
             {
-                YScale.Max = spdcmd + 2*YScale.MajorStep;
+                Y1Scale.Max = spdcmd + 2*Y1Scale.MajorStep;
             }
-            if (speed < YScale.Min) // Auto scale the Speed axis
+            if (speed < Y1Scale.Min) // Auto scale the Speed axis
             {
-                YScale.Min = speed - 2*YScale.MajorStep;
+                Y1Scale.Min = speed - 2*Y1Scale.MajorStep;
             }
-            if (spdcmd < YScale.Min) // Auto scale the Speed axis
+            if (spdcmd < Y1Scale.Min) // Auto scale the Speed axis
             {
-                YScale.Min = spdcmd - 2*YScale.MajorStep;
+                Y1Scale.Min = spdcmd - 2*Y1Scale.MajorStep;
             }
+
+            if (_AccZ > Y2Scale.Max)
+            {
+                Y2Scale.Max = _AccZ + 2 * Y2Scale.MajorStep;
+            }
+            if (_AccZ < Y2Scale.Min)
+            {
+                Y2Scale.Min = _AccZ - 2 * Y2Scale.MajorStep;
+            }
+
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
         }
@@ -934,6 +1333,7 @@ namespace FreeFall_GUI
         {
             try
             {
+                InitSpdCmdBuffer();
                 GraphOn = true;
                 btnGraphOn.Text = "Graph OFF";
                 //SendMessage("6/1"); // command to get the data
@@ -944,9 +1344,14 @@ namespace FreeFall_GUI
                     RollingPointPairList Speedlist = new RollingPointPairList(6000);
                     LineItem SpeedCurve = SpeedGraph.GraphPane.AddCurve("Speed", Speedlist, Color.Red, SymbolType.None);
                     SpeedCurve.Line.Width = (float)3.0;
-                    RollingPointPairList AccelerationList = new RollingPointPairList(6000);
-                    LineItem AccelerationCurve = SpeedGraph.GraphPane.AddCurve("Speed", Speedlist, Color.Blue, SymbolType.None);
-                    AccelerationCurve.Line.Width = (float)3.0;
+
+                    RollingPointPairList SpeedCmdlist = new RollingPointPairList(6000);
+                    LineItem SpeedCmdCurve = SpeedGraph.GraphPane.AddCurve("Speed Cmd", SpeedCmdlist, Color.Orange, SymbolType.None);
+                    SpeedCurve.Line.Width = (float)3.0;
+
+                    RollingPointPairList AccZList = new RollingPointPairList(6000);
+                    LineItem AccZCurve = SpeedGraph.GraphPane.AddCurve("AccZ", AccZList, Color.Blue, SymbolType.None);
+                    AccZCurve.Line.Width = (float)3.0;
                     SpeedGraph.AxisChange();
                 }
             }
@@ -959,7 +1364,8 @@ namespace FreeFall_GUI
         {
             timer2.Enabled = false;
             GraphOn = false;
-            btnGraphOn.Text = "Graph ON";            
+            btnGraphOn.Text = "Graph ON";
+            ResetBuffer();
         }
         private void timer2_Tick(object sender, EventArgs e)
         {
@@ -998,7 +1404,7 @@ namespace FreeFall_GUI
             GraphOn = false;
             //SendMessage("6/0" ); // Stop transmit speed data;
             timer2.Enabled = false; // Stop receive speed data            
-            timer2.Interval = SampleTime; //ms Sample time 
+            //timer2.Interval = SampleTime; //ms Sample time 
             timercount = 0;
             time = 0;            
 
@@ -1009,7 +1415,10 @@ namespace FreeFall_GUI
             SpeedGraph.GraphPane.XAxis.Scale.Max = 10;
             SpeedGraph.GraphPane.XAxis.Scale.Min = 0;
             SpeedGraph.GraphPane.YAxis.Scale.Max = 100;
-            SpeedGraph.GraphPane.YAxis.Scale.Min = -100;            
+            SpeedGraph.GraphPane.YAxis.Scale.Min = -100;
+
+            SpeedGraph.GraphPane.Y2Axis.Scale.Max = 10;
+            SpeedGraph.GraphPane.Y2Axis.Scale.Min = -10;
 
             RollingPointPairList Speedlist = new RollingPointPairList(60000);
             LineItem SpeedCurve = SpeedGraph.GraphPane.AddCurve("Motor Speed", Speedlist, Color.Red, SymbolType.None);
@@ -1018,6 +1427,10 @@ namespace FreeFall_GUI
             RollingPointPairList SpdCmdList = new RollingPointPairList(60000);
             LineItem SpdCurve = SpeedGraph.GraphPane.AddCurve("Speed Command", SpdCmdList, Color.Orange, SymbolType.None);
             SpdCurve.Line.Width = (float)3.0;
+
+            RollingPointPairList AccZList = new RollingPointPairList(60000);
+            LineItem AccZCurve = SpeedGraph.GraphPane.AddCurve("AccZ", AccZList, Color.Blue, SymbolType.None);
+            AccZCurve.Line.Width = (float)3.0;
 
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
@@ -1030,18 +1443,23 @@ namespace FreeFall_GUI
 
         private void Main_Control_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult Response;
-            Response = MessageBox.Show("Do you want to exit? ESTOP will be triggered on", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-            if (Response == DialogResult.OK)
-            {
+            serialPort1.Close();
+            timer1.Enabled = false;
+            timer2.Enabled = false;
+
+            ResetGraph();
+            //DialogResult Response;
+            //Response = MessageBox.Show("Do you want to exit? ESTOP will be triggered on", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            //if (Response == DialogResult.OK)
+            //{
                 
-                SendMessage(ESTOP);
-                lbCmdOut.Text = "> Emergency Stop";
-            }
-            else
-            {
-                e.Cancel = true;
-            }
+            //    SendMessage(ESTOP);
+            //    lbCmdOut.Text = "> Emergency Stop";
+            //}
+            //else
+            //{
+            //    e.Cancel = true;
+            //}
         }
 
         private void cbReadOutputs_CheckedChanged(object sender, EventArgs e)
@@ -1119,16 +1537,21 @@ namespace FreeFall_GUI
             {
                 SendMessage("18/0");
             }
-        }       
+        }
         #endregion
-
+        float SpdCmdData; // Speed command data
+        float SpdData; // Speed data
         private void timer2_Tick_1(object sender, EventArgs e)
         {
             //SendMessage("12"  ); // 12 means request StE03 = Motor Speed
             timercount++;
             time = (timercount * timer2.Interval) / 1000.0;  // to seconds
             //Draw(time, MotorSpeed, SpdCommand, AccelerationX, AccelerationY, AccelerationZ);
-            Draw(time, MotorSpeed, SpdCommand, AccZ);
+
+            SpdCmdData = GetValueOutOfSpdCmdBuffer();
+            SpdData = GetValueOutOfSpdBuffer();
+
+            Draw(time, SpdData, SpdCmdData, AccZ);
             //Draw(time, MotorSpeed, 1, 2, 3);
             Data_Listview(); // view data to the list view
 
@@ -1158,7 +1581,7 @@ namespace FreeFall_GUI
         {
             if (GraphOn) // if the graph is turned on then turn it off
             {
-                TurnOffGraph();
+                TurnOffGraph();                
             }
             else // if the graph is turned off then turn it on
             {
@@ -1196,9 +1619,6 @@ namespace FreeFall_GUI
         }
         private void InitExperiment()
         {
-            btnStartDropping.BackColor = Color.Orange;
-            btnStartDropping.Text = "STOP";
-
             progressBar.Visible = true;
             TurnOnGraph(); // Turn on the graph
             WaitingBeforeRunning = true;
@@ -1210,34 +1630,106 @@ namespace FreeFall_GUI
             txtTotalEpisodes.Enabled = false; // Disable setting Episode
             btnSetEpisode.Enabled = false; // Disable setting Episode
             tongleRunningMode.Enabled = false; // Disable Setting Running Mode
-            
+
+            DisableJogControl();
+            btnSetHome.Enabled = false;
+            cbExperimentMode.Enabled = false;
+            cbDriverType.Enabled = false;
+            btnStartDropping.BackColor = Color.Orange;
+            btnStartDropping.Text = "STOP";
+
+            cbExperimentMode.Enabled = false;
+            btnSetHome.Enabled = false;
+        }
+
+        TcpClient CmdClient;
+        NetworkStream CmdClientStream;
+
+        string ServerIP = "192.168.200.110";
+        int ServerPort = 5000;
+        string StartMessage = "POST /recording HTTP/1.1";
+        bool StartRecording;
+
+        private bool ConnectToPi ()
+        {
+            try
+            {
+                CmdClient = new TcpClient(ServerIP, ServerPort);
+                return true;
+            }
+            catch
+            {
+                
+            }
+            return false;
+        }
+        private bool SendRecordingCmd ()
+        {
+            if (ConnectToPi()) // Connect successful
+            {
+                try
+                {
+                    int bytecount = Encoding.ASCII.GetByteCount(StartMessage + 1);
+                    byte[] DataToSend = new byte[bytecount];
+                    DataToSend = Encoding.ASCII.GetBytes(StartMessage);
+
+                    CmdClientStream = CmdClient.GetStream();
+                    CmdClientStream.WriteTimeout = 1000; 
+                    CmdClientStream.Write(DataToSend, 0, DataToSend.Length);
+
+                    StartRecording = !StartRecording;
+
+                    if (StartRecording)
+                    {
+                        lbStartRecording.BackColor = Color.Lime;
+                    }
+                    else
+                    {
+                        lbStartRecording.BackColor = Color.Red;
+                    }
+
+                    CmdClientStream.Close();
+                    CmdClient.Close();
+                    CmdClient.Dispose();
+
+                    return true;
+                }
+                catch
+                {
+                    MessageBox.Show("Check the connection");
+                }
+            }            
+            return false;
         }
         private void btnStartDropping_Click_1(object sender, EventArgs e)
         {            
-            if (IsRunning) // if is not running > Start running
-            {            
-                cbExperimentMode.Enabled = false;
-                btnSetHome.Enabled = false;
+            if (!IsRunning) // if is not running > Start running
+            {                
                 switch (ExperimentMode)
                 {
                     case 1: // Dropping Mode
                         if (cbDataON.CheckState == CheckState.Unchecked) // No request data
                         {
                             MessageBox.Show("Please turn ON Data request");
-                            return;
+                            break;                            
                         }
                         if (Math.Abs(PosCmd) >= 1)
                         {
                             MessageBox.Show("Homing is required");
+                            btnSetHome.Enabled = true;
+                            break;                            
                         }
                         else
                         {
-                            IsRunning = !IsRunning;
-                            InitExperiment();
-
-                            DisableJogControl();
-                            btnSetHome.Enabled = false;
-                            cbExperimentMode.Enabled = false;
+                            if (SendRecordingCmd()) // Successfully start recording the data
+                            {
+                                IsRunning = !IsRunning;
+                                InitExperiment();
+                            }
+                            else // Start Recording Failed
+                            {
+                                MessageBox.Show("Fail to start recording sensors");
+                            }                            
                         }
                         break;
                     case 2:
@@ -1246,8 +1738,15 @@ namespace FreeFall_GUI
                             MessageBox.Show("Please turn ON Data request");
                             return;
                         }
-                        IsRunning = !IsRunning;
-                        InitExperiment();
+                        if (SendRecordingCmd()) // Successfully start recording the data
+                        {
+                            IsRunning = !IsRunning;
+                            InitExperiment();
+                        }
+                        else // Start Recording Failed
+                        {
+                            MessageBox.Show("Fail to start recording sensors");
+                        }
                         break;
                     case 3:
                         if (cbDataON.CheckState == CheckState.Unchecked) // No request data
@@ -1255,19 +1754,54 @@ namespace FreeFall_GUI
                             MessageBox.Show("Please turn ON Data request");
                             return;
                         }
-                        IsRunning = !IsRunning;
-                        InitExperiment();
-                        break;
-                    default:
+                        if (SendRecordingCmd()) // Successfully start recording the data
+                        {
+                            IsRunning = !IsRunning;
+                            InitExperiment();
+                        }
+                        else // Start Recording Failed
+                        {
+                            DialogResult Response;
+                            Response = MessageBox.Show("Fail to start recording sensors! Do you want to Run the Motor?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                            if (Response == DialogResult.OK)
+                            {
+                                IsRunning = !IsRunning;
+                                InitExperiment();
+                            }                            
+                        }
+                            break;
+                     default:
                         break;
                 }
             }
             else // If it is running > Stop running
             {
+                SendMessage(StopRunning);                
+
+                if (SendRecordingCmd()) //
+                {
+                    //MessageBox.Show("Sensors recording is stopped");
+                    lbStartRecording.BackColor = Color.Red;
+                }
+
+                DialogResult Response;
+                Response = MessageBox.Show("Do you want to Save the Data?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (Response == DialogResult.OK)
+                {
+                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    {                        
+                        SaveToExcel(saveFileDialog1.FileName);
+                        ResetGraph();
+                    }                    
+                }
+                else
+                {
+                    ResetGraph();
+                }
+                
                 btnStartDropping.BackColor = Color.Lime;
                 btnStartDropping.Text = "START";
-                SendMessage(StopRunning);
-                ResetGraph();
+
                 ProgressBarInit();
 
                 EnableJogControl();
@@ -1277,6 +1811,8 @@ namespace FreeFall_GUI
                 btnSetHome.Enabled = true;
                 cbExperimentMode.Enabled = true;
                 IsRunning = !IsRunning;
+
+                cbDriverType.Enabled = true;
             }
             lbCmdOut.Text = "> Start Dropping";
         }
@@ -1366,11 +1902,15 @@ namespace FreeFall_GUI
 
         private void btnSave_Click_1(object sender, EventArgs e)
         {
-            DialogResult traloi;
-            traloi = MessageBox.Show("Do you want to save?", "Save", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-            if (traloi == DialogResult.OK)
+            //DialogResult traloi;
+            //traloi = MessageBox.Show("Do you want to save?", "Save", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            //if (traloi == DialogResult.OK)
+            //{
+            //    SaveToExcel(0); // Thực thi hàm lưu ListView sang Excel
+            //}
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                SaveToExcel(0); // Thực thi hàm lưu ListView sang Excel
+                SaveToExcel(saveFileDialog1.FileName);
             }
         }
 
@@ -1448,16 +1988,7 @@ namespace FreeFall_GUI
             _ParamSetting._SetDrumRadius = new ParamSetting.SetDrumRadius(SetDrumRad);
             _ShowFeedbackDriverDataFrame = new ShowFeedbackDriverDataFrame(_ParamSetting.ShowDriverDataFrame);
 
-            _ParamSetting.ShowDialog();
-            // Load the data at the beginning
-            try
-            {
-                serialPort1.Write("10" + "$"); // 10 is the funtion code sent to the STM32 to require upload the saved parameters 
-            }
-            catch
-            {
-                MessageBox.Show("Can not load the parameters. Check the Communication");
-            }
+            _ParamSetting.ShowDialog();            
         }
 
         private void cbReadOutputs_CheckedChanged_1(object sender, EventArgs e)
@@ -1544,31 +2075,31 @@ namespace FreeFall_GUI
             }            
         }
 
-        private void selectFolderToSaveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FolderToSaveDiag.ShowDialog();
-            FolderPath = FolderToSaveDiag.SelectedPath;
-        }
+        //private void selectFolderToSaveToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    FolderToSaveDiag.ShowDialog();
+        //    FolderPath = FolderToSaveDiag.SelectedPath;
+        //}
 
-        private void rdSpeedMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rdSpeedMode.Checked) // Use Speed Mode
-            {
-                ControlMode = false; // False = SpeedMode
-                rdPositionMode.Checked = false;                
-                SendMessage("2/0"); // Set MCU to Speed Control Mode
-            }
-        }
+        //private void rdSpeedMode_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    if (rdSpeedMode.Checked) // Use Speed Mode
+        //    {
+        //        ControlMode = false; // False = SpeedMode
+        //        rdPositionMode.Checked = false;                
+        //        SendMessage("2/0"); // Set MCU to Speed Control Mode
+        //    }
+        //}
         
-        private void rdPositionMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rdPositionMode.Checked) // Use Speed Mode
-            {
-                ControlMode = true; // true = Position Mode
-                rdSpeedMode.Checked = false;               
-                SendMessage("2/1"); // Set MCU to Position Control Mode
-            }
-        }
+        //private void rdPositionMode_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    if (rdPositionMode.Checked) // Use Speed Mode
+        //    {
+        //        ControlMode = true; // true = Position Mode
+        //        rdSpeedMode.Checked = false;               
+        //        SendMessage("2/1"); // Set MCU to Position Control Mode
+        //    }
+        //}
         public int GetPulsePositionCmd()
         {
             return (int)(PulseCmd / EgearRatio);
@@ -1698,6 +2229,214 @@ namespace FreeFall_GUI
                 {
                     _COM_Config.BringToFront();
                 }
+            }
+        }
+
+        // TCP Server variables
+
+        private TcpClient client;
+        private StreamReader STR;
+        TcpListener listener;
+        NetworkStream ns;
+        string IpAddress;
+        int Port;
+        //string ServerReceivedMessage;
+        private TCPServer _TCPSerForm;
+        bool IsServerOn;
+        double AccX;
+        double AccY;
+        private void tCPServerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_TCPSerForm == null || _TCPSerForm.Text == "")
+            {
+                _TCPSerForm = new TCPServer();
+                _TCPSerForm.Show();
+            }
+            else if (CheckFormOpened(_TCPSerForm.Text))
+            {
+                _TCPSerForm.WindowState = FormWindowState.Normal;                
+                _TCPSerForm.Show();
+                _TCPSerForm.Focus();
+            }
+        }
+        private bool CheckFormOpened(string name)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm.Text == name)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ServerOn()
+        {
+            try
+            {
+                listener.Start(); // Start listening for incoming connection request
+                if (listener.Pending()) // There is a pending connection request
+                {
+                    client = listener.AcceptTcpClient();
+                    ns = client.GetStream(); // network stream
+                    STR = new StreamReader(client.GetStream());
+                    backgroundWorker1.RunWorkerAsync(); //Start receiving data in background
+                    backgroundWorker1.WorkerSupportsCancellation = true; // ability to cancel
+                    lbStatus.BackColor = Color.Lime;
+                    lbStatus.Text = "Connected";
+                    ScanClient = true;
+                    listener.Stop();                    
+                }
+                else
+                {
+                    lbStatus.BackColor = Color.Yellow;
+                    lbStatus.Text = "Waiting for connection";
+                }
+                
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.ToString());
+            }
+        }
+        private void ServerOff()
+        {
+            try
+            {
+                backgroundWorker1.CancelAsync();                
+                client.Close();
+                client.Dispose(); // dispose to null
+                //client = null;
+                listener.Stop();                
+            }
+            catch { }
+        }
+
+        private void togServerOnOff_CheckedChanged(object sender, EventArgs e)
+        {
+            if (togServerOnOff.CheckState == CheckState.Unchecked) // Server off
+            {
+                ServerOff();
+                IsServerOn = false;
+                lbStatus.Text = "Server is off";
+                lbStatus.BackColor = Color.Gray;
+                //server.Stop();
+            }
+            else
+            {
+                ServerOn();
+                IsServerOn = true;
+                timer1.Enabled = true;
+                //System.Net.IPAddress ip = System.Net.IPAddress.Parse(lbServerIP.Text);
+                //server.Start(ip, Port);
+            }
+        }
+        byte[] msg = new byte[128];
+        string DataByteRegion = "";
+        int i;
+        double AccZData;
+        byte[] AccZByteArray;
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (client.Connected)
+            {
+                try
+                {
+                    char OneCharData = Convert.ToChar(ns.ReadByte());
+                    if (OneCharData.ToString() != "e")
+                    {
+                        DataByteRegion += OneCharData.ToString();
+                    }
+                    else
+                    {
+                        this.Invoke(new MethodInvoker(delegate ()
+                        {
+                            DataByteRegion = DataByteRegion.Replace("a", null).Replace("e", null);
+                            string[] ExtractAccelData = DataByteRegion.Split('/'); // split data frame
+                            try
+                            {
+                                AccX = double.Parse(ExtractAccelData[0]); // get acceleration value
+                                AccY = double.Parse(ExtractAccelData[1]); // get acceleration value
+                                AccZData = double.Parse(ExtractAccelData[2]); // get acceleration value
+                                AccZData = Math.Round(AccZData, 2);
+                                //AccZByteArray = BitConverter.GetBytes(AccZData);
+
+                                if (serialPort2.IsOpen)
+                                {
+                                    try
+                                    {
+                                        serialPort2.WriteTimeout = 500;
+                                        serialPort2.Write(AccZData.ToString() + "$");
+                                        //serialPort2.Write(AccZByteArray,0,4);                                       
+                                    }
+                                    catch
+                                    { }
+                                }                                
+                                DataByteRegion = "";
+                            }
+                            catch { }
+                            
+                        }));
+                    }                    
+                }
+                catch
+                {
+                    //MessageBox.Show(x.Message.ToString());
+                }
+            }
+        }
+
+        SimpleTcpServer server;
+        void InitTcpServer()
+        {
+            server = new SimpleTcpServer();
+            server.Delimiter = 0x13;
+            server.StringEncoder = Encoding.UTF8;
+            server.DataReceived += Server_DataReceived;
+        }
+        private void Server_DataReceived(object sender, SimpleTCP.Message e)
+        {
+            this.Invoke((MethodInvoker)delegate ()
+            {
+                string ServerReceivedMessage = e.MessageString.Replace("a", null).Replace("e", null);
+                
+                string[] ExtractAccelData = ServerReceivedMessage.Split('/'); // split data frame
+                try
+                {
+                    AccX = double.Parse(ExtractAccelData[0]); // get acceleration value
+                    AccY = double.Parse(ExtractAccelData[1]); // get acceleration value
+                    AccZ = double.Parse(ExtractAccelData[2]); // get acceleration value                    
+                }
+                catch { }
+                //e.MessageString = null;
+            });
+        }
+
+        string Uart3ReceivedMessage;
+        private void serialPort2_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            string TemperoryData = serialPort2.ReadExisting();
+            Uart3ReceivedMessage += TemperoryData; // keep adding to the data
+            if (Uart3ReceivedMessage[Uart3ReceivedMessage.Length - 1] == 'e') // read up to the ending character e
+            {
+                this.Invoke(new EventHandler(Uart3ProcessMessage));
+                Uart3ReceivedMessage = null;
+            }
+        }
+
+        private void Uart3ProcessMessage(object sender, EventArgs e)
+        {
+            Uart3ReceivedMessage = Uart3ReceivedMessage.Replace("\n", null).Replace("\r", null);
+            try
+            {
+                AccZ = double.Parse(Uart3ReceivedMessage);
+            }
+            catch 
+            {
+                throw;
             }
         }
     }
