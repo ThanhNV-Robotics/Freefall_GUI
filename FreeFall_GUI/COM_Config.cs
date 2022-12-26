@@ -14,6 +14,7 @@ namespace FreeFall_GUI
     {
         bool IsApplied;
         string PortName;
+        int BaudRate;
         public COM_Config()
         {
             InitializeComponent();
@@ -33,7 +34,7 @@ namespace FreeFall_GUI
         private void COM_Config_Load(object sender, EventArgs e)
         {
             _COMRefresh();
-            cb_baud_rate.SelectedIndex = 2;
+            cb_baud_rate.SelectedIndex = 3;
             cb_data_bits.SelectedIndex = 2;
             cb_parity_bits.SelectedIndex = 0;
             cb_stop_bits.SelectedIndex = 0;
@@ -76,6 +77,9 @@ namespace FreeFall_GUI
         }
         private void btnConnect_Click(object sender, EventArgs e)
         {
+            PortName = cbPortName.SelectedItem.ToString();
+            EnabaleControl();
+            SetCOMParams();
             bool COMIsOpen = _COMConnect(cbPortName.SelectedIndex);
             if (COMIsOpen)
             {
@@ -101,9 +105,7 @@ namespace FreeFall_GUI
 
         private void cbPortName_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PortName = cbPortName.SelectedItem.ToString();
-            EnabaleControl();
-            SetCOMParams();            
-        }
+          
+        }        
     }
 }

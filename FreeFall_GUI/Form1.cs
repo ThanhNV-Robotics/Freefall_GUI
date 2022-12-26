@@ -33,6 +33,14 @@ namespace FreeFall_GUI
         
         Main_Control _MainCOntrol = new Main_Control();
 
+        _2ndDataGraph GyroAndDistGraph = new _2ndDataGraph();
+        public delegate void Draw2ndGraph(double time, double _GyroX, double _GyroY, double _GyroZ, double Position);
+        public Draw2ndGraph DrawGyroAndDistance;
+        public delegate void Set2ndGraphViewMode(bool Mode);
+        public Set2ndGraphViewMode SetGyroGraphViewMode;
+        public delegate void ReSetGyroDisGraph();
+        public ReSetGyroDisGraph _ReSetGyroDisGraph;
+
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         private static extern bool AllocConsole();
         
@@ -40,6 +48,7 @@ namespace FreeFall_GUI
         public delegate void LoadDataToParamSettingForm(float[] Params);
         public LoadDataToParamSettingForm LoadData; // creat an instance
 
+        
         //# is the charater indicating the ending of the frame
         // '/' is the spliting character: function code/value
         private const string STOP = "1/1";
@@ -62,8 +71,7 @@ namespace FreeFall_GUI
         private bool CcwTorqueLimit;
         private bool CwTorqueLimit;
         private bool ZeroSpeedReach;
-
-        private bool ControlMode = true; // De
+        
         private bool RunningMode; // true = automatic, false = manual
         private uint ExperimentMode = 1; // 1 = Dropping Mode, 2 = PullingMode, 3 = Pulling+Dropping
         private int TotalEpisodes = 1; // default value is 1
@@ -75,6 +83,7 @@ namespace FreeFall_GUI
         private int PulseCmd; // to count the pulse cmd generate by the mcu
         private float PosCmd; // Position Command
         private double AccZ; // m/s^2
+        private double AccRef;
 
         private volatile int timercount; // to measure the timer counter
 
@@ -92,13 +101,14 @@ namespace FreeFall_GUI
         bool SpdCmdView = false;
         bool MotorDriver = true; // true -> FDA7000, false -> ASDA-A3
         bool AccZView = false;
+        bool AccRefView = false;
 
         float MotorSpeed; // Motor speed
         float SpdCommand; // Speed Command
         int CurrentPulse = 0;
         int PulseError;
 
-        float DrumRadius = (float)0.35; //m - big model
+        float DrumRadius = (float)0.05; //m - big model
         
         private const int HIGENEncoderRes = 8192; // =2048*4, quarter count Encoder Resolution
         private const int ASDAEncoderRes = 1024; // 
@@ -214,8 +224,7 @@ namespace FreeFall_GUI
             catch (Exception x)
             {
                 MessageBox.Show(x.ToString());
-            }
-            
+            }            
         }
 
         //public void SendAccZData(float AccZ)
@@ -228,86 +237,99 @@ namespace FreeFall_GUI
             switch (index)
             {
                 case 0: // GUI port
-                    serialPort1.PortName = PortName;
-                    serialPort1.BaudRate = _BauRate;
-                    serialPort1.DataBits = _DataBits;
-                    switch (_StopBits)
+                    if (serialPort1.IsOpen)
                     {
-                        case "One":
-                            serialPort1.StopBits = StopBits.One;// default value
-                            break;
-                        case "Two":
-                            serialPort1.StopBits = StopBits.Two;
-                            break;
-                        default:
-                            serialPort1.StopBits = StopBits.One;// default value
-                            break;
+                        break;
                     }
-                    switch (_Parity)
+                    else
                     {
-                        case "None":
-                            serialPort1.Parity = Parity.None;
-                            break;
-                        case "Even":
-                            serialPort1.Parity = Parity.Even;
-                            break;
-                        case "Odd":
-                            serialPort1.Parity = Parity.Odd;
-                            break;
-                        default:
-                            serialPort1.Parity = Parity.None;
-                            break;
+                        serialPort1.PortName = PortName;
+                        serialPort1.BaudRate = _BauRate;
+                        serialPort1.DataBits = _DataBits;
+                        switch (_StopBits)
+                        {
+                            case "One":
+                                serialPort1.StopBits = StopBits.One;// default value
+                                break;
+                            case "Two":
+                                serialPort1.StopBits = StopBits.Two;
+                                break;
+                            default:
+                                serialPort1.StopBits = StopBits.One;// default value
+                                break;
+                        }
+                        switch (_Parity)
+                        {
+                            case "None":
+                                serialPort1.Parity = Parity.None;
+                                break;
+                            case "Even":
+                                serialPort1.Parity = Parity.Even;
+                                break;
+                            case "Odd":
+                                serialPort1.Parity = Parity.Odd;
+                                break;
+                            default:
+                                serialPort1.Parity = Parity.None;
+                                break;
+                        }
+                        break;
                     }
-                    break;
+                    
                 case 1: // Data port
-                    serialPort2.PortName = PortName;
-                    serialPort2.BaudRate = _BauRate;
-                    serialPort2.DataBits = _DataBits;
-                    switch (_StopBits)
+                    if (serialPort2.IsOpen)
                     {
-                        case "One":
-                            serialPort2.StopBits = StopBits.One;// default value
-                            break;
-                        case "Two":
-                            serialPort2.StopBits = StopBits.Two;
-                            break;
-                        default:
-                            serialPort2.StopBits = StopBits.One;// default value
-                            break;
+                        break;
                     }
-                    switch (_Parity)
+                    else
                     {
-                        case "None":
-                            serialPort2.Parity = Parity.None;
-                            break;
-                        case "Even":
-                            serialPort2.Parity = Parity.Even;
-                            break;
-                        case "Odd":
-                            serialPort2.Parity = Parity.Odd;
-                            break;
-                        default:
-                            serialPort2.Parity = Parity.None;
-                            break;
-                    }
-                    break;
-                    break;
+                        serialPort2.PortName = PortName;
+                        serialPort2.BaudRate = _BauRate;
+                        serialPort2.DataBits = _DataBits;
+                        switch (_StopBits)
+                        {
+                            case "One":
+                                serialPort2.StopBits = StopBits.One;// default value
+                                break;
+                            case "Two":
+                                serialPort2.StopBits = StopBits.Two;
+                                break;
+                            default:
+                                serialPort2.StopBits = StopBits.One;// default value
+                                break;
+                        }
+                        switch (_Parity)
+                        {
+                            case "None":
+                                serialPort2.Parity = Parity.None;
+                                break;
+                            case "Even":
+                                serialPort2.Parity = Parity.Even;
+                                break;
+                            case "Odd":
+                                serialPort2.Parity = Parity.Odd;
+                                break;
+                            default:
+                                serialPort2.Parity = Parity.None;
+                                break;
+                        }
+                        break;
+                    }                    
                 default:
                     break;
-            }
-                     
+            }                     
         }
  
 
         private void Form1_Load(object sender, EventArgs e)
         {
             //serialPort1.PortName = cb_com_comport.Text;
-            serialPort1.BaudRate = 9600; // default value
+            serialPort1.BaudRate = 115200; // default value
             serialPort1.DataBits = 8; // default value
             serialPort1.StopBits = StopBits.One;// default value
             serialPort1.Parity = Parity.None;// default value
 
-            serialPort2.BaudRate = 9600; // default value
+            serialPort2.BaudRate = 115200; // default value
             serialPort2.DataBits = 8; // default value
             serialPort2.StopBits = StopBits.One;// default value
             serialPort2.Parity = Parity.None;// default value
@@ -337,8 +359,7 @@ namespace FreeFall_GUI
             //DisableJogControl();
             TickStart = Environment.TickCount;
 
-            // Consider to get the driver status from the board
-            ControlMode = true; // Default is Position Control Mode
+            // Consider to get the driver status from the board            
 
             //timer2.Interval = SampleTime; //ms
             timer2.Enabled = false;
@@ -352,7 +373,7 @@ namespace FreeFall_GUI
             lbSpeedReach.BackColor = Color.Gray;
             lbTorqueLimit.BackColor = Color.Gray;
 
-            cbReadOutputs.CheckState = CheckState.Unchecked; // output driver requirement
+            //cbReadOutputs.CheckState = CheckState.Unchecked; // output driver requirement
 
             tongleRunningMode.CheckState = CheckState.Unchecked;
             gbEpisode.Enabled = false;
@@ -362,6 +383,7 @@ namespace FreeFall_GUI
             cbSpeed.CheckState = CheckState.Checked;
             cbSpdCmd.CheckState = CheckState.Checked;
             cbAccZ.CheckState = CheckState.Checked;
+            cbAccRef.CheckState = CheckState.Checked;
 
             cbDriverType.SelectedIndex = 0;
             cbExperimentMode.SelectedIndex = 0;
@@ -382,6 +404,13 @@ namespace FreeFall_GUI
 
             listener = new TcpListener(IPAddress.Any, Port); // create an instance of the listener
             InitTcpServer();
+
+            GyroAndDistGraph.Show();
+            _COM_Config._SetCOM = new COM_Config.SetCOM(SetCOMParam);
+            //LoadData = new LoadDataToParamSettingForm(_ParamSetting.LoadSavedParams);
+            DrawGyroAndDistance = new Draw2ndGraph(GyroAndDistGraph.DrawAllData);
+            SetGyroGraphViewMode = new Set2ndGraphViewMode(GyroAndDistGraph.SetViewMode);
+            _ReSetGyroDisGraph = new ReSetGyroDisGraph(GyroAndDistGraph.ReSetGraph);
         }
         bool ScanClient = false;
         private void timer1_Tick(object sender, EventArgs e)
@@ -674,6 +703,26 @@ namespace FreeFall_GUI
                                 MessageBox.Show("Set Driver Type to DELTA ASDA(A3)");
                             }
                             break;
+                        case 47:
+                            if (Param == 1)
+                            {
+                                MessageBox.Show("Set to Open-Loop Control");
+                            }
+                            if (Param == 0)
+                            {
+                                MessageBox.Show("Set to Closed-Loop Control");
+                            }
+                            break;
+                        case 48:
+                            if (Param == 1)
+                            {
+                                MessageBox.Show("Software Limit is ON");
+                            }
+                            if (Param == 0)
+                            {
+                                MessageBox.Show("Software Limit is OFF");
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -713,7 +762,7 @@ namespace FreeFall_GUI
                     return;
                 ReceivedMessage = (ReceivedMessage.Replace("p", null)).Replace("e", null); // remove the character s in the string
                 string[] RunningParamString = ReceivedMessage.Split('/'); // Split the string
-                float[] RunningParamFloat = new float[10];
+                float[] RunningParamFloat = new float[13];
 
                 try
                 {
@@ -749,73 +798,65 @@ namespace FreeFall_GUI
                 // After remove 's' and 'e': functioncode/data1/data2
                 string[] ExtractReceivedMessage = ReceivedMessage.Split('/');
                 //if (ExtractReceivedMessage[0] == "2") // Only the speed data
-                //{
-                if (ControlMode) // Position Mode
+                //{                
+                try
                 {
-                    try
+                    MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
+                    SpdCommand = float.Parse(ExtractReceivedMessage[1]);
+
+                    ObjectPosition = float.Parse(ExtractReceivedMessage[2])*1000;
+
+                    //CurrentPulse = int.Parse(ExtractReceivedMessage[2]);
+                    //PulseError = int.Parse(ExtractReceivedMessage[3]);
+
+                    //AccZ = double.Parse(ExtractReceivedMessage[3]);
+                    AccRef = 1000*double.Parse(ExtractReceivedMessage[3]);
+
+                    PulseCmd = CurrentPulse + PulseError;
+
+                    //PulseCmd = int.Parse(ExtractReceivedMessage[3]);
+
+                    //PulseError = PulseCmd - CurrentPulse;
+
+                    //PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)HIGENEncoderRes));
+                    //PosCmd = (float)Math.Round((double)PosCmd, 1);
+
+                    // Write to the Buffer
+                    WriteToSpdCmdBuffer(SpdCommand);
+                    WriteToSpdBuffer(MotorSpeed);
+
+                    //AccZ = float.Parse(ExtractReceivedMessage[4]);
+
+                    if (MotorDriver) // FDA7000 Driver
                     {
-                        MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
-                        SpdCommand = float.Parse(ExtractReceivedMessage[1]);
-                        CurrentPulse = int.Parse(ExtractReceivedMessage[2]);
-                        PulseError = int.Parse(ExtractReceivedMessage[3]);
-                        AccZ = double.Parse(ExtractReceivedMessage[4]);
-
-                        PulseCmd = CurrentPulse + PulseError;
-
-                        //PulseCmd = int.Parse(ExtractReceivedMessage[3]);
-
-                        //PulseError = PulseCmd - CurrentPulse;
+                        //ObjectPosition = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse) / (float)HIGENEncoderRes));
+                        //ObjectPosition = (float)Math.Round((double)ObjectPosition, 1);
+                        ////rackBar_Position.Value = -(int)PosCmd; // Position cmd based
 
                         //PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)HIGENEncoderRes));
                         //PosCmd = (float)Math.Round((double)PosCmd, 1);
-
-                        // Write to the Buffer
-                        WriteToSpdCmdBuffer(SpdCommand);
-                        WriteToSpdBuffer(MotorSpeed);
-
-                        //AccZ = float.Parse(ExtractReceivedMessage[4]);
-
-                        if (MotorDriver) // FDA7000 Driver
-                        {
-                            ObjectPosition = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse) / (float)HIGENEncoderRes));
-                            ObjectPosition = (float)Math.Round((double)ObjectPosition, 1);
-                            //rackBar_Position.Value = -(int)PosCmd; // Position cmd based
-
-                            PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)HIGENEncoderRes));
-                            PosCmd = (float)Math.Round((double)PosCmd, 1);
-                        }
-                        else // ASDA A3 Driver
-                        {
-                            ObjectPosition = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse) / (float)ASDAEncoderRes));
-                            ObjectPosition = (float)Math.Round((double)ObjectPosition, 1);
-
-                            PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)ASDAEncoderRes));
-                            PosCmd = (float)Math.Round((double)PosCmd, 1);
-
-                            trackBar_Position.Value = -(int)ObjectPosition; // Actual position based
-                        }                        
-
-                        lbMotorSpeed.Text = MotorSpeed.ToString() + " rpm";
-                        lbEncoderPulses.Text = CurrentPulse.ToString();
-                        lbObjectPosition.Text = ObjectPosition.ToString() + " m";
-                        lbPulseCmd.Text = PulseCmd.ToString();
-                        lbPosCmd.Text = PosCmd.ToString();
-                        lbPulseError.Text = PulseError.ToString();
-                       
                     }
-                    catch { }
-                }
-                else // Speed Mode
-                {
-                    try
+                    else // ASDA A3 Driver, directly receiving the object position from the Controller
                     {
-                        MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
-                        SpdCommand = float.Parse(ExtractReceivedMessage[1]);                        
+                        //ObjectPosition = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)CurrentPulse) / (float)ASDAEncoderRes));
+                        //ObjectPosition = (float)Math.Round((double)ObjectPosition, 1);
 
-                        lbMotorSpeed.Text = MotorSpeed.ToString();                        
+                        //PosCmd = ((float)Math.PI * (float)2.0 * DrumRadius * (float)(((float)PulseCmd) / (float)ASDAEncoderRes));
+                        //PosCmd = (float)Math.Round((double)PosCmd, 1);
+
+                        //trackBar_Position.Value = -(int)ObjectPosition; // Actual position based
                     }
-                    catch { }
+
+                    lbMotorSpeed.Text = MotorSpeed.ToString() + " rpm";
+                    //lbEncoderPulses.Text = CurrentPulse.ToString();
+                    lbObjectPosition.Text = ObjectPosition.ToString() + " m";
+
+                    //lbPulseCmd.Text = PulseCmd.ToString();
+                    //lbPosCmd.Text = PosCmd.ToString();
+                    //lbPulseError.Text = PulseError.ToString();
+
                 }
+                catch { }                
                 return;
             }
             
@@ -851,9 +892,14 @@ namespace FreeFall_GUI
                 if (btnStartDropping.Text == "STOP") // if the system is running
                 {
                     ShowCurrentEpisodeLabel(CurrentEpisode + 1, TotalEpisodes);
-                    CurrentEpisode++;
+                   
                     //progressBar.Value = CurrentEpisode;
-                    SaveToExcel(CurrentEpisode); // Save data for the current episode
+                    //SaveToExcel(CurrentEpisode); // Save data for the current episode
+                    string DataPath = @"C:\Users\thanh\OneDrive\문서\Liintech\Data\Episode" + CurrentEpisode.ToString() + ".txt";
+                    SaveDataToTxtFile(DataPath);
+
+                    CurrentEpisode++;
+
                     ResetGraph(); // Reset the graph
                     TurnOnGraph(); // Turn on the graph
                     progressBar.PerformStep(); // visual the progress
@@ -1029,52 +1075,33 @@ namespace FreeFall_GUI
         
         private void btnSetJogSpeed_Click(object sender, EventArgs e)
         {
-            if (ControlMode) // Position Control Mode
+            try
             {
-                try
+                JogSpeed = uint.Parse(txtSetSpeed.Text);
+                if (Math.Abs(JogSpeed) >= 100)
                 {
-                    JogSpeed = uint.Parse(txtSetSpeed.Text);
-                    if (Math.Abs(JogSpeed) >= 100)
-                    {
-                        MessageBox.Show("Setting is out of range! (-100~100rpm)");
-                    }
-                    else
-                    {
-                        string Command = "5" + "/" + JogSpeed.ToString();
-                        SendMessage(Command);
-                        lbCmdOut.Text = "> Set Speed";
-                        //Console.WriteLine("> Set Speed: " + Command);
-                    }
+                    MessageBox.Show("Setting is out of range! (-100~100rpm)");
                 }
-                catch (Exception)
+                else
                 {
-                    MessageBox.Show("Invalid Input data type");
-                }
-            }
-            else // Speed Mode
-            {
-                int RegisterAddress = 401; //  P4-02, Speed Command
-                float value;
-                try
-                {
-                    value = float.Parse(txtSetSpeed.Text);
-                    string Command = "5" + "/" + "1" + "/" + RegisterAddress.ToString() + "/" + value.ToString();
+                    string Command = "5" + "/" + JogSpeed.ToString();
                     SendMessage(Command);
                     lbCmdOut.Text = "> Set Speed";
                     //Console.WriteLine("> Set Speed: " + Command);
                 }
-                catch (Exception)
-                {
-                    MessageBox.Show("Invalid Input data type");
-                }
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Invalid Input data type");
+            }
+
         }
         private void GraphInit()
         {
             GraphPane myPane = SpeedGraph.GraphPane;
             myPane.Title.Text = "Data";
             myPane.XAxis.Title.Text = "time (s)";
-            myPane.YAxis.Title.Text = "Speed (rpm)";
+            myPane.YAxis.Title.Text = "Speed(rpm)";
             myPane.YAxis.Scale.FontSpec.FontColor = Color.Red;
             myPane.YAxis.Title.FontSpec.FontColor = Color.Red;
 
@@ -1086,13 +1113,17 @@ namespace FreeFall_GUI
             myPane.YAxis.Scale.Max = 100;
 
             
-            myPane.Y2Axis.Title.Text = "AccZ (m/s2)";
-            myPane.Y2Axis.Scale.Min = -10;
-            myPane.Y2Axis.Scale.Max = 10;
-            myPane.Y2Axis.Scale.MinorStep = 5;
+            myPane.Y2Axis.Title.Text = "Acc(m/s2)/Pos(mm)";
+            myPane.Y2Axis.Scale.Min = -1500;
+            myPane.Y2Axis.Scale.Max = 1500;
+            myPane.Y2Axis.Scale.MinorStep = 500;
             myPane.Y2Axis.Scale.FontSpec.FontColor = Color.Blue;
             myPane.Y2Axis.Title.FontSpec.FontColor = Color.Blue;
             myPane.Y2Axis.IsVisible = true;
+
+            myPane.IsAlignGrids = true;
+
+            
 
             RollingPointPairList MotorSpeedList = new RollingPointPairList(60000);
             LineItem MotorSpeedCurve = myPane.AddCurve("Motor Speed", MotorSpeedList, Color.Red, SymbolType.None);
@@ -1102,11 +1133,32 @@ namespace FreeFall_GUI
             LineItem SpdCmdCurve = myPane.AddCurve("Speed Command", SpdCmdList, Color.Orange, SymbolType.None);
             SpdCmdCurve.Line.Width = (float)3; // Set LineWidth
 
+            RollingPointPairList AccXList = new RollingPointPairList(60000);
+            LineItem AccXCurve = myPane.AddCurve("AccX", AccXList, Color.Brown, SymbolType.None);
+            AccXCurve.Line.Width = (float)1.5; // Set LineWidth
+
+            RollingPointPairList AccYList = new RollingPointPairList(60000);
+            LineItem AccYCurve = myPane.AddCurve("AccY", AccYList, Color.Black, SymbolType.None);
+            AccYCurve.Line.Width = (float)1.5; // Set LineWidth
+
             RollingPointPairList AccZList = new RollingPointPairList(60000);
             LineItem AccZCurve = myPane.AddCurve("AccZ", AccZList, Color.Blue, SymbolType.None);
             AccZCurve.Line.Width = (float)3; // Set LineWidth
 
+            RollingPointPairList AccRefList = new RollingPointPairList(60000);
+            LineItem AccRefCurve = myPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
+            AccRefCurve.Line.Width = (float)3; // Set LineWidth
+
+            RollingPointPairList PositionList = new RollingPointPairList(60000);
+            LineItem PositionCurve = myPane.AddCurve("Position", PositionList, Color.Lime, SymbolType.None);
+            PositionCurve.Line.Width = (float)3; // Set LineWidth
+            
+            AccXCurve.IsY2Axis = true;
+            AccYCurve.IsY2Axis = true;
             AccZCurve.IsY2Axis = true;
+            PositionCurve.IsY2Axis = true;
+
+            AccRefCurve.IsY2Axis = true;
 
             myPane.AxisChange();
         }
@@ -1215,7 +1267,6 @@ namespace FreeFall_GUI
             {
                 MessageBox.Show("Saving Failed!");
             }
-
         }
         private DateTime LocalTime;
         string TimeString;
@@ -1228,8 +1279,11 @@ namespace FreeFall_GUI
                 ListViewItem item = new ListViewItem(time.ToString()); // Gán biến realtime vào cột đầu tiên của ListView
                 item.SubItems.Add(MotorSpeed.ToString());
                 item.SubItems.Add(SpdCmdData.ToString());
+                item.SubItems.Add(AccX.ToString());
+                item.SubItems.Add(AccY.ToString());
                 item.SubItems.Add(AccZ.ToString());
-
+                item.SubItems.Add(AccRef.ToString());
+                item.SubItems.Add(ObjectPosition.ToString());
                 //LocalTime = DateTime.Now;
 
                 TimeString = System.DateTimeOffset.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt");
@@ -1245,7 +1299,7 @@ namespace FreeFall_GUI
             }
         }
         //private void Draw(double time, double speed, double spdcmd, double accelerationX, double accelerationY, double accelerationZ)
-        private void Draw(double time, double speed, double spdcmd, double _AccZ)
+        private void Draw(double time, double speed, double spdcmd, double _AccZ, double _AccRef)
         {
             if (SpeedGraph.GraphPane.CurveList.Count <= 0) // neu ko co duong du lieu dc khoi tao
             {
@@ -1282,6 +1336,18 @@ namespace FreeFall_GUI
                 AccZCurve.IsY2Axis = true;
                 AccZList.Add(time, _AccZ);
             }
+
+            if (AccRefView)
+            {
+                LineItem AccRefCurve = SpeedGraph.GraphPane.CurveList[3] as LineItem;
+                if (AccRefCurve == null) return;
+                IPointListEdit AccRefList = AccRefCurve.Points as IPointListEdit;
+                if (AccRefList == null) return;
+                //time = (Environment.TickCount - TickStart) / 1000.0;
+                AccRefCurve.IsY2Axis = true;
+                AccRefList.Add(time, _AccRef);
+            }
+
 
             Scale xScale = SpeedGraph.GraphPane.XAxis.Scale;
             if (time > xScale.Max - xScale.MajorStep)
@@ -1325,7 +1391,131 @@ namespace FreeFall_GUI
             {
                 Y2Scale.Min = _AccZ - 2 * Y2Scale.MajorStep;
             }
+            SpeedGraph.GraphPane.IsAlignGrids = true;
+            SpeedGraph.AxisChange();
+            SpeedGraph.Invalidate();
+        }
+        private void DrawAllData(double time, double speed, double spdcmd, double _AccX, double _AccY, double _AccZ, double _AccRef, double Position)
+        {
+            if (SpeedGraph.GraphPane.CurveList.Count <= 0) // neu ko co duong du lieu dc khoi tao
+            {
+                return; // Thoat ham
+            }
 
+            if (SpeedView)
+            {
+                LineItem SpeedCurve = SpeedGraph.GraphPane.CurveList[0] as LineItem;
+                if (SpeedCurve == null) return;
+                IPointListEdit SpeedList = SpeedCurve.Points as IPointListEdit;
+                if (SpeedList == null) return;
+                //time = (Environment.TickCount - TickStart) / 1000.0;
+                SpeedList.Add(time, speed);
+            }
+
+            if (SpdCmdView)
+            {
+                LineItem SpdCmdCurve = SpeedGraph.GraphPane.CurveList[1] as LineItem;
+                if (SpdCmdCurve == null) return;
+                IPointListEdit SpdCmdList = SpdCmdCurve.Points as IPointListEdit;
+                if (SpdCmdList == null) return;
+                //time = (Environment.TickCount - TickStart) / 1000.0;
+                SpdCmdList.Add(time, spdcmd);
+            }
+
+            if (AccZView)
+            {
+                // X axis
+                LineItem AccXCurve = SpeedGraph.GraphPane.CurveList[2] as LineItem;
+                if (AccXCurve == null) return;
+                IPointListEdit AccXList = AccXCurve.Points as IPointListEdit;
+                if (AccXList == null) return;
+                //time = (Environment.TickCount - TickStart) / 1000.0;
+                AccXCurve.IsY2Axis = true;
+                AccXList.Add(time, _AccX);
+
+                // Y axis
+                LineItem AccYCurve = SpeedGraph.GraphPane.CurveList[3] as LineItem;
+                if (AccYCurve == null) return;
+                IPointListEdit AccYList = AccYCurve.Points as IPointListEdit;
+                if (AccYList == null) return;
+                //time = (Environment.TickCount - TickStart) / 1000.0;
+                AccYCurve.IsY2Axis = true;
+                AccYList.Add(time, _AccY);
+
+                // Z axis
+                LineItem AccZCurve = SpeedGraph.GraphPane.CurveList[4] as LineItem;
+                if (AccZCurve == null) return;
+                IPointListEdit AccZList = AccZCurve.Points as IPointListEdit;
+                if (AccZList == null) return;
+                //time = (Environment.TickCount - TickStart) / 1000.0;
+                AccZCurve.IsY2Axis = true;
+                AccZList.Add(time, _AccZ);                
+            }
+
+            if (AccRefView)
+            {
+                LineItem AccRefCurve = SpeedGraph.GraphPane.CurveList[5] as LineItem;
+                if (AccRefCurve == null) return;
+                IPointListEdit AccRefList = AccRefCurve.Points as IPointListEdit;
+                if (AccRefList == null) return;
+                //time = (Environment.TickCount - TickStart) / 1000.0;
+                AccRefCurve.IsY2Axis = true;
+                AccRefList.Add(time, _AccRef);
+            }
+
+            LineItem PositionCurve = SpeedGraph.GraphPane.CurveList[6] as LineItem;
+            if (PositionCurve == null) return;
+            IPointListEdit PositionList = PositionCurve.Points as IPointListEdit;
+            if (PositionList == null) return;
+            //time = (Environment.TickCount - TickStart) / 1000.0;
+            //PositionCurve.IsY2Axis = true;
+            PositionList.Add(time, Position);
+
+
+
+            Scale xScale = SpeedGraph.GraphPane.XAxis.Scale;
+            if (time > xScale.Max - xScale.MajorStep)
+            {
+                if (ViewMode) // SCROLL view Mode
+                {
+                    xScale.Max = time + xScale.MajorStep;
+                    xScale.Min = time - xScale.MajorStep;
+                }
+                else // COMPACR view Mode
+                {
+                    xScale.Max = time + xScale.MajorStep;
+                    xScale.Min = 0;
+                }
+            }
+            Scale Y1Scale = SpeedGraph.GraphPane.YAxis.Scale;
+            Scale Y2Scale = SpeedGraph.GraphPane.Y2Axis.Scale;
+
+            if (speed > Y1Scale.Max) // Auto scale the Speed axis
+            {
+                Y1Scale.Max = speed + 2 * Y1Scale.MajorStep;
+            }
+            if (spdcmd > Y1Scale.Max) // Auto scale the Speed axis
+            {
+                Y1Scale.Max = spdcmd + 2 * Y1Scale.MajorStep;
+            }
+            if (speed < Y1Scale.Min) // Auto scale the Speed axis
+            {
+                Y1Scale.Min = MotorSpeed - 2 * Y1Scale.MajorStep;
+            }
+            if (spdcmd < Y1Scale.Min) // Auto scale the Speed axis
+            {
+                Y1Scale.Min = SpdCmdData - 2 * Y1Scale.MajorStep;
+            }
+
+            if (_AccZ > Y2Scale.Max)
+            {
+                Y2Scale.Max = SpdCmdData + 2 * Y2Scale.MajorStep;
+            }
+            if (_AccZ < Y2Scale.Min)
+            {
+                Y2Scale.Min = _AccZ - 2 * Y2Scale.MajorStep;
+            }
+            SpeedGraph.GraphPane.IsAlignGrids = true;
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
         }
@@ -1341,17 +1531,34 @@ namespace FreeFall_GUI
                 TickStart = Environment.TickCount;
                 if (SpeedGraph.GraphPane.CurveList.Count <= 0) // Neu chua co duong Curve thi khoi tao
                 {
-                    RollingPointPairList Speedlist = new RollingPointPairList(6000);
-                    LineItem SpeedCurve = SpeedGraph.GraphPane.AddCurve("Speed", Speedlist, Color.Red, SymbolType.None);
-                    SpeedCurve.Line.Width = (float)3.0;
+                    RollingPointPairList MotorSpeedList = new RollingPointPairList(60000);
+                    LineItem MotorSpeedCurve = SpeedGraph.GraphPane.AddCurve("Motor Speed", MotorSpeedList, Color.Red, SymbolType.None);
+                    MotorSpeedCurve.Line.Width = (float)3; // Set LineWidth
 
-                    RollingPointPairList SpeedCmdlist = new RollingPointPairList(6000);
-                    LineItem SpeedCmdCurve = SpeedGraph.GraphPane.AddCurve("Speed Cmd", SpeedCmdlist, Color.Orange, SymbolType.None);
-                    SpeedCurve.Line.Width = (float)3.0;
+                    RollingPointPairList SpdCmdList = new RollingPointPairList(60000); // speed command curve
+                    LineItem SpdCmdCurve = SpeedGraph.GraphPane.AddCurve("Speed Command", SpdCmdList, Color.Orange, SymbolType.None);
+                    SpdCmdCurve.Line.Width = (float)3; // Set LineWidth
 
-                    RollingPointPairList AccZList = new RollingPointPairList(6000);
+                    RollingPointPairList AccXList = new RollingPointPairList(60000);
+                    LineItem AccXCurve = SpeedGraph.GraphPane.AddCurve("AccX", AccXList, Color.Brown, SymbolType.None);
+                    AccXCurve.Line.Width = (float)1.5; // Set LineWidth
+
+                    RollingPointPairList AccYList = new RollingPointPairList(60000);
+                    LineItem AccYCurve = SpeedGraph.GraphPane.AddCurve("AccY", AccYList, Color.Black, SymbolType.None);
+                    AccYCurve.Line.Width = (float)1.5; // Set LineWidth
+
+                    RollingPointPairList AccZList = new RollingPointPairList(60000);
                     LineItem AccZCurve = SpeedGraph.GraphPane.AddCurve("AccZ", AccZList, Color.Blue, SymbolType.None);
-                    AccZCurve.Line.Width = (float)3.0;
+                    AccZCurve.Line.Width = (float)3; // Set LineWidth
+
+                    RollingPointPairList AccRefList = new RollingPointPairList(60000);
+                    LineItem AccRefCurve = SpeedGraph.GraphPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
+                    AccRefCurve.Line.Width = (float)3; // Set LineWidth
+
+                    RollingPointPairList PositionList = new RollingPointPairList(60000);
+                    LineItem PositionCurve = SpeedGraph.GraphPane.AddCurve("Position", PositionList, Color.Pink, SymbolType.None);
+                    AccZCurve.Line.Width = (float)2; // Set LineWidth
+
                     SpeedGraph.AxisChange();
                 }
             }
@@ -1373,7 +1580,7 @@ namespace FreeFall_GUI
             timercount++;
             time = (timercount * timer2.Interval) / 1000.0;  // to seconds
             //Draw(time, MotorSpeed, SpdCommand, AccelerationX, AccelerationY, AccelerationZ);
-            Draw(time, MotorSpeed, SpdCommand, AccZ);
+            Draw(time, MotorSpeed, SpdCommand, AccZ, AccRef);
             //Draw(time, MotorSpeed, 1, 2, 3);
             Data_Listview(); // view data to the list view
 
@@ -1417,20 +1624,40 @@ namespace FreeFall_GUI
             SpeedGraph.GraphPane.YAxis.Scale.Max = 100;
             SpeedGraph.GraphPane.YAxis.Scale.Min = -100;
 
-            SpeedGraph.GraphPane.Y2Axis.Scale.Max = 10;
-            SpeedGraph.GraphPane.Y2Axis.Scale.Min = -10;
+            SpeedGraph.GraphPane.Y2Axis.Scale.Max = 1500;
+            SpeedGraph.GraphPane.Y2Axis.Scale.Min = -1500;
 
-            RollingPointPairList Speedlist = new RollingPointPairList(60000);
-            LineItem SpeedCurve = SpeedGraph.GraphPane.AddCurve("Motor Speed", Speedlist, Color.Red, SymbolType.None);
-            SpeedCurve.Line.Width = (float)3.0;
+            SpeedGraph.GraphPane.IsAlignGrids = true;
 
-            RollingPointPairList SpdCmdList = new RollingPointPairList(60000);
-            LineItem SpdCurve = SpeedGraph.GraphPane.AddCurve("Speed Command", SpdCmdList, Color.Orange, SymbolType.None);
-            SpdCurve.Line.Width = (float)3.0;
+            RollingPointPairList MotorSpeedList = new RollingPointPairList(60000);
+            LineItem MotorSpeedCurve = SpeedGraph.GraphPane.AddCurve("Motor Speed", MotorSpeedList, Color.Red, SymbolType.None);
+            MotorSpeedCurve.Line.Width = (float)3; // Set LineWidth
+
+            RollingPointPairList SpdCmdList = new RollingPointPairList(60000); // speed command curve
+            LineItem SpdCmdCurve = SpeedGraph.GraphPane.AddCurve("Speed Command", SpdCmdList, Color.Orange, SymbolType.None);
+            SpdCmdCurve.Line.Width = (float)3; // Set LineWidth
+
+            RollingPointPairList AccXList = new RollingPointPairList(60000);
+            LineItem AccXCurve = SpeedGraph.GraphPane.AddCurve("AccX", AccXList, Color.Brown, SymbolType.None);
+            AccXCurve.Line.Width = (float)1.5; // Set LineWidth
+
+            RollingPointPairList AccYList = new RollingPointPairList(60000);
+            LineItem AccYCurve = SpeedGraph.GraphPane.AddCurve("AccY", AccYList, Color.Black, SymbolType.None);
+            AccYCurve.Line.Width = (float)1.5; // Set LineWidth
 
             RollingPointPairList AccZList = new RollingPointPairList(60000);
             LineItem AccZCurve = SpeedGraph.GraphPane.AddCurve("AccZ", AccZList, Color.Blue, SymbolType.None);
-            AccZCurve.Line.Width = (float)3.0;
+            AccZCurve.Line.Width = (float)3; // Set LineWidth
+
+            RollingPointPairList AccRefList = new RollingPointPairList(60000);
+            LineItem AccRefCurve = SpeedGraph.GraphPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
+            AccRefCurve.Line.Width = (float)3; // Set LineWidth
+
+            RollingPointPairList PositionList = new RollingPointPairList(60000);
+            LineItem PositionCurve = SpeedGraph.GraphPane.AddCurve("Position", PositionList, Color.Lime, SymbolType.None);
+            AccZCurve.Line.Width = (float)3; // Set LineWidth
+
+            PositionCurve.IsY2Axis = true;
 
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
@@ -1541,6 +1768,7 @@ namespace FreeFall_GUI
         #endregion
         float SpdCmdData; // Speed command data
         float SpdData; // Speed data
+        double Distance;
         private void timer2_Tick_1(object sender, EventArgs e)
         {
             //SendMessage("12"  ); // 12 means request StE03 = Motor Speed
@@ -1551,7 +1779,21 @@ namespace FreeFall_GUI
             SpdCmdData = GetValueOutOfSpdCmdBuffer();
             SpdData = GetValueOutOfSpdBuffer();
 
-            Draw(time, SpdData, SpdCmdData, AccZ);
+            //Draw(time, MotorSpeed, SpdCommand, AccZ, ObjectPosition);
+
+            //Draw(time, SpdData, SpdCmdData, AccZ, AccRef);
+            DrawAllData(time, SpdData, SpdCmdData, AccX, AccY, AccZ, AccRef, ObjectPosition);
+
+            //if (GyroAndDistGraph)
+            //{
+
+            //}
+            if ((Application.OpenForms["_2ndDataGraph"] as _2ndDataGraph) != null) // Check if the form is opened or not
+            {
+                DrawGyroAndDistance(time, 0, 0, 0, Distance);
+            }
+            
+            
             //Draw(time, MotorSpeed, 1, 2, 3);
             Data_Listview(); // view data to the list view
 
@@ -1593,6 +1835,7 @@ namespace FreeFall_GUI
         {
             ResetGraph();
             ProgressBarInit();
+            _ReSetGyroDisGraph();
         }
 
         private void btnResetAlarm_Click_1(object sender, EventArgs e)
@@ -1708,68 +1951,87 @@ namespace FreeFall_GUI
                 switch (ExperimentMode)
                 {
                     case 1: // Dropping Mode
-                        if (cbDataON.CheckState == CheckState.Unchecked) // No request data
+                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
                         {
                             MessageBox.Show("Please turn ON Data request");
                             break;                            
                         }
-                        if (Math.Abs(PosCmd) >= 1)
-                        {
-                            MessageBox.Show("Homing is required");
-                            btnSetHome.Enabled = true;
-                            break;                            
-                        }
-                        else
-                        {
-                            if (SendRecordingCmd()) // Successfully start recording the data
-                            {
-                                IsRunning = !IsRunning;
-                                InitExperiment();
-                            }
-                            else // Start Recording Failed
-                            {
-                                MessageBox.Show("Fail to start recording sensors");
-                            }                            
-                        }
+
+                        IsRunning = !IsRunning;
+                        InitExperiment();
+
+                        //if (Math.Abs(PosCmd) >= 1)
+                        //{
+                        //    //MessageBox.Show("Homing is required");
+                        //    //btnSetHome.Enabled = true;
+                        //    //break;                            
+                        //}
+                        //else
+                        //{
+                        //    IsRunning = !IsRunning;
+                        //    InitExperiment();
+                        //    //if (SendRecordingCmd()) // Successfully start recording the data
+                        //    //{
+                        //    //    IsRunning = !IsRunning;
+                        //    //    InitExperiment();
+                        //    //}
+                        //    //else // Start Recording Failed
+                        //    //{
+                        //    //    DialogResult Response;
+                        //    //    Response = MessageBox.Show("Fail to start recording sensors! Do you want to Run the Motor?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                        //    //    if (Response == DialogResult.OK)
+                        //    //    {
+                        //    //        IsRunning = !IsRunning;
+                        //    //        InitExperiment();
+                        //    //    }
+                        //    //}                            
+                        //}
                         break;
                     case 2:
-                        if (cbDataON.CheckState == CheckState.Unchecked) // No request data
+                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
                         {
                             MessageBox.Show("Please turn ON Data request");
                             return;
                         }
-                        if (SendRecordingCmd()) // Successfully start recording the data
-                        {
-                            IsRunning = !IsRunning;
-                            InitExperiment();
-                        }
-                        else // Start Recording Failed
-                        {
-                            MessageBox.Show("Fail to start recording sensors");
-                        }
+                        IsRunning = !IsRunning;
+                        InitExperiment();
+                        //if (SendRecordingCmd()) // Successfully start recording the data
+                        //{
+                        //    IsRunning = !IsRunning;
+                        //    InitExperiment();
+                        //}
+                        //else // Start Recording Failed
+                        //{
+                        //    MessageBox.Show("Fail to start recording sensors");
+                        //}
                         break;
                     case 3:
-                        if (cbDataON.CheckState == CheckState.Unchecked) // No request data
+                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
                         {
                             MessageBox.Show("Please turn ON Data request");
                             return;
                         }
-                        if (SendRecordingCmd()) // Successfully start recording the data
-                        {
-                            IsRunning = !IsRunning;
-                            InitExperiment();
-                        }
-                        else // Start Recording Failed
-                        {
-                            DialogResult Response;
-                            Response = MessageBox.Show("Fail to start recording sensors! Do you want to Run the Motor?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                            if (Response == DialogResult.OK)
-                            {
-                                IsRunning = !IsRunning;
-                                InitExperiment();
-                            }                            
-                        }
-                            break;
+
+                        IsRunning = !IsRunning;
+                        InitExperiment();
+
+                        //if (SendRecordingCmd()) // Successfully start recording the data
+                        //{
+                        //    IsRunning = !IsRunning;
+                        //    InitExperiment();
+                        //}
+                        //else // Start Recording Failed
+                        //{
+                        //    DialogResult Response;
+                        //    Response = MessageBox.Show("Fail to start recording sensors! Do you want to Run the Motor?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                        //    if (Response == DialogResult.OK)
+                        //    {
+                        //        IsRunning = !IsRunning;
+                        //        InitExperiment();
+                        //    }                            
+                        //}
+
+                        break;
                      default:
                         break;
                 }
@@ -1778,19 +2040,20 @@ namespace FreeFall_GUI
             {
                 SendMessage(StopRunning);                
 
-                if (SendRecordingCmd()) //
-                {
-                    //MessageBox.Show("Sensors recording is stopped");
-                    lbStartRecording.BackColor = Color.Red;
-                }
+                //if (SendRecordingCmd()) //
+                //{
+                //    //MessageBox.Show("Sensors recording is stopped");
+                //    lbStartRecording.BackColor = Color.Red;
+                //}
 
                 DialogResult Response;
                 Response = MessageBox.Show("Do you want to Save the Data?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (Response == DialogResult.OK)
                 {
                     if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                    {                        
-                        SaveToExcel(saveFileDialog1.FileName);
+                    {
+                        //SaveToExcel(saveFileDialog1.FileName);
+                        SaveDataToTxtFile(saveFileDialog1.FileName);
                         ResetGraph();
                     }                    
                 }
@@ -1811,6 +2074,7 @@ namespace FreeFall_GUI
                 btnSetHome.Enabled = true;
                 cbExperimentMode.Enabled = true;
                 IsRunning = !IsRunning;
+                tongleRunningMode.Enabled = true;
 
                 cbDriverType.Enabled = true;
             }
@@ -1910,7 +2174,9 @@ namespace FreeFall_GUI
             //}
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                SaveToExcel(saveFileDialog1.FileName);
+                //SaveToExcel(saveFileDialog1.FileName); // Save to excel file
+
+                SaveDataToTxtFile(saveFileDialog1.FileName);
             }
         }
 
@@ -1923,14 +2189,8 @@ namespace FreeFall_GUI
 
         private void btnMoveDown_MouseUp_1(object sender, MouseEventArgs e)
         {
-            if (ControlMode) // Position mode
-            {
-                SendMessage(StopPulse); // Stop generating Pulses;
-            }
-            else // Speed Mode
-            {
-                SendMessage(STOP);
-            }
+            SendMessage(StopPulse); // Stop generating Pulses;
+            
             lbCmdOut.Text = "> Stop";
             //Console.WriteLine("> Stop");
         }
@@ -1944,15 +2204,8 @@ namespace FreeFall_GUI
 
         private void btnMoveUp_MouseUp_1(object sender, MouseEventArgs e)
         {
-            if (ControlMode) // Position mode
-            {
-                SendMessage(StopPulse); // Stop generating Pulses;
-            }
-            else // Speed Mode
-            {
-                SendMessage(STOP);
-            }
-            //Console.WriteLine("> Stop");
+
+            SendMessage(StopPulse); // Stop generating Pulses;                        
             lbCmdOut.Text = "> Stop";
         }
 
@@ -1986,38 +2239,42 @@ namespace FreeFall_GUI
             LoadData = new LoadDataToParamSettingForm(_ParamSetting.LoadSavedParams);           
             _ParamSetting._SendCommand = new ParamSetting.SendCommand(SendMessage);
             _ParamSetting._SetDrumRadius = new ParamSetting.SetDrumRadius(SetDrumRad);
-            _ShowFeedbackDriverDataFrame = new ShowFeedbackDriverDataFrame(_ParamSetting.ShowDriverDataFrame);
 
+            //_ShowFeedbackDriverDataFrame = new ShowFeedbackDriverDataFrame(_ParamSetting.ShowDriverDataFrame);
+            tongleDataOnOff.CheckState = CheckState.Unchecked;
             _ParamSetting.ShowDialog();            
         }
 
         private void cbReadOutputs_CheckedChanged_1(object sender, EventArgs e)
         {
-            if (cbReadOutputs.CheckState == CheckState.Checked) // request reading output data
+            if (serialPort1.IsOpen)
             {
-                SendMessage("8/1"); // 8/1 = request output data
-            }
-            else
-            {
-                SendMessage("8/0"); // 8/1 = stop Reading output data
-                lb_Type.BackColor = Color.Gray;
+                if (cbReadOutputs.CheckState == CheckState.Checked) // request reading output data
+                {
+                    SendMessage("8/1"); // 8/1 = request output data
+                }
+                else
+                {
+                    SendMessage("8/0"); // 8/1 = stop Reading output data
+                    lb_Type.BackColor = Color.Gray;
 
-                lbBrake.BackColor = Color.Gray;
+                    lbBrake.BackColor = Color.Gray;
 
-                lbReady.BackColor = Color.Gray;
+                    lbReady.BackColor = Color.Gray;
 
-                lbSpeedReach.BackColor = Color.Gray;
+                    lbSpeedReach.BackColor = Color.Gray;
 
-                lbTorqueLimit.BackColor = Color.Gray;
+                    lbTorqueLimit.BackColor = Color.Gray;
 
-                lbAlarm.BackColor = Color.Gray;
+                    lbAlarm.BackColor = Color.Gray;
 
-                lbCcwTorqueLimit.BackColor = Color.Gray;
+                    lbCcwTorqueLimit.BackColor = Color.Gray;
 
-                lbCwTorqueLimit.BackColor = Color.Gray;
+                    lbCwTorqueLimit.BackColor = Color.Gray;
 
-                lbZeroSpeedReach.BackColor = Color.Gray;
-            }
+                    lbZeroSpeedReach.BackColor = Color.Gray;
+                }
+            }            
         }
 
         private void ToggleRunningMode_CheckedChanged(object sender, EventArgs e)
@@ -2044,23 +2301,6 @@ namespace FreeFall_GUI
                 gbEpisode.Enabled = false;
                 ProgressBarInit();
             }
-        }        
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbDataON.CheckState == CheckState.Checked)
-            {
-                PreviousTime = Environment.TickCount; // Initialize 
-                SendMessage("6/1"); // Request data from MCU
-                
-            }
-            else
-            {
-                SendMessage("6/0");
-                lbMotorSpeed.Text = null;
-                lbEncoderPulses.Text = null;
-                lbObjectPosition.Text = null;
-            }
         }
 
         private void btnRstMcu_Click_1(object sender, EventArgs e)
@@ -2070,7 +2310,7 @@ namespace FreeFall_GUI
             if (CheckCmd == DialogResult.OK)
             {
                 SendMessage("17"); // Reset MCU
-                cbDataON.CheckState = CheckState.Unchecked;
+                tongleDataOnOff.CheckState = CheckState.Unchecked;
                 cbReadOutputs.CheckState = CheckState.Unchecked;
             }            
         }
@@ -2174,7 +2414,7 @@ namespace FreeFall_GUI
             if (cbDriverType.SelectedIndex == 0) // HIGEN FDA7000 Driver
             {
                 MotorDriver = true;
-                DrumRadius = (float)0.35;
+                DrumRadius = (float)0.3;
                 if (serialPort1.IsOpen)
                 {
                     SendMessage("39/1");
@@ -2183,7 +2423,7 @@ namespace FreeFall_GUI
             else // ASDA-A3, small model
             {
                 MotorDriver = false;
-                DrumRadius = (float)0.35;
+                DrumRadius = (float)0.05;
                 SendMessage("39/0");
             }
         }
@@ -2196,7 +2436,14 @@ namespace FreeFall_GUI
             }
             else AccZView = false;
         }
-
+        private void cbAccRef_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbAccRef.CheckState == CheckState.Checked)
+            {
+                AccRefView = true;
+            }
+            else AccRefView = false;
+        }
         private void lb_com_status_Click(object sender, EventArgs e)
         {
             if (_COM_Config == null)
@@ -2338,6 +2585,7 @@ namespace FreeFall_GUI
         string DataByteRegion = "";
         int i;
         double AccZData;
+        double Temp; // Temperature sensor
         byte[] AccZByteArray;
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -2360,21 +2608,33 @@ namespace FreeFall_GUI
                             {
                                 AccX = double.Parse(ExtractAccelData[0]); // get acceleration value
                                 AccY = double.Parse(ExtractAccelData[1]); // get acceleration value
+
                                 AccZData = double.Parse(ExtractAccelData[2]); // get acceleration value
-                                AccZData = Math.Round(AccZData, 2);
+
+                                AccZData = -Math.Round(AccZData, 3);
+                                AccZ = AccZData; // Get the acclerometer here
+                                lbAccZ.Text = AccZ.ToString(); // Show on the Screen
+
                                 //AccZByteArray = BitConverter.GetBytes(AccZData);
 
-                                if (serialPort2.IsOpen)
-                                {
-                                    try
-                                    {
-                                        serialPort2.WriteTimeout = 500;
-                                        serialPort2.Write(AccZData.ToString() + "$");
-                                        //serialPort2.Write(AccZByteArray,0,4);                                       
-                                    }
-                                    catch
-                                    { }
-                                }                                
+                                //Distance = double.Parse(ExtractAccelData[3]);
+
+                                //if (ExtractAccelData.Length >= 5)
+                                //{
+                                //    Temp = double.Parse(ExtractAccelData[4]);
+                                //    lbTemp.Text = Temp.ToString() + " C";
+                                //}
+                                //if (serialPort2.IsOpen)
+                                //{
+                                //    try
+                                //    {
+                                //        serialPort2.WriteTimeout = 500;
+                                //        serialPort2.Write(AccZData.ToString() + "$");
+                                //        //serialPort2.Write(AccZByteArray,0,4);                                       
+                                //    }
+                                //    catch
+                                //    { }
+                                //}                                
                                 DataByteRegion = "";
                             }
                             catch { }
@@ -2438,6 +2698,132 @@ namespace FreeFall_GUI
             {
                 throw;
             }
+        }
+        private void SaveDataToTxtFile(string DataPath)
+        {
+            TextWriter writer = new StreamWriter(DataPath);
+            int j = 1;
+            foreach (ListViewItem comp in listData.Items)
+            {                
+                foreach (ListViewItem.ListViewSubItem drv in comp.SubItems)
+                {
+                    if (j>=9)
+                    {
+                        writer.WriteLine(drv.Text.ToString());
+                        j = 1;
+                    }
+                    else
+                    {
+                        writer.Write(drv.Text.ToString() + "$");
+                        j++;
+                    }                   
+                }                
+            }
+            writer.Close(); //remember to close the file again.
+            writer.Dispose(); //remember to dispose it from the memory.
+        }
+        private void openAFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //Get the path of specified file
+                string filePath = openFileDialog.FileName;
+
+                //Read the contents of the file into a stream
+                var fileStream = openFileDialog.OpenFile();
+
+                //Pass the file path and file name to the StreamReader constructor
+                StreamReader sr = new StreamReader(filePath);
+                //Read the first line of text
+                string line = sr.ReadLine();
+                //Continue to read until you reach end of file
+                while (line != null)
+                {
+                    string[] datafield = line.Split('$');
+                    try
+                    {
+                        double _time = double.Parse(datafield[0]);
+                        double _Speed = double.Parse(datafield[1]);
+                        double _RefSpd = double.Parse(datafield[2]);
+
+                        double _AccX = double.Parse(datafield[3]);
+                        double _AccY = double.Parse(datafield[4]);
+                        double _AccZ = double.Parse(datafield[5]);
+                        double _AccRef = double.Parse(datafield[6]);
+                        double ObjectPos = double.Parse(datafield[7]);
+
+                        //double _AccZ = double.Parse(datafield[3]);                        
+                        //double ObjectPos = double.Parse(datafield[4]);
+                        //Draw(_time, _Speed, _RefSpd, _AccZ, ObjectPos);
+
+                        //DrawAllData(_time, _Speed, _RefSpd, 0, 0, _AccZ, 0, ObjectPos);
+                        DrawAllData(_time, _Speed, _RefSpd, _AccX, _AccY, _AccZ, _AccRef, ObjectPos);
+                    }
+                    catch
+                    {  }
+                    line = sr.ReadLine();
+                }
+            }
+        }
+
+        private void btnHome_Click(object sender, EventArgs e)
+        {
+            SendMessage("46/1"); // Set Origin Pulse Position
+        }
+
+        private void tongleControlLoop_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tongleControlLoop.CheckState == CheckState.Checked)
+            {
+                SendMessage("47/1"); // Use open loop control
+            }
+            else
+            {
+                SendMessage("47/0"); // Use closed loop control                
+            }
+        }
+
+        private void tongleDataOnOff_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tongleDataOnOff.CheckState == CheckState.Checked)
+            {
+                PreviousTime = Environment.TickCount; // Initialize 
+                SendMessage("6/1"); // Request data from MCU
+
+            }
+            else
+            {
+                SendMessage("6/0");
+                lbMotorSpeed.Text = null;
+                //lbEncoderPulses.Text = null;
+                lbObjectPosition.Text = null;
+                lbAccZ.Text = null;
+            }
+        }
+
+        private void tongleSoftLimit_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tongleSoftLimit.CheckState == CheckState.Checked) // turn on the software limit
+            {
+                SendMessage("48/1"); // Request data from MCU
+            }
+            else
+            {
+                SendMessage("48/0"); // Request data from MCU
+            }
+        }
+
+        private void gyroAndDisGraphToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GyroAndDistGraph = new _2ndDataGraph();
+            GyroAndDistGraph.Show();
         }
     }
 }

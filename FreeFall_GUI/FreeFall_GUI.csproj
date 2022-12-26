@@ -65,6 +65,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="2ndDataGraph.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2ndDataGraph.Designer.cs">
+      <DependentUpon>2ndDataGraph.cs</DependentUpon>
+    </Compile>
     <Compile Include="ButtonEllipse.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -79,6 +85,12 @@
     </Compile>
     <Compile Include="DriverInputControl.Designer.cs">
       <DependentUpon>DriverInputControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DriverSetingParams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DriverSetingParams.Designer.cs">
+      <DependentUpon>DriverSetingParams.cs</DependentUpon>
     </Compile>
     <Compile Include="Elip_Label.cs">
       <SubType>Component</SubType>
@@ -118,11 +130,17 @@
     <Compile Include="TCPServer.Designer.cs">
       <DependentUpon>TCPServer.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="2ndDataGraph.resx">
+      <DependentUpon>2ndDataGraph.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="COM_Config.resx">
       <DependentUpon>COM_Config.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DriverInputControl.resx">
       <DependentUpon>DriverInputControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DriverSetingParams.resx">
+      <DependentUpon>DriverSetingParams.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

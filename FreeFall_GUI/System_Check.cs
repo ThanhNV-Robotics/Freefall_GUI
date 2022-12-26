@@ -15,7 +15,7 @@ namespace FreeFall_GUI
     public partial class ParamSetting : Form
     {
         private float DrumRadius;
-        private UInt16 DroppingDistance;
+        private float DroppingDistance;
         private UInt16 PullingSpeed;
         private UInt16 StoppingTime;
        
@@ -55,7 +55,11 @@ namespace FreeFall_GUI
             PullingAccelDistance = Params[7];
             PullingAccel = Params[8];
             PullingDecel = Params[9];
-            
+
+            //PID controller Params
+            Kp = Params[10];
+            Ki = Params[11];
+            Kd = Params[12];
 
             txtDrumRadius.Text = DrumRadius.ToString();
             txtPullingSpeed.Text = PullingSpeed.ToString();
@@ -69,56 +73,12 @@ namespace FreeFall_GUI
             txtAccelPullingDistance.Text = PullingAccelDistance.ToString();
             txtPullingAccRef.Text = PullingAccel.ToString();
             txtPullingDecel.Text = PullingDecel.ToString();
+
+            txtKp.Text = Kp.ToString();
+            txtKi.Text = Ki.ToString();
+            txtKd.Text = Kd.ToString();
         }
-        public void ShowDriverDataFrame (string DataFrame)
-        {
-            lbFeedbackFrame.Text = DataFrame;
-            string[] SplitDataFrame = DataFrame.Split('/'); // Split the string
-            byte[] DataByte = new byte[4];
-            try
-            {
-                DataByte[0] = byte.Parse(SplitDataFrame[7]);
-                DataByte[1] = byte.Parse(SplitDataFrame[6]);
-                DataByte[2] = byte.Parse(SplitDataFrame[5]);
-                DataByte[3] = byte.Parse(SplitDataFrame[4]);
-
-                FloatFeedbackValue = System.BitConverter.ToSingle(DataByte,0);
-                IntFeedbackValue = System.BitConverter.ToInt32(DataByte, 0);
-
-                lbFeedbackValueFloat.Text = FloatFeedbackValue.ToString();
-                lbFeedbackValueInt.Text = IntFeedbackValue.ToString();
-            }
-            catch
-            { return;   }
-
-            string Register = cbRegister.SelectedItem.ToString();
-            string[] ExtractRegister = Register.Split('-'); // Split the string
-            try
-            {
-                string DataType = ExtractRegister[3];                
-
-                if (DataType == "Float") // Float Type
-                {
-                    float SettingValue = float.Parse(txtSetingValue.Text);
-                    if (FloatFeedbackValue == SettingValue)
-                    {
-                        MessageBox.Show("Setting is successful");
-                    }
-                }
-                if (DataType == "Int") // Int type
-                {
-                    float SettingValue = int.Parse(txtSetingValue.Text);
-                    if (IntFeedbackValue == SettingValue)
-                    {
-                        MessageBox.Show("Setting is successful");
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Data");
-            }
-        }
+        
         public void CheckParams(uint ParamCode, float Param)
         {
             switch (ParamCode)
@@ -226,6 +186,36 @@ namespace FreeFall_GUI
                         MessageBox.Show("Setting Failed! Set Again");
                     }
                     break;
+                case 41:
+                    if (Kp == Param)
+                    {
+                        MessageBox.Show("Successfully Set Kp");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed!");
+                    }
+                    break;
+                case 42:
+                    if (Ki == Param)
+                    {
+                        MessageBox.Show("Successfully Set Ki");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed!");
+                    }
+                    break;
+                case 43:
+                    if (Kd == Param)
+                    {
+                        MessageBox.Show("Successfully Set Kd");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed!");
+                    }
+                    break;
                 //case 36:
                 //    if (PD_DroppingAccRef == Param)
                 //    {
@@ -291,7 +281,7 @@ namespace FreeFall_GUI
         {
             try
             {
-                DroppingDistance = UInt16.Parse(txtDroppingAccelDistance.Text);
+                DroppingDistance = float.Parse(txtDroppingAccelDistance.Text);
                 _SendCommand("12" + "/" + DroppingDistance.ToString() + "$");
             }
             catch
@@ -360,62 +350,7 @@ namespace FreeFall_GUI
                 MessageBox.Show("Invalid Input Type");
             }
         }
-
-        private void btnSetDriverParam_Click(object sender, EventArgs e)
-        {
-            string Register = cbRegister.SelectedItem.ToString();
-            string[] ExtractRegister = Register.Split('-'); // Split the string
-            try
-            {
-                int Address = int.Parse(ExtractRegister[2]);
-                string DataType = ExtractRegister[3];
-                float MinValue = float.Parse(ExtractRegister[4]);
-                float MaxValue = float.Parse(ExtractRegister[5]);
-
-                if (DataType == "Float") // Float Type
-                {
-                    try
-                    {
-                        float SettingValue = float.Parse(txtSetingValue.Text);
-                        if (SettingValue > MaxValue || SettingValue < MinValue) // Out of range
-                        {
-                            MessageBox.Show("Setting range is between: " + MinValue.ToString() + " and " + MaxValue.ToString());
-                        }
-                        else
-                        {
-                            _SendCommand("30/1/" + Address.ToString() + "/" + SettingValue.ToString());
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Invalid Input Data Type");
-                    }
-                }
-                if (DataType == "Int") // Int type
-                {
-                    try
-                    {
-                        int SettingValue = int.Parse(txtSetingValue.Text);
-                        if (SettingValue > (int)MaxValue || SettingValue < (int)MinValue) // Out of range
-                        {
-                            MessageBox.Show("Setting range is between: " + MinValue.ToString() + " and " + MaxValue.ToString());
-                        }
-                        else
-                        {
-                            _SendCommand("30/0/" + Address.ToString() + "/" + SettingValue.ToString());
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Invalid Input Data Type");
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Register");
-            }
-        }
+        
         // Dropping Stage
         double DroppingAccel; // m/s2
         double DroppingDecel; // m/s2 
@@ -458,6 +393,11 @@ namespace FreeFall_GUI
         double MOb; // kg , object's mass
         double Fs; // Safety factor
 
+        // PID controller parameters
+        float Kp;
+        float Ki;
+        float Kd;
+
         const double g = 9.8; // m/s2 gravity acc
         //public delegate void
         private void CalculateRunningParameters ()
@@ -467,12 +407,12 @@ namespace FreeFall_GUI
                 DrumRadius = float.Parse(txtDrumRadius.Text); // m
 
                 // Dropping Params
-                DroppingAccelDistance = UInt16.Parse(txtDroppingAccelDistance.Text); //m
+                DroppingAccelDistance = float.Parse(txtDroppingAccelDistance.Text); //m
                 DroppingAccel = double.Parse(txtDroppingAccRef.Text); // m/s2
                 DroppingDecel = double.Parse(txtDropDecel.Text); // m/s2
 
                 // Pulling Params
-                PullingAccelDistance = UInt16.Parse(txtAccelPullingDistance.Text); //m
+                PullingAccelDistance = float.Parse(txtAccelPullingDistance.Text); //m
                 PullingAccel = double.Parse(txtPullingAccRef.Text); // m/s2
                 PullingDecel = double.Parse(txtPullingDecel.Text); // m/s2
 
@@ -483,24 +423,27 @@ namespace FreeFall_GUI
                 // Dropping stage calculation
                 DroppingAccleratingTime = Math.Round(Math.Sqrt(2 * DroppingAccelDistance / DroppingAccel), 1); // s
 
-                DroppingMaxSpeed = Math.Round((Math.Sqrt(2 * DroppingAccel * DroppingAccelDistance) / DrumRadius) * 10, 1); // rpm
+                DroppingMaxSpeed = Math.Round((Math.Sqrt(2 * DroppingAccel * DroppingAccelDistance) / DrumRadius) * 60 / (2 * Math.PI), 1); // rpm
 
                 DroppingDecelTime = Math.Round(((DroppingMaxSpeed * 2 * Math.PI / 60) * DrumRadius) / DroppingDecel, 1); // s
 
                 DroppingDecelDistance = Math.Round(0.5 * (DroppingMaxSpeed * 2 * Math.PI / 60) * DrumRadius * DroppingDecelTime, 1);
 
-                DroppingTotalDistance = DroppingDecelDistance + DroppingAccelDistance;
+                DroppingTotalDistance = Math.Round(DroppingDecelDistance + DroppingAccelDistance,1);
 
                 // Pulling Stage Calculation
                 PullingAccleratingTime = Math.Round(Math.Sqrt(2 * PullingAccelDistance / PullingAccel), 1); // s
 
                 PullingMaxSpeed = Math.Round((Math.Sqrt(2 * PullingAccel * PullingAccelDistance) / DrumRadius) * 60 / (2 * Math.PI), 1);// rpm
 
-                PullingDecelTime = Math.Round(((PullingMaxSpeed * 2 * Math.PI / 60) * DrumRadius) / PullingDecel, 1); // s
+                PullingDecelTime = Math.Round(((PullingMaxSpeed * 2 * Math.PI / 60) * DrumRadius) / 9.8, 1); // s
 
-                PullingDecelDistance = Math.Round(0.5 * (PullingMaxSpeed * 2 * Math.PI / 60) * DrumRadius * PullingDecelTime, 1);
+                //PullingDecelTime = Math.Round(((PullingMaxSpeed * 2 * Math.PI / 60) * DrumRadius) / PullingDecel, 1); // s
 
-                PullingTotalDistance = PullingDecelDistance + PullingAccelDistance;
+                //PullingDecelDistance = Math.Round(0.5 * (PullingMaxSpeed * 2 * Math.PI / 60) * DrumRadius * PullingDecelTime, 1);
+                PullingDecelDistance = Math.Round((Math.Pow(PullingMaxSpeed * 2 * 3.14 * DrumRadius / 60, 2)) / (2 * 9.8),1);
+
+                PullingTotalDistance = Math.Round(PullingDecelDistance + PullingAccelDistance,1);
 
                 //Torque calculation
                 DropAccTorque = -Jd * DroppingAccel / DrumRadius - MOb * (DroppingAccel - g) * DrumRadius;
@@ -534,6 +477,8 @@ namespace FreeFall_GUI
                 lbPullingBrakingDis.Text = PullingDecelDistance.ToString();
                 lbPullingBrakingTime.Text = PullingDecelTime.ToString();
                 lbPullingTotalDis.Text = PullingTotalDistance.ToString();
+                double PullingMaxSpeedInKph = Math.Round((Math.Sqrt(2 * PullingAccel * PullingAccelDistance) * 3.6), 1);// km/h
+                lbPullingMaxSpdInKph.Text = PullingMaxSpeedInKph.ToString();
 
                 // Torque
                 lbDropAccTorque.Text = DropAccTorque.ToString();
@@ -561,7 +506,7 @@ namespace FreeFall_GUI
         {
             try
             {
-                PullingAccelDistance = UInt16.Parse(txtAccelPullingDistance.Text);
+                PullingAccelDistance = float.Parse(txtAccelPullingDistance.Text);
                 _SendCommand("32" + "/" + PullingAccelDistance.ToString() + "$");
             }
             catch
@@ -658,5 +603,45 @@ namespace FreeFall_GUI
         {
             CalculateRunningParameters();
         }
+
+        private void btnSetKp_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Kp = float.Parse(txtKp.Text);
+                _SendCommand("41" + "/" + Kp.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        private void btnSetKi_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Ki = float.Parse(txtKi.Text);
+                _SendCommand("42" + "/" + Ki.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        private void btnSetKd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Kd = float.Parse(txtKd.Text);
+                _SendCommand("43" + "/" + Kd.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+        
     }
 }

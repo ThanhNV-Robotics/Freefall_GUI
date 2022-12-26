@@ -105,6 +105,7 @@
             this.cb_baud_rate.Name = "cb_baud_rate";
             this.cb_baud_rate.Size = new System.Drawing.Size(121, 23);
             this.cb_baud_rate.TabIndex = 6;
+
             // 
             // cb_data_bits
             // 
