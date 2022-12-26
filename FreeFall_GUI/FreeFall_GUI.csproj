@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AA46E7F6-E7EA-4535-B0E3-8C20102E7311}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>FreeFall_GUI</RootNamespace>
     <AssemblyName>FreeFall_GUI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -42,6 +42,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SimpleTCP, Version=1.0.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleTCP.1.0.24\lib\net45\SimpleTCP.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
@@ -62,26 +65,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accelerometter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Accelerometter.Designer.cs">
-      <DependentUpon>Accelerometter.cs</DependentUpon>
+    <Compile Include="2ndDataGraph.cs" />
+    <Compile Include="2ndDataGraph.Designer.cs">
+      <DependentUpon>2ndDataGraph.cs</DependentUpon>
     </Compile>
     <Compile Include="ButtonEllipse.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="COM Testing.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="COM Testing.Designer.cs">
-      <DependentUpon>COM Testing.cs</DependentUpon>
     </Compile>
     <Compile Include="COM_Config.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="COM_Config.Designer.cs">
       <DependentUpon>COM_Config.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DriverInputControl.cs" />
+    <Compile Include="DriverInputControl.Designer.cs">
+      <DependentUpon>DriverInputControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DriverSetingParams.cs" />
+    <Compile Include="DriverSetingParams.Designer.cs">
+      <DependentUpon>DriverSetingParams.cs</DependentUpon>
     </Compile>
     <Compile Include="Elip_Label.cs">
       <SubType>Component</SubType>
@@ -100,20 +103,32 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RJControls\RJToggleButton.cs" />
+    <Compile Include="StepPositionControl.cs" />
+    <Compile Include="StepPositionControl.Designer.cs">
+      <DependentUpon>StepPositionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="System_Check.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="System_Check.Designer.cs">
       <DependentUpon>System_Check.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Accelerometter.resx">
-      <DependentUpon>Accelerometter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="COM Testing.resx">
-      <DependentUpon>COM Testing.cs</DependentUpon>
+    <Compile Include="TCPServer.cs" />
+    <Compile Include="TCPServer.Designer.cs">
+      <DependentUpon>TCPServer.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="2ndDataGraph.resx">
+      <DependentUpon>2ndDataGraph.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="COM_Config.resx">
       <DependentUpon>COM_Config.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DriverInputControl.resx">
+      <DependentUpon>DriverInputControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DriverSetingParams.resx">
+      <DependentUpon>DriverSetingParams.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -129,9 +144,16 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="StepPositionControl.resx">
+      <DependentUpon>StepPositionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="System_Check.resx">
       <DependentUpon>System_Check.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TCPServer.resx">
+      <DependentUpon>TCPServer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -149,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="License-LGPL.txt" />
+    <None Include="Resources\Down_Arrow.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
