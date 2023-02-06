@@ -1768,8 +1768,7 @@ namespace FreeFall_GUI
             }
         }
         private void DisableJogControl()
-        {
-            //gbJogControl.Enabled = false;
+        {            
             btnMoveDown.Enabled = false;
             btnMoveUp.Enabled = false;
             txtSetSpeed.Enabled = false;
@@ -2055,8 +2054,7 @@ namespace FreeFall_GUI
         }
 
         private void btnStop_Click_1(object sender, EventArgs e)
-        {
-            //Console.WriteLine("> Stop");
+        {            
             SendMessage(STOP);
         }
         private bool IsServoON;
@@ -2147,8 +2145,7 @@ namespace FreeFall_GUI
 
         private void btnMoveDown_MouseDown_1(object sender, MouseEventArgs e)
         {            
-            SendMessage(JogDown);
-            //Console.WriteLine("> Jog Move Down");
+            SendMessage(JogDown);            
         }
 
         private void btnMoveDown_MouseUp_1(object sender, MouseEventArgs e)
@@ -2157,10 +2154,8 @@ namespace FreeFall_GUI
         }
 
         private void btnMoveUp_MouseDown_1(object sender, MouseEventArgs e)
-        {
-            //Console.WriteLine("> Jog Move Up");
+        {            
             SendMessage(JogUp);
-
         }
 
         private void btnMoveUp_MouseUp_1(object sender, MouseEventArgs e)
