@@ -26,7 +26,47 @@ C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\bin\Debug\zh-cn\ZedGraph.resources.dll
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\bin\Debug\zh-tw\ZedGraph.resources.dll
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.CopyComplete
-C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.COM_Testing.resources
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Main_Control.resources
-C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Accelerometter.resources
 C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.ParamSetting.resources
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.StepPositionControl.resources
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.DriverInputControl.resources
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.TCPServer.resources
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\SimpleTCP.dll
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.DriverSetingParams.resources
+C:\Users\thanh\OneDrive - Sejong University\NV_THANH\Liintech_Company\CSharp_App\FreeFall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI._2ndDataGraph.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\FreeFall_GUI.exe.config
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\FreeFall_GUI.exe
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\FreeFall_GUI.pdb
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\SimpleTCP.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\ZedGraph.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\ZedGraph.xml
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\ru\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\sk\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.AssemblyReference.cache
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.SuggestedBindingRedirects.cache
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI._2ndDataGraph.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.COM_Config.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.DriverInputControl.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.DriverSetingParams.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Form1.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Main_Control.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Properties.Resources.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.StepPositionControl.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.ParamSetting.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.TCPServer.resources
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.GenerateResource.cache
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.CoreCompileInputs.cache
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.CopyComplete
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.exe
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.pdb

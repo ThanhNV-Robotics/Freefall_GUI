@@ -13,19 +13,28 @@ namespace FreeFall_GUI
     public partial class COM_Config : Form
     {
         bool IsApplied;
+        string PortName;
+        int BaudRate;
         public COM_Config()
         {
             InitializeComponent();
             IsApplied = false;
         }
         
-        public delegate void SetParam(int _BauRate, int _DataBits, string _StopBits, string _Parity);
-        
-private void COM_Config_Load(object sender, EventArgs e)
-        {
-            btn_apply.Enabled = true;
+        public delegate void SetCOM(int index, string PortName, int _BauRate, int _DataBits, string _StopBits, string _Parity);
+        public delegate bool COMConnect(int index);
+        public delegate bool COMDisconnect(int index);
+        public delegate string[] COMRefresh();
 
-            cb_baud_rate.SelectedIndex = 2;
+        public SetCOM _SetCOM; // tao mot ham uy quyen
+        public COMConnect _COMConnect;
+        public COMDisconnect _COMDisconnect;
+        public COMRefresh _COMRefresh;
+
+        private void COM_Config_Load(object sender, EventArgs e)
+        {
+            _COMRefresh();
+            cb_baud_rate.SelectedIndex = 3;
             cb_data_bits.SelectedIndex = 2;
             cb_parity_bits.SelectedIndex = 0;
             cb_stop_bits.SelectedIndex = 0;
@@ -35,34 +44,68 @@ private void COM_Config_Load(object sender, EventArgs e)
         {
 
         }
-        public SetParam _SetParam; // tao mot ham uy quyen
-        private void btn_apply_Click(object sender, EventArgs e)
+
+        private void SetCOMParams()
         {
+            //string _PortName = cbPortName.SelectedItem.ToString();
             int _BaudRate = int.Parse(cb_baud_rate.SelectedItem.ToString());
             int _DataBits = int.Parse(cb_data_bits.SelectedItem.ToString());
             string _StopBits = cb_stop_bits.SelectedItem.ToString();
             string _Parity = cb_parity_bits.SelectedItem.ToString();
-            _SetParam(_BaudRate, _DataBits, _StopBits, _Parity);
-            btn_apply.Enabled = false;
+            _SetCOM(cbPortName.SelectedIndex ,PortName, _BaudRate, _DataBits, _StopBits, _Parity);
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
         {
-            if (IsApplied)
+ 
+        }
+        private void DisableControl ()
+        {
+            //cbPortName.Enabled = false;
+            cb_baud_rate.Enabled = false;
+            cb_data_bits.Enabled = false;
+            cb_parity_bits.Enabled = false;
+            cb_stop_bits.Enabled = false;
+        }
+        private void EnabaleControl ()
+        {
+            cbPortName.Enabled = true;
+            cb_baud_rate.Enabled = true;
+            cb_data_bits.Enabled = true;
+            cb_parity_bits.Enabled = true;
+            cb_stop_bits.Enabled = true;
+        }
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            PortName = cbPortName.SelectedItem.ToString();
+            EnabaleControl();
+            SetCOMParams();
+            bool COMIsOpen = _COMConnect(cbPortName.SelectedIndex);
+            if (COMIsOpen)
             {
-                Close();
-            }
-            else
-            {
-                int _BaudRate = int.Parse(cb_baud_rate.SelectedItem.ToString());
-                int _DataBits = int.Parse(cb_data_bits.SelectedItem.ToString());
-                string _StopBits = cb_stop_bits.SelectedItem.ToString();
-                string _Parity = cb_parity_bits.SelectedItem.ToString();
-                _SetParam(_BaudRate, _DataBits, _StopBits, _Parity);
-                btn_apply.Enabled = false;
+                DisableControl();
+            }            
+        }
 
-                Close();
+        private void btn_com_disconnect_Click(object sender, EventArgs e)
+        {
+            bool  COMIsOpen  = _COMDisconnect(cbPortName.SelectedIndex); // thuc hien uy quyen
+            if (!COMIsOpen)
+            {
+                EnabaleControl();
             }
         }
+
+        private void btn_com_refresh_Click(object sender, EventArgs e)
+        {
+            cbPortName.Items.Clear();
+            string[] _PortName = _COMRefresh();
+            cbPortName.Items.AddRange(_PortName);
+        }
+
+        private void cbPortName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+          
+        }        
     }
 }
