@@ -215,28 +215,7 @@ namespace FreeFall_GUI
                     {
                         MessageBox.Show("Setting Failed!");
                     }
-                    break;
-                //case 36:
-                //    if (PD_DroppingAccRef == Param)
-                //    {
-                //        MessageBox.Show("Successfully Set PD_DroppingAccRef");
-                //    }
-                //    else
-                //    {
-                //        MessageBox.Show("Setting Failed! Set Again");
-                //    }
-                //    break;
-
-                //case 41:
-                //    if (kbrake == Param)
-                //    {
-                //        MessageBox.Show("Successfully Set kbrake");
-                //    }
-                //    else
-                //    {
-                //        MessageBox.Show("Setting Failed! Set Again");
-                //    }
-                //    break;
+                    break;                
                 default:
                     break;
             }
