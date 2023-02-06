@@ -81,7 +81,9 @@ namespace FreeFall_GUI
         private uint CountBeforeRunning;
         private bool WaitingBeforeRunning = false;
         private int PulseCmd; // to count the pulse cmd generate by the mcu
-        private float PosCmd; // Position Command
+
+        private bool SimuOrRunning = false;
+
         private double AccZ; // m/s^2
         private double AccRef;
 
@@ -118,8 +120,7 @@ namespace FreeFall_GUI
         uint DriverOutput;
         uint JogSpeed;
 
-        private GraphPane MyPane = new GraphPane();
-        private bool IsRunning = false;
+        private GraphPane MyPane = new GraphPane();        
 
         //private string FolderPath;
 
@@ -227,11 +228,6 @@ namespace FreeFall_GUI
             }            
         }
 
-        //public void SendAccZData(float AccZ)
-        //{
-        //    string AccData2Send = "9" + "/" + AccZ.ToString();
-        //    SendMessage(AccData2Send); // r is the funtion code
-        //} 
         public void SetCOMParam (int index, string PortName, int _BauRate, int _DataBits, string _StopBits, string _Parity)
         {
             switch (index)
@@ -341,7 +337,9 @@ namespace FreeFall_GUI
 
             //cbDriverType.SelectedIndex = 0; // FDA7000 is default
             // Disbale JOG Control
-            DisableJogControl();
+
+            //DisableJogControl();
+
             //cbExperimentMode.SelectedIndex = 0; // Dropping Mode 
             Main_Control_Load();
             txtSetSpeed.Text = "30";
@@ -723,6 +721,47 @@ namespace FreeFall_GUI
                                 MessageBox.Show("Software Limit is OFF");
                             }
                             break;
+                        case 14:
+                            MessageBox.Show("Simulation finished\n Pulling distance is" + Param.ToString() + "m");
+                            break;
+                        case 4: // Start Running Experiment response
+                            if (Param != 1) // Can not start the experiment
+                            {
+                                MessageBox.Show("CAN NOT START!!\n Please Initialize the Experiment First");
+                            }
+                            else // Param = 1, then start the experiment
+                            {
+                                switch (ExperimentMode)
+                                {
+                                    case 1: // Dropping Mode
+                                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
+                                        {
+                                            MessageBox.Show("Please turn ON Data request");
+                                            break;
+                                        }
+                                        InitExperiment();
+                                        break;
+                                    case 2: //Pulling
+                                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
+                                        {
+                                            MessageBox.Show("Please turn ON Data request");
+                                            return;
+                                        }
+                                        InitExperiment();
+                                        break;
+                                    case 3: // PullingAndDropping
+                                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
+                                        {
+                                            MessageBox.Show("Please turn ON Data request");
+                                            return;
+                                        }
+                                        InitExperiment();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -822,6 +861,7 @@ namespace FreeFall_GUI
                     //PosCmd = (float)Math.Round((double)PosCmd, 1);
 
                     // Write to the Buffer
+
                     WriteToSpdCmdBuffer(SpdCommand);
                     WriteToSpdBuffer(MotorSpeed);
 
@@ -849,7 +889,7 @@ namespace FreeFall_GUI
 
                     lbMotorSpeed.Text = MotorSpeed.ToString() + " rpm";
                     //lbEncoderPulses.Text = CurrentPulse.ToString();
-                    lbObjectPosition.Text = ObjectPosition.ToString() + " m";
+                    lbObjectPosition.Text = (ObjectPosition/1000).ToString() + " m";
 
                     //lbPulseCmd.Text = PulseCmd.ToString();
                     //lbPosCmd.Text = PosCmd.ToString();
@@ -1086,8 +1126,6 @@ namespace FreeFall_GUI
                 {
                     string Command = "5" + "/" + JogSpeed.ToString();
                     SendMessage(Command);
-                    lbCmdOut.Text = "> Set Speed";
-                    //Console.WriteLine("> Set Speed: " + Command);
                 }
             }
             catch (Exception)
@@ -1098,59 +1136,59 @@ namespace FreeFall_GUI
         }
         private void GraphInit()
         {
-            GraphPane myPane = SpeedGraph.GraphPane;
-            myPane.Title.Text = "Data";
-            myPane.XAxis.Title.Text = "time (s)";
-            myPane.YAxis.Title.Text = "Speed(rpm)";
-            myPane.YAxis.Scale.FontSpec.FontColor = Color.Red;
-            myPane.YAxis.Title.FontSpec.FontColor = Color.Red;
+            //GraphPane myPane = SpeedGraph.GraphPane;
+            SpeedGraph.GraphPane.Title.Text = "Data";
+            SpeedGraph.GraphPane.XAxis.Title.Text = "time (s)";
+            SpeedGraph.GraphPane.YAxis.Title.Text = "Speed(rpm)";
+            SpeedGraph.GraphPane.YAxis.Scale.FontSpec.FontColor = Color.Red;
+            SpeedGraph.GraphPane.YAxis.Title.FontSpec.FontColor = Color.Red;
 
-            myPane.XAxis.Scale.Min = 0;
-            myPane.XAxis.Scale.Max = 10;
-            myPane.XAxis.Scale.MinorStep = 1;
-            myPane.XAxis.Scale.MajorStep = 5;
-            myPane.YAxis.Scale.Min = -100;
-            myPane.YAxis.Scale.Max = 100;
+            SpeedGraph.GraphPane.XAxis.Scale.Min = 0;
+            SpeedGraph.GraphPane.XAxis.Scale.Max = 10;
+            SpeedGraph.GraphPane.XAxis.Scale.MinorStep = 1;
+            SpeedGraph.GraphPane.XAxis.Scale.MajorStep = 5;
+            SpeedGraph.GraphPane.YAxis.Scale.Min = -100;
+            SpeedGraph.GraphPane.YAxis.Scale.Max = 100;
 
             
-            myPane.Y2Axis.Title.Text = "Acc(m/s2)/Pos(mm)";
-            myPane.Y2Axis.Scale.Min = -1500;
-            myPane.Y2Axis.Scale.Max = 1500;
-            myPane.Y2Axis.Scale.MinorStep = 500;
-            myPane.Y2Axis.Scale.FontSpec.FontColor = Color.Blue;
-            myPane.Y2Axis.Title.FontSpec.FontColor = Color.Blue;
-            myPane.Y2Axis.IsVisible = true;
+            SpeedGraph.GraphPane.Y2Axis.Title.Text = "Acc(m/s2)/Pos(mm)";
+            SpeedGraph.GraphPane.Y2Axis.Scale.Min = -1500;
+            SpeedGraph.GraphPane.Y2Axis.Scale.Max = 1500;
+            SpeedGraph.GraphPane.Y2Axis.Scale.MinorStep = 500;
+            SpeedGraph.GraphPane.Y2Axis.Scale.FontSpec.FontColor = Color.Blue;
+            SpeedGraph.GraphPane.Y2Axis.Title.FontSpec.FontColor = Color.Blue;
+            SpeedGraph.GraphPane.Y2Axis.IsVisible = true;
 
-            myPane.IsAlignGrids = true;
+            SpeedGraph.GraphPane.IsAlignGrids = true;
 
             
 
             RollingPointPairList MotorSpeedList = new RollingPointPairList(60000);
-            LineItem MotorSpeedCurve = myPane.AddCurve("Motor Speed", MotorSpeedList, Color.Red, SymbolType.None);
+            LineItem MotorSpeedCurve = SpeedGraph.GraphPane.AddCurve("Motor Speed", MotorSpeedList, Color.Red, SymbolType.None);
             MotorSpeedCurve.Line.Width = (float)3; // Set LineWidth
 
             RollingPointPairList SpdCmdList = new RollingPointPairList(60000); // speed command curve
-            LineItem SpdCmdCurve = myPane.AddCurve("Speed Command", SpdCmdList, Color.Orange, SymbolType.None);
+            LineItem SpdCmdCurve = SpeedGraph.GraphPane.AddCurve("Speed Command", SpdCmdList, Color.Orange, SymbolType.None);
             SpdCmdCurve.Line.Width = (float)3; // Set LineWidth
 
             RollingPointPairList AccXList = new RollingPointPairList(60000);
-            LineItem AccXCurve = myPane.AddCurve("AccX", AccXList, Color.Brown, SymbolType.None);
+            LineItem AccXCurve = SpeedGraph.GraphPane.AddCurve("AccX", AccXList, Color.Brown, SymbolType.None);
             AccXCurve.Line.Width = (float)1.5; // Set LineWidth
 
             RollingPointPairList AccYList = new RollingPointPairList(60000);
-            LineItem AccYCurve = myPane.AddCurve("AccY", AccYList, Color.Black, SymbolType.None);
+            LineItem AccYCurve = SpeedGraph.GraphPane.AddCurve("AccY", AccYList, Color.Black, SymbolType.None);
             AccYCurve.Line.Width = (float)1.5; // Set LineWidth
 
             RollingPointPairList AccZList = new RollingPointPairList(60000);
-            LineItem AccZCurve = myPane.AddCurve("AccZ", AccZList, Color.Blue, SymbolType.None);
+            LineItem AccZCurve = SpeedGraph.GraphPane.AddCurve("AccZ", AccZList, Color.Blue, SymbolType.None);
             AccZCurve.Line.Width = (float)3; // Set LineWidth
 
             RollingPointPairList AccRefList = new RollingPointPairList(60000);
-            LineItem AccRefCurve = myPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
+            LineItem AccRefCurve = SpeedGraph.GraphPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
             AccRefCurve.Line.Width = (float)3; // Set LineWidth
 
             RollingPointPairList PositionList = new RollingPointPairList(60000);
-            LineItem PositionCurve = myPane.AddCurve("Position", PositionList, Color.Lime, SymbolType.None);
+            LineItem PositionCurve = SpeedGraph.GraphPane.AddCurve("Position", PositionList, Color.Lime, SymbolType.None);
             PositionCurve.Line.Width = (float)3; // Set LineWidth
             
             AccXCurve.IsY2Axis = true;
@@ -1160,7 +1198,7 @@ namespace FreeFall_GUI
 
             AccRefCurve.IsY2Axis = true;
 
-            myPane.AxisChange();
+            SpeedGraph.GraphPane.AxisChange();
         }
         private void ProgressBarInit()
         {
@@ -1726,7 +1764,7 @@ namespace FreeFall_GUI
             }
             else
             {
-                DisableJogControl();
+                //DisableJogControl();
             }
         }
         private void DisableJogControl()
@@ -1814,7 +1852,14 @@ namespace FreeFall_GUI
                 {
                     WaitingBeforeRunning = false;
                     CountBeforeRunning = 0;
-                    SendMessage(StartRunning); // Send command to start running
+                    if (SimuOrRunning) // Simulation Mode
+                    {
+                        SendMessage("14/1");
+                    }
+                    else //Running Mode
+                    {
+                        SendMessage(StartRunning); // Send command to start running
+                    }                    
                 }
             }
         }
@@ -1841,16 +1886,12 @@ namespace FreeFall_GUI
         private void btnResetAlarm_Click_1(object sender, EventArgs e)
         {            
             SendMessage(AlarmReset);
-            lbCmdOut.Text = "> Arm Reset";
-            lbCmdOut.BackColor = Color.White;
             IsEStop = false;
         }
         private volatile bool IsEStop;
         private void btnEstop_Click_1(object sender, EventArgs e)
         {
             SendMessage(ESTOP);
-            lbCmdOut.Text = "> Emergency Stop";
-            lbCmdOut.BackColor = Color.Yellow;
             
             IsEStop = true;
             if (btnStartDropping.Text == "START")
@@ -1860,8 +1901,30 @@ namespace FreeFall_GUI
             }
             //Console.WriteLine("> Emergency Stop");
         }
+        private void InitSimulation()
+        {
+            TurnOnGraph(); // Turn on the graph
+            WaitingBeforeRunning = true;
+
+
+            txtTotalEpisodes.Enabled = false; // Disable setting Episode
+            btnSetEpisode.Enabled = false; // Disable setting Episode
+            tongleRunningMode.Enabled = false; // Disable Setting Running Mode
+
+            DisableJogControl();
+            btnSetHome.Enabled = false;
+            cbExperimentMode.Enabled = false;
+            cbDriverType.Enabled = false;
+
+            cbExperimentMode.Enabled = false;
+            btnSetHome.Enabled = false;
+
+            btnStartDropping.Enabled = false;
+        }
         private void InitExperiment()
         {
+            SimuOrRunning = false; // Running cmd
+
             progressBar.Visible = true;
             TurnOnGraph(); // Turn on the graph
             WaitingBeforeRunning = true;
@@ -1888,7 +1951,7 @@ namespace FreeFall_GUI
         TcpClient CmdClient;
         NetworkStream CmdClientStream;
 
-        string ServerIP = "192.168.200.110";
+        string ServerIP = "192.168.0.141";
         int ServerPort = 5000;
         string StartMessage = "POST /recording HTTP/1.1";
         bool StartRecording;
@@ -1946,106 +2009,14 @@ namespace FreeFall_GUI
         }
         private void btnStartDropping_Click_1(object sender, EventArgs e)
         {            
-            if (!IsRunning) // if is not running > Start running
-            {                
-                switch (ExperimentMode)
-                {
-                    case 1: // Dropping Mode
-                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
-                        {
-                            MessageBox.Show("Please turn ON Data request");
-                            break;                            
-                        }
-
-                        IsRunning = !IsRunning;
-                        InitExperiment();
-
-                        //if (Math.Abs(PosCmd) >= 1)
-                        //{
-                        //    //MessageBox.Show("Homing is required");
-                        //    //btnSetHome.Enabled = true;
-                        //    //break;                            
-                        //}
-                        //else
-                        //{
-                        //    IsRunning = !IsRunning;
-                        //    InitExperiment();
-                        //    //if (SendRecordingCmd()) // Successfully start recording the data
-                        //    //{
-                        //    //    IsRunning = !IsRunning;
-                        //    //    InitExperiment();
-                        //    //}
-                        //    //else // Start Recording Failed
-                        //    //{
-                        //    //    DialogResult Response;
-                        //    //    Response = MessageBox.Show("Fail to start recording sensors! Do you want to Run the Motor?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                        //    //    if (Response == DialogResult.OK)
-                        //    //    {
-                        //    //        IsRunning = !IsRunning;
-                        //    //        InitExperiment();
-                        //    //    }
-                        //    //}                            
-                        //}
-                        break;
-                    case 2:
-                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
-                        {
-                            MessageBox.Show("Please turn ON Data request");
-                            return;
-                        }
-                        IsRunning = !IsRunning;
-                        InitExperiment();
-                        //if (SendRecordingCmd()) // Successfully start recording the data
-                        //{
-                        //    IsRunning = !IsRunning;
-                        //    InitExperiment();
-                        //}
-                        //else // Start Recording Failed
-                        //{
-                        //    MessageBox.Show("Fail to start recording sensors");
-                        //}
-                        break;
-                    case 3:
-                        if (tongleDataOnOff.CheckState == CheckState.Unchecked) // No request data
-                        {
-                            MessageBox.Show("Please turn ON Data request");
-                            return;
-                        }
-
-                        IsRunning = !IsRunning;
-                        InitExperiment();
-
-                        //if (SendRecordingCmd()) // Successfully start recording the data
-                        //{
-                        //    IsRunning = !IsRunning;
-                        //    InitExperiment();
-                        //}
-                        //else // Start Recording Failed
-                        //{
-                        //    DialogResult Response;
-                        //    Response = MessageBox.Show("Fail to start recording sensors! Do you want to Run the Motor?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                        //    if (Response == DialogResult.OK)
-                        //    {
-                        //        IsRunning = !IsRunning;
-                        //        InitExperiment();
-                        //    }                            
-                        //}
-
-                        break;
-                     default:
-                        break;
-                }
-            }
-            else // If it is running > Stop running
+            if (btnStartDropping.Text == "START") // if is not running > Start running
             {
-                SendMessage(StopRunning);                
-
-                //if (SendRecordingCmd()) //
-                //{
-                //    //MessageBox.Show("Sensors recording is stopped");
-                //    lbStartRecording.BackColor = Color.Red;
-                //}
-
+                //SimuOrRunning = false;
+                SendMessage(StartRunning);
+            }
+            if (btnStartDropping.Text == "STOP") // if is not running > Start running
+            {
+                SendMessage(StopRunning);
                 DialogResult Response;
                 Response = MessageBox.Show("Do you want to Save the Data?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (Response == DialogResult.OK)
@@ -2072,13 +2043,10 @@ namespace FreeFall_GUI
                 btnSetJogSpeed.Enabled = true;
                 tongleRunningMode.Enabled = true;
                 btnSetHome.Enabled = true;
-                cbExperimentMode.Enabled = true;
-                IsRunning = !IsRunning;
+                cbExperimentMode.Enabled = true;                
                 tongleRunningMode.Enabled = true;
-
                 cbDriverType.Enabled = true;
             }
-            lbCmdOut.Text = "> Start Dropping";
         }
 
         private void btnStartPulling_Click_1(object sender, EventArgs e)
@@ -2090,7 +2058,6 @@ namespace FreeFall_GUI
         {
             //Console.WriteLine("> Stop");
             SendMessage(STOP);
-            lbCmdOut.Text = "> Stop";
         }
         private bool IsServoON;
         private void toggleServoEnable_CheckedChanged(object sender, EventArgs e)
@@ -2107,7 +2074,6 @@ namespace FreeFall_GUI
                 else
                 {
                     SendMessage("18/1");
-                    lbCmdOut.Text = "> Servo ON";
                     IsServoON = true;
                     EnableJogControl();
 
@@ -2124,12 +2090,11 @@ namespace FreeFall_GUI
                 else
                 {
                     SendMessage("18/0");
-                    lbCmdOut.Text = "> Servo OFF";
                     IsServoON = false;
                     DisableJogControl();
 
-                    //btnStartDropping.Enabled = false;
-                    //btnStartDropping.BackColor = Color.LightGray;
+                    btnStartDropping.Enabled = false;
+                    btnStartDropping.BackColor = Color.LightGray;
                 }                
             }
         }
@@ -2183,30 +2148,24 @@ namespace FreeFall_GUI
         private void btnMoveDown_MouseDown_1(object sender, MouseEventArgs e)
         {            
             SendMessage(JogDown);
-            lbCmdOut.Text = "> Jog DOWN";
             //Console.WriteLine("> Jog Move Down");
         }
 
         private void btnMoveDown_MouseUp_1(object sender, MouseEventArgs e)
         {
             SendMessage(StopPulse); // Stop generating Pulses;
-            
-            lbCmdOut.Text = "> Stop";
-            //Console.WriteLine("> Stop");
         }
 
         private void btnMoveUp_MouseDown_1(object sender, MouseEventArgs e)
         {
             //Console.WriteLine("> Jog Move Up");
             SendMessage(JogUp);
-            lbCmdOut.Text = "> Jog Move Up";
+
         }
 
         private void btnMoveUp_MouseUp_1(object sender, MouseEventArgs e)
         {
-
             SendMessage(StopPulse); // Stop generating Pulses;                        
-            lbCmdOut.Text = "> Stop";
         }
 
         private void cbSpeed_CheckedChanged_1(object sender, EventArgs e)
@@ -2361,7 +2320,7 @@ namespace FreeFall_GUI
             //lbEncoderPulses.Text = CurrentPulse.ToString();
 
             // Homing task
-            if (btnStartDropping.Text == "STOP") // !IsRunning = the system is running
+            if (btnStartDropping.Text == "STOP") // 
             {
                 MessageBox.Show("System is Running. Please Stop Running and then homing");
             }
@@ -2824,6 +2783,49 @@ namespace FreeFall_GUI
         {
             GyroAndDistGraph = new _2ndDataGraph();
             GyroAndDistGraph.Show();
+        }
+
+        private void btnSimulate_Click(object sender, EventArgs e)
+        {
+            if (tongleDataOnOff.CheckState == CheckState.Unchecked)
+            {
+                MessageBox.Show("Please TURN ON Data");
+                return;
+            }
+            if (btnSimulate.Text == "Start Init") // Start Simulation
+            {
+                // Make sure Servo is off
+                if (toggleServoEnable.CheckState == CheckState.Checked)
+                {
+                    MessageBox.Show("Please turn off Servo");
+                }
+                else
+                {
+                    SimuOrRunning = true; // true = simulation, false = Start Running
+                    InitSimulation();
+                    btnSimulate.Text = "Stop Init";
+                }
+                return;
+            }
+            if (btnSimulate.Text == "Stop Init") // Stop Simulation
+            {
+                SendMessage(StopRunning);
+
+
+                ResetGraph();
+                btnSimulate.Text = "Start Init";
+
+                EnableJogControl();
+
+                btnSetJogSpeed.Enabled = true;
+                tongleRunningMode.Enabled = true;
+                btnSetHome.Enabled = true;
+                cbExperimentMode.Enabled = true;                
+                tongleRunningMode.Enabled = true;
+
+                cbDriverType.Enabled = true;
+                return;
+            }
         }
     }
 }

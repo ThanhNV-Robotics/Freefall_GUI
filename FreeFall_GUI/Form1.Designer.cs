@@ -62,6 +62,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.btnMoveDown = new System.Windows.Forms.Button();
             this.btnMoveUp = new System.Windows.Forms.Button();
+            this.btnSimulate = new System.Windows.Forms.Button();
             this.btnSetHome = new System.Windows.Forms.Button();
             this.lbMotorSpeed = new System.Windows.Forms.Label();
             this.btnResetAlarm = new System.Windows.Forms.Button();
@@ -108,7 +109,6 @@
             this.btnGraphOn = new System.Windows.Forms.Button();
             this.lb_com_status = new System.Windows.Forms.Label();
             this.btnRstMcu = new System.Windows.Forms.Button();
-            this.lbCmdOut = new System.Windows.Forms.Label();
             this.cbExperimentMode = new System.Windows.Forms.ComboBox();
             this.cbDriverType = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -176,7 +176,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1638, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(1638, 28);
             this.menuStrip1.TabIndex = 12;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -186,7 +186,7 @@
             this.cOMPortToolStripMenuItem,
             this.tCPServerToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(98, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(98, 24);
             this.fileToolStripMenuItem.Text = "Connection";
             // 
             // cOMPortToolStripMenuItem
@@ -209,7 +209,7 @@
             this.selectFolderToSaveToolStripMenuItem,
             this.openAFileToolStripMenuItem});
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
-            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(46, 26);
+            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem1.Text = "File";
             // 
             // selectFolderToSaveToolStripMenuItem
@@ -232,7 +232,7 @@
             this.parameterSettingToolStripMenuItem,
             this.driverInputControlToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 26);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 24);
             this.aboutToolStripMenuItem.Text = "Tool";
             // 
             // pulseTestToolStripMenuItem
@@ -261,7 +261,7 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gyroAndDisGraphToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.helpToolStripMenuItem.Text = "View";
             // 
             // gyroAndDisGraphToolStripMenuItem
@@ -420,7 +420,7 @@
             this.gbJogControl.ForeColor = System.Drawing.Color.Red;
             this.gbJogControl.Location = new System.Drawing.Point(11, 561);
             this.gbJogControl.Name = "gbJogControl";
-            this.gbJogControl.Size = new System.Drawing.Size(326, 194);
+            this.gbJogControl.Size = new System.Drawing.Size(336, 126);
             this.gbJogControl.TabIndex = 16;
             this.gbJogControl.TabStop = false;
             this.gbJogControl.Text = "JOG Control";
@@ -428,7 +428,7 @@
             // btnSetJogSpeed
             // 
             this.btnSetJogSpeed.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSetJogSpeed.Location = new System.Drawing.Point(220, 29);
+            this.btnSetJogSpeed.Location = new System.Drawing.Point(89, 65);
             this.btnSetJogSpeed.Name = "btnSetJogSpeed";
             this.btnSetJogSpeed.Size = new System.Drawing.Size(87, 32);
             this.btnSetJogSpeed.TabIndex = 15;
@@ -438,7 +438,7 @@
             // 
             // txtSetSpeed
             // 
-            this.txtSetSpeed.Location = new System.Drawing.Point(123, 29);
+            this.txtSetSpeed.Location = new System.Drawing.Point(94, 29);
             this.txtSetSpeed.Name = "txtSetSpeed";
             this.txtSetSpeed.Size = new System.Drawing.Size(79, 30);
             this.txtSetSpeed.TabIndex = 14;
@@ -452,7 +452,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(122, 39);
             this.label5.TabIndex = 13;
-            this.label5.Text = "Setting Speed (rpm)";
+            this.label5.Text = "Set Speed (rpm)";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnMoveDown
@@ -461,9 +461,9 @@
             this.btnMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.BackgroundImage")));
             this.btnMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMoveDown.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveDown.Location = new System.Drawing.Point(6, 82);
+            this.btnMoveDown.Location = new System.Drawing.Point(194, 25);
             this.btnMoveDown.Name = "btnMoveDown";
-            this.btnMoveDown.Size = new System.Drawing.Size(63, 83);
+            this.btnMoveDown.Size = new System.Drawing.Size(63, 61);
             this.btnMoveDown.TabIndex = 5;
             this.btnMoveDown.UseVisualStyleBackColor = false;
             this.btnMoveDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseDown_1);
@@ -475,13 +475,24 @@
             this.btnMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.BackgroundImage")));
             this.btnMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnMoveUp.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveUp.Location = new System.Drawing.Point(84, 82);
+            this.btnMoveUp.Location = new System.Drawing.Point(267, 25);
             this.btnMoveUp.Name = "btnMoveUp";
-            this.btnMoveUp.Size = new System.Drawing.Size(63, 83);
+            this.btnMoveUp.Size = new System.Drawing.Size(63, 61);
             this.btnMoveUp.TabIndex = 4;
             this.btnMoveUp.UseVisualStyleBackColor = false;
             this.btnMoveUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseDown_1);
             this.btnMoveUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseUp_1);
+            // 
+            // btnSimulate
+            // 
+            this.btnSimulate.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnSimulate.Location = new System.Drawing.Point(180, 175);
+            this.btnSimulate.Name = "btnSimulate";
+            this.btnSimulate.Size = new System.Drawing.Size(112, 98);
+            this.btnSimulate.TabIndex = 16;
+            this.btnSimulate.Text = "Start Init";
+            this.btnSimulate.UseVisualStyleBackColor = true;
+            this.btnSimulate.Click += new System.EventHandler(this.btnSimulate_Click);
             // 
             // btnSetHome
             // 
@@ -524,7 +535,7 @@
             this.lbServoEnable.AutoSize = true;
             this.lbServoEnable.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbServoEnable.ForeColor = System.Drawing.Color.Black;
-            this.lbServoEnable.Location = new System.Drawing.Point(153, 95);
+            this.lbServoEnable.Location = new System.Drawing.Point(153, 109);
             this.lbServoEnable.Name = "lbServoEnable";
             this.lbServoEnable.Size = new System.Drawing.Size(139, 19);
             this.lbServoEnable.TabIndex = 40;
@@ -563,15 +574,13 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.LightBlue;
+            this.groupBox1.Controls.Add(this.btnSimulate);
             this.groupBox1.Controls.Add(this.btnStop);
             this.groupBox1.Controls.Add(this.btnEstop);
             this.groupBox1.Controls.Add(this.btnResetAlarm);
             this.groupBox1.Controls.Add(this.lbServoEnable);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.lbRunningMode);
             this.groupBox1.Controls.Add(this.toggleServoEnable);
             this.groupBox1.Controls.Add(this.btnStartDropping);
-            this.groupBox1.Controls.Add(this.tongleRunningMode);
             this.groupBox1.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox1.ForeColor = System.Drawing.Color.Red;
             this.groupBox1.Location = new System.Drawing.Point(11, 765);
@@ -586,7 +595,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(157, 141);
+            this.label2.Location = new System.Drawing.Point(12, 719);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(137, 19);
             this.label2.TabIndex = 56;
@@ -598,7 +607,7 @@
             this.lbRunningMode.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbRunningMode.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lbRunningMode.ForeColor = System.Drawing.Color.Black;
-            this.lbRunningMode.Location = new System.Drawing.Point(157, 175);
+            this.lbRunningMode.Location = new System.Drawing.Point(263, 714);
             this.lbRunningMode.Name = "lbRunningMode";
             this.lbRunningMode.Size = new System.Drawing.Size(137, 35);
             this.lbRunningMode.TabIndex = 56;
@@ -784,9 +793,9 @@
             this.listLocalTime});
             this.listData.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.listData.HideSelection = false;
-            this.listData.Location = new System.Drawing.Point(1180, 922);
+            this.listData.Location = new System.Drawing.Point(873, 922);
             this.listData.Name = "listData";
-            this.listData.Size = new System.Drawing.Size(454, 107);
+            this.listData.Size = new System.Drawing.Size(761, 126);
             this.listData.TabIndex = 61;
             this.listData.UseCompatibleStateImageBehavior = false;
             this.listData.View = System.Windows.Forms.View.Details;
@@ -826,10 +835,12 @@
             // Position
             // 
             this.Position.Text = "ObPosition";
+            this.Position.Width = 76;
             // 
             // listLocalTime
             // 
             this.listLocalTime.Text = "LocalTime";
+            this.listLocalTime.Width = 118;
             // 
             // timer2
             // 
@@ -971,16 +982,6 @@
             this.btnRstMcu.UseVisualStyleBackColor = false;
             this.btnRstMcu.Click += new System.EventHandler(this.btnRstMcu_Click_1);
             // 
-            // lbCmdOut
-            // 
-            this.lbCmdOut.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbCmdOut.Font = new System.Drawing.Font("Gulim", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbCmdOut.Location = new System.Drawing.Point(873, 921);
-            this.lbCmdOut.Name = "lbCmdOut";
-            this.lbCmdOut.Size = new System.Drawing.Size(298, 108);
-            this.lbCmdOut.TabIndex = 68;
-            this.lbCmdOut.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // cbExperimentMode
             // 
             this.cbExperimentMode.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -989,7 +990,7 @@
             "Dropping",
             "Pulling",
             "Pulling->Dropping"});
-            this.cbExperimentMode.Location = new System.Drawing.Point(87, 27);
+            this.cbExperimentMode.Location = new System.Drawing.Point(6, 29);
             this.cbExperimentMode.Name = "cbExperimentMode";
             this.cbExperimentMode.Size = new System.Drawing.Size(186, 28);
             this.cbExperimentMode.TabIndex = 69;
@@ -1029,9 +1030,9 @@
             this.groupBox5.Controls.Add(this.cbExperimentMode);
             this.groupBox5.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox5.ForeColor = System.Drawing.Color.Red;
-            this.groupBox5.Location = new System.Drawing.Point(348, 674);
+            this.groupBox5.Location = new System.Drawing.Point(451, 692);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(279, 63);
+            this.groupBox5.Size = new System.Drawing.Size(210, 63);
             this.groupBox5.TabIndex = 73;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Experiment Mode";
@@ -1241,9 +1242,9 @@
             this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnStop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnStop.Location = new System.Drawing.Point(306, 22);
+            this.btnStop.Location = new System.Drawing.Point(298, 36);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(113, 106);
+            this.btnStop.Size = new System.Drawing.Size(113, 101);
             this.btnStop.TabIndex = 42;
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click_1);
@@ -1279,14 +1280,14 @@
             // 
             // tongleRunningMode
             // 
-            this.tongleRunningMode.Location = new System.Drawing.Point(165, 218);
+            this.tongleRunningMode.Location = new System.Drawing.Point(155, 711);
             this.tongleRunningMode.MinimumSize = new System.Drawing.Size(45, 23);
             this.tongleRunningMode.Name = "tongleRunningMode";
             this.tongleRunningMode.OffBackColor = System.Drawing.Color.Gray;
             this.tongleRunningMode.OffToggleColor = System.Drawing.Color.Gainsboro;
             this.tongleRunningMode.OnBackColor = System.Drawing.Color.Lime;
             this.tongleRunningMode.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.tongleRunningMode.Size = new System.Drawing.Size(111, 50);
+            this.tongleRunningMode.Size = new System.Drawing.Size(93, 44);
             this.tongleRunningMode.TabIndex = 56;
             this.tongleRunningMode.UseVisualStyleBackColor = true;
             this.tongleRunningMode.CheckedChanged += new System.EventHandler(this.ToggleRunningMode_CheckedChanged);
@@ -1392,10 +1393,12 @@
             this.Controls.Add(this.lbTemp);
             this.Controls.Add(this.lbSerialPort2Status);
             this.Controls.Add(this.groupBox6);
+            this.Controls.Add(this.lbRunningMode);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.tongleRunningMode);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.lbCmdOut);
             this.Controls.Add(this.lbStartRecording);
             this.Controls.Add(this.btnRstMcu);
             this.Controls.Add(this.lb_com_status);
@@ -1511,7 +1514,6 @@
         private RJControls.RJToggleButton tongleRunningMode;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbRunningMode;
-        private System.Windows.Forms.Label lbCmdOut;
         private System.Windows.Forms.ComboBox cbExperimentMode;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label14;
@@ -1555,6 +1557,7 @@
         private System.Windows.Forms.ColumnHeader AccelY;
         private System.Windows.Forms.ColumnHeader Position;
         private System.Windows.Forms.ToolStripMenuItem gyroAndDisGraphToolStripMenuItem;
+        private System.Windows.Forms.Button btnSimulate;
     }
 }
 
