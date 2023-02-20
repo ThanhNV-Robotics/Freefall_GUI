@@ -32,8 +32,8 @@ namespace FreeFall_GUI
             DataGraph.GraphPane.YAxis.Scale.Max = 100;
             DataGraph.GraphPane.YAxis.Scale.Min = -100;
 
-            DataGraph.GraphPane.Y2Axis.Scale.Max = 10;
-            DataGraph.GraphPane.Y2Axis.Scale.Min = -10;
+            DataGraph.GraphPane.Y2Axis.Scale.Max = 50;
+            DataGraph.GraphPane.Y2Axis.Scale.Min = -1;
 
             DataGraph.GraphPane.IsAlignGrids = true;
 
@@ -49,12 +49,16 @@ namespace FreeFall_GUI
             LineItem GyroZCurve = DataGraph.GraphPane.AddCurve("GyroZ", GyroZList, Color.Blue, SymbolType.None);
             GyroZCurve.Line.Width = (float)3; // Set LineWidth
 
+            RollingPointPairList PositionList = new RollingPointPairList(60000);
+            LineItem PositionCurve = DataGraph.GraphPane.AddCurve("Position", PositionList, Color.Green, SymbolType.None);
+            PositionCurve.Line.Width = (float)3; // Set LineWidth
 
-            RollingPointPairList DistanceList = new RollingPointPairList(60000);
-            LineItem DistanceCurve = DataGraph.GraphPane.AddCurve("Position", DistanceList, Color.Lime, SymbolType.None);
-            DistanceCurve.Line.Width = (float)3; // Set LineWidth
+            RollingPointPairList PositionCmdList = new RollingPointPairList(60000);
+            LineItem PositionCmdCurve = DataGraph.GraphPane.AddCurve("PositionCmd", PositionCmdList, Color.Red, SymbolType.None);
+            PositionCmdCurve.Line.Width = (float)3; // Set LineWidth
 
-            DistanceCurve.IsY2Axis = true;
+            PositionCmdCurve.IsY2Axis = true;
+            PositionCurve.IsY2Axis = true;
 
             DataGraph.AxisChange();
             DataGraph.Invalidate();
@@ -71,8 +75,8 @@ namespace FreeFall_GUI
             myPane.Title.Text = " Gyro & Distance";
             myPane.XAxis.Title.Text = "time (s)";
             myPane.YAxis.Title.Text = "Gyro(rad/s)";
-            myPane.YAxis.Scale.FontSpec.FontColor = Color.Red;
-            myPane.YAxis.Title.FontSpec.FontColor = Color.Red;
+            myPane.YAxis.Scale.FontSpec.FontColor = Color.Blue;
+            myPane.YAxis.Title.FontSpec.FontColor = Color.Blue;
 
             myPane.XAxis.Scale.Min = 0;
             myPane.XAxis.Scale.Max = 10;
@@ -83,12 +87,12 @@ namespace FreeFall_GUI
             myPane.YAxis.Scale.Max = 10;
 
 
-            myPane.Y2Axis.Title.Text = "Distance (mm)";
-            myPane.Y2Axis.Scale.Min = -100;
-            myPane.Y2Axis.Scale.Max = 100;
+            myPane.Y2Axis.Title.Text = "Position (m)";
+            myPane.Y2Axis.Scale.Min = -1;
+            myPane.Y2Axis.Scale.Max = 50;
             myPane.Y2Axis.Scale.MinorStep = 5;
-            myPane.Y2Axis.Scale.FontSpec.FontColor = Color.Blue;
-            myPane.Y2Axis.Title.FontSpec.FontColor = Color.Blue;
+            myPane.Y2Axis.Scale.FontSpec.FontColor = Color.Red;
+            myPane.Y2Axis.Title.FontSpec.FontColor = Color.Red;
             myPane.Y2Axis.IsVisible = true;
 
             myPane.IsAlignGrids = true;
@@ -107,19 +111,22 @@ namespace FreeFall_GUI
             GyroZCurve.Line.Width = (float)3; // Set LineWidth
             
 
-            RollingPointPairList DistanceList = new RollingPointPairList(60000);
-            LineItem DistanceCurve = myPane.AddCurve("Position", DistanceList, Color.Lime, SymbolType.None);
-            DistanceCurve.Line.Width = (float)3; // Set LineWidth
+            RollingPointPairList PositionList = new RollingPointPairList(60000);
+            LineItem PositionCurve = myPane.AddCurve("Position", PositionList, Color.Green, SymbolType.None);
+            PositionCurve.Line.Width = (float)3; // Set LineWidth
 
-            GyroXCurve.IsY2Axis = true;
-            GyroYCurve.IsY2Axis = true;
-            GyroZCurve.IsY2Axis = true;
-            DistanceCurve.IsY2Axis = true;            
+            RollingPointPairList PositionCmdList = new RollingPointPairList(60000);
+            LineItem PositionCmdCurve = myPane.AddCurve("PositionCmd", PositionCmdList, Color.Red, SymbolType.None);
+            PositionCmdCurve.Line.Width = (float)3; // Set LineWidth
+
+
+            PositionCurve.IsY2Axis = true;
+            PositionCmdCurve.IsY2Axis = true;
 
             myPane.AxisChange();
         }
 
-        public void DrawAllData(double time, double _GyroX, double _GyroY, double _GyroZ, double Position)
+        public void DrawAllData(double time, double _GyroX, double _GyroY, double _GyroZ, double Position, double PositionCmd)
         {
             if (DataGraph.GraphPane.CurveList.Count <= 0) // neu ko co duong du lieu dc khoi tao
             {
@@ -163,6 +170,12 @@ namespace FreeFall_GUI
             //PositionCurve.IsY2Axis = true;
             PositionList.Add(time, Position);
 
+            LineItem PositionCmdCurve = DataGraph.GraphPane.CurveList[4] as LineItem;
+            if (PositionCmdCurve == null) return;
+            IPointListEdit PositionCmdList = PositionCmdCurve.Points as IPointListEdit;
+            if (PositionCmdList == null) return;
+            PositionCmdList.Add(time, PositionCmd);
+
 
 
             Scale xScale = DataGraph.GraphPane.XAxis.Scale;
@@ -170,28 +183,28 @@ namespace FreeFall_GUI
             {
                 xScale.Max = time + xScale.MajorStep;
                 xScale.Min = time - xScale.MajorStep;
-                //if (ViewMode) // SCROLL view Mode
-                //{
-                //    xScale.Max = time + xScale.MajorStep;
-                //    xScale.Min = time - xScale.MajorStep;
-                //}
-                //else // COMPACR view Mode
-                //{
-                //    xScale.Max = time + xScale.MajorStep;
-                //    xScale.Min = 0;
-                //}
             }
             Scale Y1Scale = DataGraph.GraphPane.YAxis.Scale;
             Scale Y2Scale = DataGraph.GraphPane.Y2Axis.Scale;
             
-
+            // Gyro axis
             if (_GyroX > Y1Scale.Max || _GyroY > Y1Scale.Max || _GyroZ > Y1Scale.Max)
             {
-                Y2Scale.Max = _GyroX + 2 * Y2Scale.MajorStep;
+                Y1Scale.Max = Math.Max(Math.Max(_GyroX, _GyroY), _GyroZ) + 2 * Y1Scale.MajorStep;
             }
-            if (_GyroZ < Y2Scale.Min)
+            if (_GyroX < Y1Scale.Min || _GyroY < Y1Scale.Min || _GyroZ < Y1Scale.Min)
             {
-                Y2Scale.Min = _GyroZ - 2 * Y2Scale.MajorStep;
+                Y1Scale.Min = Math.Min(Math.Min(_GyroX, _GyroY), _GyroZ) - 2 * Y1Scale.MajorStep;
+            }
+
+            // Position axis
+            if (Position > Y2Scale.Max || PositionCmd > Y2Scale.Max)
+            {
+                Y2Scale.Max = Math.Max(Position, PositionCmd) + 2 * Y2Scale.MajorStep;
+            }
+            if (Position < Y2Scale.Min || PositionCmd < Y2Scale.Min)
+            {
+                Y2Scale.Min = Math.Min(Position, PositionCmd) - 2 * Y2Scale.MajorStep;
             }
             DataGraph.GraphPane.IsAlignGrids = true;
             DataGraph.AxisChange();
