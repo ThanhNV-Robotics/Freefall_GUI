@@ -456,7 +456,7 @@ namespace FreeFall_GUI
             if (ScanClient) // Scanning connection is true
             {
                 try
-                {
+                { 
                     if (!isClientConnected())
                     {
                         lbStatus.BackColor = Color.LightGray;
@@ -816,6 +816,22 @@ namespace FreeFall_GUI
                     //lbEncoderPulses.Text = CurrentPulse.ToString();
                     lbObjectPosition.Text = (ObjectPosition).ToString() + " m";
 
+                   
+
+                    //SpdCmdData = GetValueOutOfSpdCmdBuffer();
+                    //SpdData = GetValueOutOfSpdBuffer();
+                    if (btnGraphOn.Text == "Graph OFF")
+                    {
+                        time += (timer2.Interval) / 1000.0;  // to seconds
+                        DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef);
+
+                        if ((Application.OpenForms["_2ndDataGraph"] as _2ndDataGraph) != null) // Check if the form is opened or not
+                        {
+                            DrawGyroAndDistance(time, 0, 0, 0, ObjectPosition, PositionCmd);
+                        }
+
+                        Data_Listview(); // view data to the list view
+                    }                    
                 }
                 catch { }                
                 return;
@@ -1706,22 +1722,22 @@ namespace FreeFall_GUI
         private void timer2_Tick_1(object sender, EventArgs e)
         {
             //SendMessage("12"  ); // 12 means request StE03 = Motor Speed
-            timercount++;
-            time = (timercount * timer2.Interval) / 1000.0;  // to seconds
+            //timercount++;
+            //time = (timercount * timer2.Interval) / 1000.0;  // to seconds
 
-            //SpdCmdData = GetValueOutOfSpdCmdBuffer();
-            //SpdData = GetValueOutOfSpdBuffer();
-            //Draw(time, SpdData, SpdCmdData, AccZ, AccRef);
-            //DrawAllData(time, SpdData, SpdCmdData, AccX, AccY, AccZ, AccRef);
+            ////SpdCmdData = GetValueOutOfSpdCmdBuffer();
+            ////SpdData = GetValueOutOfSpdBuffer();
+            ////Draw(time, SpdData, SpdCmdData, AccZ, AccRef);
+            ////DrawAllData(time, SpdData, SpdCmdData, AccX, AccY, AccZ, AccRef);
 
-            DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef);
+            //DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef);
 
-            if ((Application.OpenForms["_2ndDataGraph"] as _2ndDataGraph) != null) // Check if the form is opened or not
-            {
-                DrawGyroAndDistance(time, 0, 0, 0, ObjectPosition, PositionCmd);
-            }
+            //if ((Application.OpenForms["_2ndDataGraph"] as _2ndDataGraph) != null) // Check if the form is opened or not
+            //{
+            //    DrawGyroAndDistance(time, 0, 0, 0, ObjectPosition, PositionCmd);
+            //}
             
-            Data_Listview(); // view data to the list view
+            //Data_Listview(); // view data to the list view
 
             if (StartWaitingFlag) // stm32 finishes an episode, then delay for seconds before the next one
             {
