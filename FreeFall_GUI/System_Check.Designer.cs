@@ -54,10 +54,22 @@
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnDropAccelSlope = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtDroppingAccelSlope = new System.Windows.Forms.TextBox();
+            this.btnDropDecelSlope = new System.Windows.Forms.Button();
+            this.txtDropDecelSlope = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.btnSetDropDecel = new System.Windows.Forms.Button();
             this.label31 = new System.Windows.Forms.Label();
             this.txtDropDecel = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lbPullingSpeedPoint4 = new System.Windows.Forms.Label();
+            this.lbPullingSpeedPoint3 = new System.Windows.Forms.Label();
+            this.lbPullingSpeedPoint2 = new System.Windows.Forms.Label();
+            this.lbPullingSpeedPoint1 = new System.Windows.Forms.Label();
+            this.btnSetPullingPoint4 = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.btnSetPullingAcc5 = new System.Windows.Forms.Button();
             this.btnSetPullingAcc4 = new System.Windows.Forms.Button();
@@ -65,6 +77,7 @@
             this.btnSetPullingAcc2 = new System.Windows.Forms.Button();
             this.btnSetPullingAcc1 = new System.Windows.Forms.Button();
             this.txtPullingAcc5 = new System.Windows.Forms.TextBox();
+            this.txtPullingPoint4 = new System.Windows.Forms.TextBox();
             this.txtPullingAcc4 = new System.Windows.Forms.TextBox();
             this.txtPullingAcc3 = new System.Windows.Forms.TextBox();
             this.txtPullingAcc2 = new System.Windows.Forms.TextBox();
@@ -82,12 +95,7 @@
             this.txtPullingPoint2 = new System.Windows.Forms.TextBox();
             this.txtPullingPoint1 = new System.Windows.Forms.TextBox();
             this.btnSetPullingPoint2 = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtDropDecelSlope = new System.Windows.Forms.TextBox();
-            this.btnDropDecelSlope = new System.Windows.Forms.Button();
-            this.txtDroppingAccelSlope = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.btnDropAccelSlope = new System.Windows.Forms.Button();
+            this.lbTotalPullingDist = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -412,6 +420,74 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Dropping Stage Params";
             // 
+            // btnDropAccelSlope
+            // 
+            this.btnDropAccelSlope.AllowDrop = true;
+            this.btnDropAccelSlope.ForeColor = System.Drawing.Color.Black;
+            this.btnDropAccelSlope.Location = new System.Drawing.Point(222, 180);
+            this.btnDropAccelSlope.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDropAccelSlope.Name = "btnDropAccelSlope";
+            this.btnDropAccelSlope.Size = new System.Drawing.Size(70, 35);
+            this.btnDropAccelSlope.TabIndex = 29;
+            this.btnDropAccelSlope.Text = "SET";
+            this.btnDropAccelSlope.UseVisualStyleBackColor = true;
+            this.btnDropAccelSlope.Click += new System.EventHandler(this.btnDropAccelSlope_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label8.ForeColor = System.Drawing.Color.Black;
+            this.label8.Location = new System.Drawing.Point(27, 214);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(169, 15);
+            this.label8.TabIndex = 28;
+            this.label8.Text = "Dropping Accel Slope";
+            // 
+            // txtDroppingAccelSlope
+            // 
+            this.txtDroppingAccelSlope.BackColor = System.Drawing.Color.LightBlue;
+            this.txtDroppingAccelSlope.Location = new System.Drawing.Point(148, 181);
+            this.txtDroppingAccelSlope.Margin = new System.Windows.Forms.Padding(4);
+            this.txtDroppingAccelSlope.Name = "txtDroppingAccelSlope";
+            this.txtDroppingAccelSlope.Size = new System.Drawing.Size(66, 29);
+            this.txtDroppingAccelSlope.TabIndex = 27;
+            // 
+            // btnDropDecelSlope
+            // 
+            this.btnDropDecelSlope.AllowDrop = true;
+            this.btnDropDecelSlope.ForeColor = System.Drawing.Color.Black;
+            this.btnDropDecelSlope.Location = new System.Drawing.Point(435, 255);
+            this.btnDropDecelSlope.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDropDecelSlope.Name = "btnDropDecelSlope";
+            this.btnDropDecelSlope.Size = new System.Drawing.Size(70, 35);
+            this.btnDropDecelSlope.TabIndex = 26;
+            this.btnDropDecelSlope.Text = "SET";
+            this.btnDropDecelSlope.UseVisualStyleBackColor = true;
+            this.btnDropDecelSlope.Click += new System.EventHandler(this.btnDropDecelSlope_Click);
+            // 
+            // txtDropDecelSlope
+            // 
+            this.txtDropDecelSlope.BackColor = System.Drawing.Color.LightBlue;
+            this.txtDropDecelSlope.Location = new System.Drawing.Point(339, 258);
+            this.txtDropDecelSlope.Margin = new System.Windows.Forms.Padding(4);
+            this.txtDropDecelSlope.Name = "txtDropDecelSlope";
+            this.txtDropDecelSlope.Size = new System.Drawing.Size(76, 29);
+            this.txtDropDecelSlope.TabIndex = 25;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(157, 263);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(170, 15);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "Dropping Decel Slope";
+            // 
             // btnSetDropDecel
             // 
             this.btnSetDropDecel.AllowDrop = true;
@@ -452,6 +528,13 @@
             this.groupBox4.BackColor = System.Drawing.Color.AliceBlue;
             this.groupBox4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("groupBox4.BackgroundImage")));
             this.groupBox4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.groupBox4.Controls.Add(this.lbTotalPullingDist);
+            this.groupBox4.Controls.Add(this.lbPullingSpeedPoint4);
+            this.groupBox4.Controls.Add(this.lbPullingSpeedPoint3);
+            this.groupBox4.Controls.Add(this.lbPullingSpeedPoint2);
+            this.groupBox4.Controls.Add(this.lbPullingSpeedPoint1);
+            this.groupBox4.Controls.Add(this.btnSetPullingPoint4);
+            this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Controls.Add(this.label27);
             this.groupBox4.Controls.Add(this.btnSetPullingAcc5);
             this.groupBox4.Controls.Add(this.btnLoad);
@@ -461,6 +544,7 @@
             this.groupBox4.Controls.Add(this.btnSetPullingAcc2);
             this.groupBox4.Controls.Add(this.btnSetPullingAcc1);
             this.groupBox4.Controls.Add(this.txtPullingAcc5);
+            this.groupBox4.Controls.Add(this.txtPullingPoint4);
             this.groupBox4.Controls.Add(this.txtPullingAcc4);
             this.groupBox4.Controls.Add(this.txtPullingAcc3);
             this.groupBox4.Controls.Add(this.txtPullingAcc2);
@@ -488,6 +572,65 @@
             this.groupBox4.TabIndex = 21;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Pulling Stage Params";
+            // 
+            // lbPullingSpeedPoint4
+            // 
+            this.lbPullingSpeedPoint4.AutoSize = true;
+            this.lbPullingSpeedPoint4.Location = new System.Drawing.Point(150, 157);
+            this.lbPullingSpeedPoint4.Name = "lbPullingSpeedPoint4";
+            this.lbPullingSpeedPoint4.Size = new System.Drawing.Size(43, 19);
+            this.lbPullingSpeedPoint4.TabIndex = 38;
+            this.lbPullingSpeedPoint4.Text = "rpm";
+            // 
+            // lbPullingSpeedPoint3
+            // 
+            this.lbPullingSpeedPoint3.AutoSize = true;
+            this.lbPullingSpeedPoint3.Location = new System.Drawing.Point(150, 244);
+            this.lbPullingSpeedPoint3.Name = "lbPullingSpeedPoint3";
+            this.lbPullingSpeedPoint3.Size = new System.Drawing.Size(43, 19);
+            this.lbPullingSpeedPoint3.TabIndex = 37;
+            this.lbPullingSpeedPoint3.Text = "rpm";
+            // 
+            // lbPullingSpeedPoint2
+            // 
+            this.lbPullingSpeedPoint2.AutoSize = true;
+            this.lbPullingSpeedPoint2.Location = new System.Drawing.Point(154, 328);
+            this.lbPullingSpeedPoint2.Name = "lbPullingSpeedPoint2";
+            this.lbPullingSpeedPoint2.Size = new System.Drawing.Size(43, 19);
+            this.lbPullingSpeedPoint2.TabIndex = 36;
+            this.lbPullingSpeedPoint2.Text = "rpm";
+            // 
+            // lbPullingSpeedPoint1
+            // 
+            this.lbPullingSpeedPoint1.AutoSize = true;
+            this.lbPullingSpeedPoint1.Location = new System.Drawing.Point(154, 452);
+            this.lbPullingSpeedPoint1.Name = "lbPullingSpeedPoint1";
+            this.lbPullingSpeedPoint1.Size = new System.Drawing.Size(43, 19);
+            this.lbPullingSpeedPoint1.TabIndex = 35;
+            this.lbPullingSpeedPoint1.Text = "rpm";
+            // 
+            // btnSetPullingPoint4
+            // 
+            this.btnSetPullingPoint4.ForeColor = System.Drawing.Color.Black;
+            this.btnSetPullingPoint4.Location = new System.Drawing.Point(326, 142);
+            this.btnSetPullingPoint4.Name = "btnSetPullingPoint4";
+            this.btnSetPullingPoint4.Size = new System.Drawing.Size(62, 29);
+            this.btnSetPullingPoint4.TabIndex = 34;
+            this.btnSetPullingPoint4.Text = "SET";
+            this.btnSetPullingPoint4.UseVisualStyleBackColor = true;
+            this.btnSetPullingPoint4.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label11.ForeColor = System.Drawing.Color.Black;
+            this.label11.Location = new System.Drawing.Point(151, 142);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(93, 15);
+            this.label11.TabIndex = 33;
+            this.label11.Text = "Point 4 (m)";
             // 
             // label27
             // 
@@ -518,7 +661,7 @@
             // 
             this.btnSetPullingAcc4.AllowDrop = true;
             this.btnSetPullingAcc4.ForeColor = System.Drawing.Color.Black;
-            this.btnSetPullingAcc4.Location = new System.Drawing.Point(384, 176);
+            this.btnSetPullingAcc4.Location = new System.Drawing.Point(383, 179);
             this.btnSetPullingAcc4.Margin = new System.Windows.Forms.Padding(4);
             this.btnSetPullingAcc4.Name = "btnSetPullingAcc4";
             this.btnSetPullingAcc4.Size = new System.Drawing.Size(59, 29);
@@ -574,9 +717,17 @@
             this.txtPullingAcc5.Size = new System.Drawing.Size(60, 29);
             this.txtPullingAcc5.TabIndex = 26;
             // 
+            // txtPullingPoint4
+            // 
+            this.txtPullingPoint4.Location = new System.Drawing.Point(260, 142);
+            this.txtPullingPoint4.Margin = new System.Windows.Forms.Padding(4);
+            this.txtPullingPoint4.Name = "txtPullingPoint4";
+            this.txtPullingPoint4.Size = new System.Drawing.Size(56, 29);
+            this.txtPullingPoint4.TabIndex = 25;
+            // 
             // txtPullingAcc4
             // 
-            this.txtPullingAcc4.Location = new System.Drawing.Point(319, 176);
+            this.txtPullingAcc4.Location = new System.Drawing.Point(318, 179);
             this.txtPullingAcc4.Margin = new System.Windows.Forms.Padding(4);
             this.txtPullingAcc4.Name = "txtPullingAcc4";
             this.txtPullingAcc4.Size = new System.Drawing.Size(56, 29);
@@ -623,7 +774,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label14.ForeColor = System.Drawing.Color.Black;
-            this.label14.Location = new System.Drawing.Point(207, 181);
+            this.label14.Location = new System.Drawing.Point(206, 184);
             this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(101, 15);
@@ -756,73 +907,14 @@
             this.btnSetPullingPoint2.UseVisualStyleBackColor = true;
             this.btnSetPullingPoint2.Click += new System.EventHandler(this.btnSetPullingPoint2_Click);
             // 
-            // label7
+            // lbTotalPullingDist
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(157, 263);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(170, 15);
-            this.label7.TabIndex = 24;
-            this.label7.Text = "Dropping Decel Slope";
-            // 
-            // txtDropDecelSlope
-            // 
-            this.txtDropDecelSlope.BackColor = System.Drawing.Color.LightBlue;
-            this.txtDropDecelSlope.Location = new System.Drawing.Point(339, 258);
-            this.txtDropDecelSlope.Margin = new System.Windows.Forms.Padding(4);
-            this.txtDropDecelSlope.Name = "txtDropDecelSlope";
-            this.txtDropDecelSlope.Size = new System.Drawing.Size(76, 29);
-            this.txtDropDecelSlope.TabIndex = 25;
-            // 
-            // btnDropDecelSlope
-            // 
-            this.btnDropDecelSlope.AllowDrop = true;
-            this.btnDropDecelSlope.ForeColor = System.Drawing.Color.Black;
-            this.btnDropDecelSlope.Location = new System.Drawing.Point(435, 255);
-            this.btnDropDecelSlope.Margin = new System.Windows.Forms.Padding(4);
-            this.btnDropDecelSlope.Name = "btnDropDecelSlope";
-            this.btnDropDecelSlope.Size = new System.Drawing.Size(70, 35);
-            this.btnDropDecelSlope.TabIndex = 26;
-            this.btnDropDecelSlope.Text = "SET";
-            this.btnDropDecelSlope.UseVisualStyleBackColor = true;
-            this.btnDropDecelSlope.Click += new System.EventHandler(this.btnDropDecelSlope_Click);
-            // 
-            // txtDroppingAccelSlope
-            // 
-            this.txtDroppingAccelSlope.BackColor = System.Drawing.Color.LightBlue;
-            this.txtDroppingAccelSlope.Location = new System.Drawing.Point(148, 181);
-            this.txtDroppingAccelSlope.Margin = new System.Windows.Forms.Padding(4);
-            this.txtDroppingAccelSlope.Name = "txtDroppingAccelSlope";
-            this.txtDroppingAccelSlope.Size = new System.Drawing.Size(66, 29);
-            this.txtDroppingAccelSlope.TabIndex = 27;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(-24, 190);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(169, 15);
-            this.label8.TabIndex = 28;
-            this.label8.Text = "Dropping Accel Slope";
-            // 
-            // btnDropAccelSlope
-            // 
-            this.btnDropAccelSlope.AllowDrop = true;
-            this.btnDropAccelSlope.ForeColor = System.Drawing.Color.Black;
-            this.btnDropAccelSlope.Location = new System.Drawing.Point(222, 180);
-            this.btnDropAccelSlope.Margin = new System.Windows.Forms.Padding(4);
-            this.btnDropAccelSlope.Name = "btnDropAccelSlope";
-            this.btnDropAccelSlope.Size = new System.Drawing.Size(70, 35);
-            this.btnDropAccelSlope.TabIndex = 29;
-            this.btnDropAccelSlope.Text = "SET";
-            this.btnDropAccelSlope.UseVisualStyleBackColor = true;
-            this.btnDropAccelSlope.Click += new System.EventHandler(this.btnDropAccelSlope_Click);
+            this.lbTotalPullingDist.AutoSize = true;
+            this.lbTotalPullingDist.Location = new System.Drawing.Point(172, 26);
+            this.lbTotalPullingDist.Name = "lbTotalPullingDist";
+            this.lbTotalPullingDist.Size = new System.Drawing.Size(25, 19);
+            this.lbTotalPullingDist.TabIndex = 38;
+            this.lbTotalPullingDist.Text = "m";
             // 
             // ParamSetting
             // 
@@ -909,5 +1001,13 @@
         private System.Windows.Forms.Button btnDropAccelSlope;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtDroppingAccelSlope;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox txtPullingPoint4;
+        private System.Windows.Forms.Button btnSetPullingPoint4;
+        private System.Windows.Forms.Label lbPullingSpeedPoint4;
+        private System.Windows.Forms.Label lbPullingSpeedPoint3;
+        private System.Windows.Forms.Label lbPullingSpeedPoint2;
+        private System.Windows.Forms.Label lbPullingSpeedPoint1;
+        private System.Windows.Forms.Label lbTotalPullingDist;
     }
 }

@@ -348,9 +348,8 @@ namespace FreeFall_GUI
             btnSetHome.Enabled = true;
 
             btnHoming.Enabled = false;
-
-            tongleRunningMode.Enabled = false;
-            gbEpisode.Enabled = false;
+            
+           
 
             btnStartDropping.Enabled = false;
             btnStartDropping.BackColor = Color.LightGray;
@@ -358,7 +357,7 @@ namespace FreeFall_GUI
 
             //timer2.Interval = SampleTime; //ms
             timer2.Enabled = false;
-            ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
+            
             //Initial output states color
             lbAlarm.BackColor = Color.Gray;
             lbBrake.BackColor = Color.Gray;
@@ -367,11 +366,8 @@ namespace FreeFall_GUI
             lbReady.BackColor = Color.Gray;
             lbSpeedReach.BackColor = Color.Gray;
             lbTorqueLimit.BackColor = Color.Gray;
-
-            //cbReadOutputs.CheckState = CheckState.Unchecked; // output driver requirement
-
-            tongleRunningMode.CheckState = CheckState.Unchecked;
-            gbEpisode.Enabled = false;
+            
+            
             TotalEpisodes = 1; // Set default #of Episodes to 1
 
             // Data checkbox
@@ -427,8 +423,9 @@ namespace FreeFall_GUI
             else // Not ready
             {
                 toggleServoEnable.Enabled = false;
-                lbServoEnable.Enabled = false;
                 toggleServoEnable.CheckState = CheckState.Unchecked;
+                lbServoEnable.Enabled = false;
+                
             }
 
             if (IsServerOn)
@@ -442,8 +439,7 @@ namespace FreeFall_GUI
                 {
                     if (client.Connected)
                     {
-                        lbStatus.BackColor = Color.Lime;
-                        lbStatus.Text = "Connected";
+                        return;
                     }
                     else
                     {
@@ -459,35 +455,19 @@ namespace FreeFall_GUI
                 { 
                     if (!isClientConnected())
                     {
-                        lbStatus.BackColor = Color.LightGray;
-                        lbStatus.Text = "Disconnected";
                         togServerOnOff.CheckState = CheckState.Unchecked;
                         ScanClient = false;
                     }
                     else
                     {
-                        lbStatus.BackColor = Color.Lime;
-                        lbStatus.Text = "Connected";
+                        return;
                     }
                 }
                 catch
                 {
                     return;
                 }                
-            }
-            //if (client != null)
-            //{
-            //    if (client.Connected)
-            //    {
-            //        lbStatus.BackColor = Color.Lime;
-            //        lbStatus.Text = "Connected";                    
-            //    }
-            //    else
-            //    {
-            //        lbStatus.BackColor = Color.LightGray;
-            //        lbStatus.Text = "Disconnected";
-            //    }                            
-            //}            
+            }                        
         }
         public bool isClientConnected()
         {
@@ -705,7 +685,13 @@ namespace FreeFall_GUI
                             }
                             break;
                         case 14:
+                            MessageBox.Show("Simulation finished\n Dropping distance is" + Param.ToString() + "m");
+                            break;
+                        case 15:
                             MessageBox.Show("Simulation finished\n Pulling distance is" + Param.ToString() + "m");
+                            break;
+                        case 16:
+                            MessageBox.Show("Pulling distance is" + RunningParamString[1] + "m" + "\n Dropping Distance: " + RunningParamString[2]);
                             break;
                         case 4: // Start Running Experiment response
                             if (Param != 1) // Can not start the experiment
@@ -714,6 +700,7 @@ namespace FreeFall_GUI
                                 ResetGraph();
                                 btnStartDropping.Text = "START";
                                 btnStartDropping.BackColor = Color.Lime;
+                                btnSimulate.Enabled = true;
                             }
                             else // Param = 1, then start the experiment
                             {
@@ -751,7 +738,32 @@ namespace FreeFall_GUI
                     {
                         return;
                     }
-                }                                
+                }
+                return;
+            }
+            if (ReceivedMessage[0] == 't') // Check testing params
+            {
+                if (_CheckSpeedTestParam == null)
+                {
+                    return;
+                }
+                else
+                {
+                    ReceivedMessage = (ReceivedMessage.Replace("t", null)).Replace("e", null); // remove the character s in the string
+                    string[] RunningParamString = ReceivedMessage.Split('/'); // Split the string
+
+                    try
+                    {
+                        uint ParamCode = uint.Parse(RunningParamString[0]);
+                        float Param = float.Parse(RunningParamString[1]);
+                        _CheckSpeedTestParam(ParamCode, Param); // Check if setting is done or not
+                    }
+                    catch
+                    {
+                        return;
+                    }
+                }
+                return;
             }
             if (ReceivedMessage[0] == 'p') // Load running (controller params)
             {
@@ -759,7 +771,7 @@ namespace FreeFall_GUI
                     return;
                 ReceivedMessage = (ReceivedMessage.Replace("p", null)).Replace("e", null); // remove the character s in the string
                 string[] RunningParamString = ReceivedMessage.Split('/'); // Split the string
-                float[] RunningParamFloat = new float[18];
+                float[] RunningParamFloat = new float[19];
 
                 try
                 {
@@ -802,11 +814,9 @@ namespace FreeFall_GUI
                     SpdCommand = float.Parse(ExtractReceivedMessage[1]);
 
                     ObjectPosition = float.Parse(ExtractReceivedMessage[2]);
-
-                    //AccRef = double.Parse(ExtractReceivedMessage[3]);
-
                     PositionCmd = double.Parse(ExtractReceivedMessage[3]);
 
+                    AccRef = double.Parse(ExtractReceivedMessage[4]);
                     // Write to the Buffer
 
                     //WriteToSpdCmdBuffer(SpdCommand);
@@ -867,11 +877,8 @@ namespace FreeFall_GUI
             if (ReceivedMessage[0] == '$') // $ means stm32 completes an episode
             {
                 if (btnStartDropping.Text == "STOP") // if the system is running
-                {
-                    ShowCurrentEpisodeLabel(CurrentEpisode + 1, TotalEpisodes);
-                   
-                    //progressBar.Value = CurrentEpisode;
-                    //SaveToExcel(CurrentEpisode); // Save data for the current episode
+                {                  
+                    
                     string DataPath = @"C:\Users\thanh\OneDrive\문서\Liintech\Data\Episode" + CurrentEpisode.ToString() + ".txt";
                     SaveDataToTxtFile(DataPath);
 
@@ -884,8 +891,7 @@ namespace FreeFall_GUI
 
                     if (CurrentEpisode >= TotalEpisodes) // Complete all the episodes
                     {
-                        CurrentEpisode = 0; // Set back to zero
-                        ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
+                        CurrentEpisode = 0; // Set back to zero                        
                         btnStartDropping.Text = "START";
                         btnStartDropping.BackColor = Color.Lime;
 
@@ -920,6 +926,8 @@ namespace FreeFall_GUI
         }
         public delegate void CheckRunningData(uint Code, float Param);
         public CheckRunningData _CheckRunningData;
+        public delegate void CheckSpeedTestParam(uint Code, float Param);
+        public CheckSpeedTestParam _CheckSpeedTestParam;
         private void btn_check_start_Click(object sender, EventArgs e)
         {
             ParamSetting _ParamSetting = new ParamSetting(); // Create a new form
@@ -1143,11 +1151,7 @@ namespace FreeFall_GUI
             }
             progressBar.Step = 1;
             progressBar.Value = 1;
-        }
-        void ShowCurrentEpisodeLabel(int currenteps, int totaleps)
-        {
-            lbCurrentEpisode.Text = currenteps.ToString() + "/" + totaleps.ToString();
-        }
+        }        
              
         
         private void SaveToExcel(int index)
@@ -1796,6 +1800,8 @@ namespace FreeFall_GUI
         private void btnEstop_Click_1(object sender, EventArgs e)
         {
             SendMessage(ESTOP);
+
+            DisableJogControl();
             
             IsEStop = true;
             if (btnStartDropping.Text == "START")
@@ -1808,12 +1814,7 @@ namespace FreeFall_GUI
         private void InitSimulation()
         {
             TurnOnGraph(); // Turn on the graph
-            WaitingBeforeRunning = true;
-
-
-            txtTotalEpisodes.Enabled = false; // Disable setting Episode
-            btnSetEpisode.Enabled = false; // Disable setting Episode
-            tongleRunningMode.Enabled = false; // Disable Setting Running Mode
+            WaitingBeforeRunning = true;                    
 
             DisableJogControl();
             btnHoming.Enabled = false;
@@ -1830,11 +1831,7 @@ namespace FreeFall_GUI
             SimuOrRunning = false; // Running cmd
 
             TurnOnGraph(); // Turn on the graph
-            WaitingBeforeRunning = true;
-
-            txtTotalEpisodes.Enabled = false; // Disable setting Episode
-            btnSetEpisode.Enabled = false; // Disable setting Episode
-            tongleRunningMode.Enabled = false; // Disable Setting Running Mode
+            WaitingBeforeRunning = true;                      
 
             DisableJogControl();
             btnHoming.Enabled = false;
@@ -1851,7 +1848,7 @@ namespace FreeFall_GUI
         NetworkStream CmdClientStream;
 
         string ServerIP = "192.168.0.141";
-        int ServerPort = 5000;
+        int PiServerPort = 5000;
         string StartMessage = "POST /recording HTTP/1.1";
         bool StartRecording;
 
@@ -1859,7 +1856,7 @@ namespace FreeFall_GUI
         {
             try
             {
-                CmdClient = new TcpClient(ServerIP, ServerPort);
+                CmdClient = new TcpClient(ServerIP, PiServerPort);
                 return true;
             }
             catch
@@ -1930,6 +1927,7 @@ namespace FreeFall_GUI
             if (btnStartDropping.Text == "START") // if is not running > Start running
             {
                 btnStartDropping.Text = "STOP";
+                btnSimulate.Enabled = false;
                 InitExperiment();
                 return;
             }
@@ -1960,18 +1958,14 @@ namespace FreeFall_GUI
                 EnableJogControl();
 
                 btnSetJogSpeed.Enabled = true;
-                tongleRunningMode.Enabled = true;
+                
                 btnHoming.Enabled = true;
                 cbExperimentMode.Enabled = true;                
-                tongleRunningMode.Enabled = true;
+                
                 cbDriverType.Enabled = true;
+                btnSimulate.Enabled = true;
                 return;
             }
-        }
-
-        private void btnStartPulling_Click_1(object sender, EventArgs e)
-        {
-
         }
 
         private void btnStop_Click_1(object sender, EventArgs e)
@@ -1995,7 +1989,7 @@ namespace FreeFall_GUI
                 {
                     SendMessage("18/1");
                     EnableJogControl();
-
+                    //btnSimulate.Enabled = false;
                     btnStartDropping.Enabled = true;
                     btnStartDropping.BackColor = Color.Lime;
                     btnHoming.Enabled = true;
@@ -2012,27 +2006,12 @@ namespace FreeFall_GUI
                     SendMessage("18/0");                    
                     DisableJogControl();
 
+                    btnSimulate.Enabled = true;
                     btnStartDropping.Enabled = false;
                     btnStartDropping.BackColor = Color.LightGray;
 
                     btnHoming.Enabled = false;
                 }                
-            }
-        }
-
-        private void btnSetEpisode_Click_1(object sender, EventArgs e)
-        {
-            if (int.TryParse(txtTotalEpisodes.Text, out TotalEpisodes))
-            {
-                SendMessage("9" + "/" + TotalEpisodes.ToString());
-                // 9 is the function code indicates setting the total number of episodes.               
-                progressBar.Maximum = TotalEpisodes;
-                ShowCurrentEpisodeLabel(CurrentEpisode, TotalEpisodes);
-                MessageBox.Show("Setting done");
-            }
-            else
-            {
-                MessageBox.Show("Invalid input data type");
             }
         }
 
@@ -2106,10 +2085,6 @@ namespace FreeFall_GUI
             }
             else SpdCmdView = false;
         }
-        public void SetDrumRad (float _radius)
-        {
-            DrumRadius = _radius;
-        }
         private void parameterSettingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ParamSetting _ParamSetting = new ParamSetting(); // Create a new form
@@ -2118,7 +2093,7 @@ namespace FreeFall_GUI
             // Assign the delegate to a function in Paramseting Form
             LoadData = new LoadDataToParamSettingForm(_ParamSetting.LoadSavedParams);           
             _ParamSetting._SendCommand = new ParamSetting.SendCommand(SendMessage);
-            _ParamSetting._SetDrumRadius = new ParamSetting.SetDrumRadius(SetDrumRad);
+            
 
             //_ShowFeedbackDriverDataFrame = new ShowFeedbackDriverDataFrame(_ParamSetting.ShowDriverDataFrame);
             tongleDataOnOff.CheckState = CheckState.Unchecked;
@@ -2157,32 +2132,6 @@ namespace FreeFall_GUI
             }            
         }
 
-        private void ToggleRunningMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (tongleRunningMode.CheckState == CheckState.Checked) // Automatic Running
-            {
-                SendMessage("27/1");
-                RunningMode = true;
-                gbEpisode.Enabled = true;
-                btnSetEpisode.Enabled = true;
-                txtTotalEpisodes.Enabled = true;
-                lbRunningMode.Text = "Automatic";
-                
-            }
-            else // Manual Running
-            {
-                SendMessage("27/0");                
-                RunningMode = false;
-                lbRunningMode.Text = "Manual";
-                TotalEpisodes = 1; // Set to default value
-                CurrentEpisode = 0; // Set to default value
-                lbCurrentEpisode.Text = CurrentEpisode.ToString() + "/" + TotalEpisodes.ToString();
-                txtTotalEpisodes.Text = "1";                
-                gbEpisode.Enabled = false;
-                ProgressBarInit();
-            }
-        }
-
         private void btnRstMcu_Click_1(object sender, EventArgs e)
         {
             DialogResult CheckCmd;
@@ -2194,18 +2143,7 @@ namespace FreeFall_GUI
                 cbReadOutputs.CheckState = CheckState.Unchecked;
             }            
         }
-
-        public int GetPulsePositionCmd()
-        {
-            return (int)(PulseCmd / EgearRatio);
-        }
-        private void pulseTestToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            StepPositionControl _StepPositionControl = new StepPositionControl();
-            _StepPositionControl._SendCommand = new StepPositionControl.SendCommand(SendMessage); // Assign the delegate
-            _StepPositionControl._GetCurrentPosition = new StepPositionControl.GetCurrentPosition(GetPulsePositionCmd);
-            _StepPositionControl.Show();
-        }
+               
 
         private void btnSetHome_Click(object sender, EventArgs e)
         {
@@ -2344,25 +2282,62 @@ namespace FreeFall_GUI
         NetworkStream ns;
         string IpAddress;
         int Port;
+
+        private const int ServerPort = 8000;
+        UdpClient server;
+        IPEndPoint endPoint;
+        private bool ConnectToESP = false;
+
+        private void ServerStart()
+        {
+            while (ConnectToESP)
+            {
+                try
+                {
+                    byte[] bytes = server.Receive(ref endPoint);
+                    string ReceievedESPMess = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+                    this.Invoke(new MethodInvoker(delegate ()
+                    {
+                        try
+                        {
+                            DataByteRegion = ReceievedESPMess.Replace("a", null).Replace("e", null);
+                            string[] ExtractAccelData = DataByteRegion.Split('/'); // split data frame
+                            try
+                            {
+                                AccX = double.Parse(ExtractAccelData[0]) * 9.8 / 1000; // get acceleration value
+                                AccY = double.Parse(ExtractAccelData[1]) * 9.8 / 1000; // get acceleration value
+                                AccZData = Math.Round(double.Parse(ExtractAccelData[2]) * 9.8 / 1000, 2);
+                                AccZ = AccZData;
+                                if (ExtractAccelData.Length >= 4)
+                                {
+                                    // get acceleration value
+                                    Temp = double.Parse(ExtractAccelData[3]);
+                                    lbTemp.Text = Temp.ToString() + " C";
+                                }
+
+                                lbAccZ.Text = AccZ.ToString(); // Show on the Screen
+
+                                DataByteRegion = "";
+                            }
+                            catch { }
+                        }
+                        catch { }
+
+                    }));
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
         //string ServerReceivedMessage;
-        private TCPServer _TCPSerForm;
+       
         bool IsServerOn;
         double AccX;
         double AccY;
-        private void tCPServerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (_TCPSerForm == null || _TCPSerForm.Text == "")
-            {
-                _TCPSerForm = new TCPServer();
-                _TCPSerForm.Show();
-            }
-            else if (CheckFormOpened(_TCPSerForm.Text))
-            {
-                _TCPSerForm.WindowState = FormWindowState.Normal;                
-                _TCPSerForm.Show();
-                _TCPSerForm.Focus();
-            }
-        }
+        
         private bool CheckFormOpened(string name)
         {
             FormCollection fc = Application.OpenForms;
@@ -2380,7 +2355,8 @@ namespace FreeFall_GUI
         private void ServerOn()
         {
             try
-            {
+            {       
+
                 listener.Start(); // Start listening for incoming connection request
                 if (listener.Pending()) // There is a pending connection request
                 {
@@ -2389,15 +2365,13 @@ namespace FreeFall_GUI
                     STR = new StreamReader(client.GetStream());
                     backgroundWorker1.RunWorkerAsync(); //Start receiving data in background
                     backgroundWorker1.WorkerSupportsCancellation = true; // ability to cancel
-                    lbStatus.BackColor = Color.Lime;
-                    lbStatus.Text = "Connected";
+                    
                     ScanClient = true;
                     listener.Stop();                    
                 }
                 else
                 {
-                    lbStatus.BackColor = Color.Yellow;
-                    lbStatus.Text = "Waiting for connection";
+                    return;
                 }
                 
             }
@@ -2423,96 +2397,49 @@ namespace FreeFall_GUI
         {
             if (togServerOnOff.CheckState == CheckState.Unchecked) // Server off
             {
-                ServerOff();
+                server.Close();
+                server.Dispose();
+                ConnectToESP = false;
+                backgroundWorker1.CancelAsync();               
+
+                //ServerOff();
                 IsServerOn = false;
-                lbStatus.Text = "Server is off";
-                lbStatus.BackColor = Color.Gray;
-                //server.Stop();
+                
             }
             else
             {
-                ServerOn();
+                server = new UdpClient(ServerPort);
+                endPoint = new IPEndPoint(IPAddress.Any, 0);
+                ConnectToESP = true;
+
+                backgroundWorker1.RunWorkerAsync();
+                backgroundWorker1.WorkerSupportsCancellation = true; // ability to cancel
+
+                //ServerOn();
                 IsServerOn = true;
                 timer1.Enabled = true;
+
                 //System.Net.IPAddress ip = System.Net.IPAddress.Parse(lbServerIP.Text);
                 //server.Start(ip, Port);
             }
         }
-        byte[] msg = new byte[128];
+        
         string DataByteRegion = "";
-        int i;
+       
         double AccZData;
-        double Temp; // Temperature sensor
-        byte[] AccZByteArray;
+        double Temp; // Temperature sensor       
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            while (client.Connected)
-            {
-                try
-                {
-                    char OneCharData = Convert.ToChar(ns.ReadByte());
-                    if (OneCharData.ToString() != "e")
-                    {
-                        DataByteRegion += OneCharData.ToString();
-                    }
-                    else
-                    {
-                        this.Invoke(new MethodInvoker(delegate ()
-                        {
-                            DataByteRegion = DataByteRegion.Replace("a", null).Replace("e", null);
-                            string[] ExtractAccelData = DataByteRegion.Split('/'); // split data frame
-                            try
-                            {
-                                AccX = double.Parse(ExtractAccelData[0]); // get acceleration value
-                                AccY = double.Parse(ExtractAccelData[1]); // get acceleration value
-
-                                AccZData = double.Parse(ExtractAccelData[2]); // get acceleration value
-
-                                AccZData = -Math.Round(AccZData, 3);
-                                AccZ = AccZData; // Get the acclerometer here
-                                lbAccZ.Text = AccZ.ToString(); // Show on the Screen
-
-                                //AccZByteArray = BitConverter.GetBytes(AccZData);
-
-                                //Distance = double.Parse(ExtractAccelData[3]);
-
-                                //if (ExtractAccelData.Length >= 5)
-                                //{
-                                //    Temp = double.Parse(ExtractAccelData[4]);
-                                //    lbTemp.Text = Temp.ToString() + " C";
-                                //}
-                                //if (serialPort2.IsOpen)
-                                //{
-                                //    try
-                                //    {
-                                //        serialPort2.WriteTimeout = 500;
-                                //        serialPort2.Write(AccZData.ToString() + "$");
-                                //        //serialPort2.Write(AccZByteArray,0,4);                                       
-                                //    }
-                                //    catch
-                                //    { }
-                                //}                                
-                                DataByteRegion = "";
-                            }
-                            catch { }
-                            
-                        }));
-                    }                    
-                }
-                catch
-                {
-                    //MessageBox.Show(x.Message.ToString());
-                }
-            }
+            ServerStart();            
         }
 
-        SimpleTcpServer server;
+        SimpleTcpServer TCPserver;
         void InitTcpServer()
         {
-            server = new SimpleTcpServer();
-            server.Delimiter = 0x13;
-            server.StringEncoder = Encoding.UTF8;
-            server.DataReceived += Server_DataReceived;
+            TCPserver = new SimpleTcpServer();
+            TCPserver.Delimiter = 0x13;
+            TCPserver.StringEncoder = Encoding.UTF8;
+            TCPserver.DataReceived += Server_DataReceived;
         }
         private void Server_DataReceived(object sender, SimpleTCP.Message e)
         {
@@ -2617,6 +2544,7 @@ namespace FreeFall_GUI
                         double ObjectPos = double.Parse(datafield[7]);
 
                         DrawAllData(_time, _Speed, _RefSpd, _AccX, _AccY, _AccZ, _AccRef);
+                        
                     }
                     catch
                     {  }
@@ -2668,20 +2596,17 @@ namespace FreeFall_GUI
 
         private void btnSimulate_Click(object sender, EventArgs e)
         {
-            if (tongleDataOnOff.CheckState == CheckState.Unchecked)
-            {
-                MessageBox.Show("Please TURN ON Data");
-                return;
-            }
+            
             if (btnSimulate.Text == "Start Init") // Start Simulation
             {
-                // Make sure Servo is off
-                if (toggleServoEnable.CheckState == CheckState.Checked)
+                if (tongleDataOnOff.CheckState == CheckState.Unchecked)
                 {
-                    MessageBox.Show("Please turn off Servo");
+                    MessageBox.Show("Please TURN ON Data");
+                    return;
                 }
-                else
+
                 {
+                    DisableJogControl();
                     SimuOrRunning = true; // true = simulation, false = Start Running
                     InitSimulation();
                     btnSimulate.Text = "Stop Init";
@@ -2699,14 +2624,27 @@ namespace FreeFall_GUI
                 EnableJogControl();
 
                 btnSetJogSpeed.Enabled = true;
-                tongleRunningMode.Enabled = true;
+                btnStartDropping.Enabled = true;
                 btnHoming.Enabled = true;
                 cbExperimentMode.Enabled = true;                
-                tongleRunningMode.Enabled = true;
+                
 
                 cbDriverType.Enabled = true;
                 return;
             }
+        }
+        void StartSpeedTesting ()
+        {
+            ResetGraph();
+            TurnOnGraph();
+        }
+        private void speedControlTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SpeedControlTest _SpeedControlTest = new SpeedControlTest();
+            _CheckSpeedTestParam = new CheckSpeedTestParam(_SpeedControlTest.CheckParams);
+            _SpeedControlTest._SendCommand = new SpeedControlTest.SendCommand(SendMessage);
+            _SpeedControlTest._StartTesting = new SpeedControlTest.StartTesting(StartSpeedTesting);
+            _SpeedControlTest.Show();            
         }
     }
 }

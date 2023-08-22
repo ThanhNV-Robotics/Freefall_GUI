@@ -112,23 +112,17 @@
     <Compile Include="RJControls\RJToggleButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="StepPositionControl.cs">
+    <Compile Include="SpeedControlTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StepPositionControl.Designer.cs">
-      <DependentUpon>StepPositionControl.cs</DependentUpon>
+    <Compile Include="SpeedControlTest.Designer.cs">
+      <DependentUpon>SpeedControlTest.cs</DependentUpon>
     </Compile>
     <Compile Include="System_Check.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="System_Check.Designer.cs">
       <DependentUpon>System_Check.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TCPServer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TCPServer.Designer.cs">
-      <DependentUpon>TCPServer.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="2ndDataGraph.resx">
       <DependentUpon>2ndDataGraph.cs</DependentUpon>
@@ -158,14 +152,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="StepPositionControl.resx">
-      <DependentUpon>StepPositionControl.cs</DependentUpon>
+    <EmbeddedResource Include="SpeedControlTest.resx">
+      <DependentUpon>SpeedControlTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="System_Check.resx">
       <DependentUpon>System_Check.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TCPServer.resx">
-      <DependentUpon>TCPServer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

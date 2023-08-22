@@ -62,9 +62,7 @@ C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GU
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Form1.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Main_Control.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Properties.Resources.resources
-C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.StepPositionControl.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.ParamSetting.resources
-C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.TCPServer.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.GenerateResource.cache
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.CoreCompileInputs.cache
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.CopyComplete
@@ -106,3 +104,4 @@ C:\Users\Thanh_Engineer\Desktop\Freefall_GUI-SeperationMethod\FreeFall_GUI\obj\D
 C:\Users\Thanh_Engineer\Desktop\Freefall_GUI-SeperationMethod\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.CopyComplete
 C:\Users\Thanh_Engineer\Desktop\Freefall_GUI-SeperationMethod\FreeFall_GUI\obj\Debug\FreeFall_GUI.exe
 C:\Users\Thanh_Engineer\Desktop\Freefall_GUI-SeperationMethod\FreeFall_GUI\obj\Debug\FreeFall_GUI.pdb
+C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.SpeedControlTest.resources

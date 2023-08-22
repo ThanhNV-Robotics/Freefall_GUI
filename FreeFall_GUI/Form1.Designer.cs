@@ -40,9 +40,9 @@
             this.selectFolderToSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openAFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pulseTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.parameterSettingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.driverInputControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.speedControlTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gyroAndDisGraphToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -69,8 +69,6 @@
             this.btnSetJogSpeed = new System.Windows.Forms.Button();
             this.txtSetSpeed = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.btnMoveDown = new System.Windows.Forms.Button();
-            this.btnMoveUp = new System.Windows.Forms.Button();
             this.btnSimulate = new System.Windows.Forms.Button();
             this.btnHoming = new System.Windows.Forms.Button();
             this.lbMotorSpeed = new System.Windows.Forms.Label();
@@ -79,11 +77,7 @@
             this.btnStartDropping = new System.Windows.Forms.Button();
             this.SpeedGraph = new ZedGraph.ZedGraphControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnStop = new FreeFall_GUI.ButtonEllipse();
-            this.btnEstop = new FreeFall_GUI.ButtonEllipse();
             this.toggleServoEnable = new FreeFall_GUI.RJControls.RJToggleButton();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lbRunningMode = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -95,11 +89,6 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.lbObjectPosition = new System.Windows.Forms.Label();
-            this.gbEpisode = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.lbCurrentEpisode = new System.Windows.Forms.Label();
-            this.txtTotalEpisodes = new System.Windows.Forms.TextBox();
-            this.btnSetEpisode = new System.Windows.Forms.Button();
             this.listData = new System.Windows.Forms.ListView();
             this.Time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -129,7 +118,6 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.lbStatus = new System.Windows.Forms.Label();
             this.lbPort = new System.Windows.Forms.Label();
             this.togServerOnOff = new FreeFall_GUI.RJControls.RJToggleButton();
             this.lbServerIP = new System.Windows.Forms.Label();
@@ -139,14 +127,17 @@
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label15 = new System.Windows.Forms.Label();
-            this.tongleRunningMode = new FreeFall_GUI.RJControls.RJToggleButton();
+            this.lbTemp = new System.Windows.Forms.Label();
             this.lbStartRecording = new FreeFall_GUI.Elip_Label();
+            this.btnStop = new FreeFall_GUI.ButtonEllipse();
+            this.btnEstop = new FreeFall_GUI.ButtonEllipse();
+            this.btnMoveDown = new System.Windows.Forms.Button();
+            this.btnMoveUp = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gbJogControl.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.gbEpisode.SuspendLayout();
             this.gbDataView.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -197,7 +188,6 @@
             this.tCPServerToolStripMenuItem.Name = "tCPServerToolStripMenuItem";
             this.tCPServerToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
             this.tCPServerToolStripMenuItem.Text = "TCP Server";
-            this.tCPServerToolStripMenuItem.Click += new System.EventHandler(this.tCPServerToolStripMenuItem_Click);
             // 
             // fileToolStripMenuItem1
             // 
@@ -224,33 +214,33 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pulseTestToolStripMenuItem,
             this.parameterSettingToolStripMenuItem,
-            this.driverInputControlToolStripMenuItem});
+            this.driverInputControlToolStripMenuItem,
+            this.speedControlTestToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 24);
             this.aboutToolStripMenuItem.Text = "Tool";
             // 
-            // pulseTestToolStripMenuItem
-            // 
-            this.pulseTestToolStripMenuItem.Name = "pulseTestToolStripMenuItem";
-            this.pulseTestToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
-            this.pulseTestToolStripMenuItem.Text = "Pulse Command Test";
-            this.pulseTestToolStripMenuItem.Click += new System.EventHandler(this.pulseTestToolStripMenuItem_Click);
-            // 
             // parameterSettingToolStripMenuItem
             // 
             this.parameterSettingToolStripMenuItem.Name = "parameterSettingToolStripMenuItem";
-            this.parameterSettingToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
+            this.parameterSettingToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.parameterSettingToolStripMenuItem.Text = "Parameter Setting";
             this.parameterSettingToolStripMenuItem.Click += new System.EventHandler(this.parameterSettingToolStripMenuItem_Click);
             // 
             // driverInputControlToolStripMenuItem
             // 
             this.driverInputControlToolStripMenuItem.Name = "driverInputControlToolStripMenuItem";
-            this.driverInputControlToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
+            this.driverInputControlToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.driverInputControlToolStripMenuItem.Text = "Driver Input Control";
             this.driverInputControlToolStripMenuItem.Click += new System.EventHandler(this.driverInputControlToolStripMenuItem_Click);
+            // 
+            // speedControlTestToolStripMenuItem
+            // 
+            this.speedControlTestToolStripMenuItem.Name = "speedControlTestToolStripMenuItem";
+            this.speedControlTestToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.speedControlTestToolStripMenuItem.Text = "Speed Control Test";
+            this.speedControlTestToolStripMenuItem.Click += new System.EventHandler(this.speedControlTestToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -541,34 +531,6 @@
             this.label5.Text = "Set Speed (rpm)";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btnMoveDown
-            // 
-            this.btnMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.BackgroundImage")));
-            this.btnMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMoveDown.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveDown.Location = new System.Drawing.Point(194, 25);
-            this.btnMoveDown.Name = "btnMoveDown";
-            this.btnMoveDown.Size = new System.Drawing.Size(63, 61);
-            this.btnMoveDown.TabIndex = 5;
-            this.btnMoveDown.UseVisualStyleBackColor = false;
-            this.btnMoveDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseDown_1);
-            this.btnMoveDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseUp_1);
-            // 
-            // btnMoveUp
-            // 
-            this.btnMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.BackgroundImage")));
-            this.btnMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMoveUp.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveUp.Location = new System.Drawing.Point(267, 25);
-            this.btnMoveUp.Name = "btnMoveUp";
-            this.btnMoveUp.Size = new System.Drawing.Size(63, 61);
-            this.btnMoveUp.TabIndex = 4;
-            this.btnMoveUp.UseVisualStyleBackColor = false;
-            this.btnMoveUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseDown_1);
-            this.btnMoveUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseUp_1);
-            // 
             // btnSimulate
             // 
             this.btnSimulate.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -669,42 +631,12 @@
             this.groupBox1.Controls.Add(this.btnStartDropping);
             this.groupBox1.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox1.ForeColor = System.Drawing.Color.Red;
-            this.groupBox1.Location = new System.Drawing.Point(11, 765);
+            this.groupBox1.Location = new System.Drawing.Point(7, 674);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(436, 283);
             this.groupBox1.TabIndex = 58;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Control";
-            // 
-            // btnStop
-            // 
-            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStop.BackColor = System.Drawing.Color.White;
-            this.btnStop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStop.BackgroundImage")));
-            this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnStop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnStop.Location = new System.Drawing.Point(298, 36);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(113, 101);
-            this.btnStop.TabIndex = 42;
-            this.btnStop.UseVisualStyleBackColor = false;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click_1);
-            // 
-            // btnEstop
-            // 
-            this.btnEstop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEstop.BackColor = System.Drawing.Color.White;
-            this.btnEstop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEstop.BackgroundImage")));
-            this.btnEstop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnEstop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnEstop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnEstop.Location = new System.Drawing.Point(6, 129);
-            this.btnEstop.Name = "btnEstop";
-            this.btnEstop.Size = new System.Drawing.Size(141, 139);
-            this.btnEstop.TabIndex = 14;
-            this.btnEstop.UseVisualStyleBackColor = false;
-            this.btnEstop.Click += new System.EventHandler(this.btnEstop_Click_1);
             // 
             // toggleServoEnable
             // 
@@ -719,30 +651,6 @@
             this.toggleServoEnable.TabIndex = 39;
             this.toggleServoEnable.UseVisualStyleBackColor = true;
             this.toggleServoEnable.CheckedChanged += new System.EventHandler(this.toggleServoEnable_CheckedChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(12, 719);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(137, 19);
-            this.label2.TabIndex = 56;
-            this.label2.Text = "Running Mode";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbRunningMode
-            // 
-            this.lbRunningMode.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbRunningMode.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbRunningMode.ForeColor = System.Drawing.Color.Black;
-            this.lbRunningMode.Location = new System.Drawing.Point(263, 714);
-            this.lbRunningMode.Name = "lbRunningMode";
-            this.lbRunningMode.Size = new System.Drawing.Size(137, 35);
-            this.lbRunningMode.TabIndex = 56;
-            this.lbRunningMode.Text = "Manual";
-            this.lbRunningMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // groupBox3
             // 
@@ -880,65 +788,6 @@
             this.lbObjectPosition.TabIndex = 53;
             this.lbObjectPosition.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // gbEpisode
-            // 
-            this.gbEpisode.Controls.Add(this.label3);
-            this.gbEpisode.Controls.Add(this.lbCurrentEpisode);
-            this.gbEpisode.Controls.Add(this.txtTotalEpisodes);
-            this.gbEpisode.Controls.Add(this.btnSetEpisode);
-            this.gbEpisode.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.gbEpisode.ForeColor = System.Drawing.Color.Red;
-            this.gbEpisode.Location = new System.Drawing.Point(453, 756);
-            this.gbEpisode.Name = "gbEpisode";
-            this.gbEpisode.Size = new System.Drawing.Size(195, 135);
-            this.gbEpisode.TabIndex = 60;
-            this.gbEpisode.TabStop = false;
-            this.gbEpisode.Text = "# of Episodes";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(98, 98);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(55, 19);
-            this.label3.TabIndex = 70;
-            this.label3.Text = "Done";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbCurrentEpisode
-            // 
-            this.lbCurrentEpisode.BackColor = System.Drawing.Color.White;
-            this.lbCurrentEpisode.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbCurrentEpisode.Location = new System.Drawing.Point(9, 89);
-            this.lbCurrentEpisode.Name = "lbCurrentEpisode";
-            this.lbCurrentEpisode.Size = new System.Drawing.Size(83, 38);
-            this.lbCurrentEpisode.TabIndex = 20;
-            this.lbCurrentEpisode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // txtTotalEpisodes
-            // 
-            this.txtTotalEpisodes.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.txtTotalEpisodes.Location = new System.Drawing.Point(9, 30);
-            this.txtTotalEpisodes.Multiline = true;
-            this.txtTotalEpisodes.Name = "txtTotalEpisodes";
-            this.txtTotalEpisodes.Size = new System.Drawing.Size(83, 38);
-            this.txtTotalEpisodes.TabIndex = 10;
-            this.txtTotalEpisodes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // btnSetEpisode
-            // 
-            this.btnSetEpisode.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnSetEpisode.ForeColor = System.Drawing.Color.Black;
-            this.btnSetEpisode.Location = new System.Drawing.Point(98, 30);
-            this.btnSetEpisode.Name = "btnSetEpisode";
-            this.btnSetEpisode.Size = new System.Drawing.Size(81, 38);
-            this.btnSetEpisode.TabIndex = 28;
-            this.btnSetEpisode.Text = "SET";
-            this.btnSetEpisode.UseVisualStyleBackColor = true;
-            this.btnSetEpisode.Click += new System.EventHandler(this.btnSetEpisode_Click_1);
-            // 
             // listData
             // 
             this.listData.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -953,9 +802,9 @@
             this.listLocalTime});
             this.listData.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.listData.HideSelection = false;
-            this.listData.Location = new System.Drawing.Point(873, 922);
+            this.listData.Location = new System.Drawing.Point(810, 922);
             this.listData.Name = "listData";
-            this.listData.Size = new System.Drawing.Size(761, 126);
+            this.listData.Size = new System.Drawing.Size(824, 126);
             this.listData.TabIndex = 61;
             this.listData.UseCompatibleStateImageBehavior = false;
             this.listData.View = System.Windows.Forms.View.Details;
@@ -995,7 +844,7 @@
             // Position
             // 
             this.Position.Text = "ObPosition";
-            this.Position.Width = 76;
+            this.Position.Width = 125;
             // 
             // listLocalTime
             // 
@@ -1190,7 +1039,7 @@
             this.groupBox5.Controls.Add(this.cbExperimentMode);
             this.groupBox5.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox5.ForeColor = System.Drawing.Color.Red;
-            this.groupBox5.Location = new System.Drawing.Point(451, 692);
+            this.groupBox5.Location = new System.Drawing.Point(449, 681);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(230, 63);
             this.groupBox5.TabIndex = 73;
@@ -1201,7 +1050,6 @@
             // 
             this.groupBox6.AutoSize = true;
             this.groupBox6.BackColor = System.Drawing.Color.OldLace;
-            this.groupBox6.Controls.Add(this.lbStatus);
             this.groupBox6.Controls.Add(this.lbPort);
             this.groupBox6.Controls.Add(this.togServerOnOff);
             this.groupBox6.Controls.Add(this.lbServerIP);
@@ -1209,38 +1057,27 @@
             this.groupBox6.Controls.Add(this.label19);
             this.groupBox6.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.groupBox6.ForeColor = System.Drawing.Color.Red;
-            this.groupBox6.Location = new System.Drawing.Point(453, 916);
+            this.groupBox6.Location = new System.Drawing.Point(449, 761);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(414, 132);
+            this.groupBox6.Size = new System.Drawing.Size(231, 151);
             this.groupBox6.TabIndex = 75;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "TCP Server Communication";
-            // 
-            // lbStatus
-            // 
-            this.lbStatus.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lbStatus.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbStatus.ForeColor = System.Drawing.Color.Black;
-            this.lbStatus.Location = new System.Drawing.Point(38, 67);
-            this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(175, 35);
-            this.lbStatus.TabIndex = 36;
-            this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.groupBox6.Text = "UDP Com";
             // 
             // lbPort
             // 
             this.lbPort.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lbPort.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbPort.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lbPort.Location = new System.Drawing.Point(285, 28);
+            this.lbPort.Location = new System.Drawing.Point(63, 78);
             this.lbPort.Name = "lbPort";
-            this.lbPort.Size = new System.Drawing.Size(111, 36);
+            this.lbPort.Size = new System.Drawing.Size(71, 36);
             this.lbPort.TabIndex = 33;
             this.lbPort.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // togServerOnOff
             // 
-            this.togServerOnOff.Location = new System.Drawing.Point(305, 75);
+            this.togServerOnOff.Location = new System.Drawing.Point(135, 83);
             this.togServerOnOff.MinimumSize = new System.Drawing.Size(45, 23);
             this.togServerOnOff.Name = "togServerOnOff";
             this.togServerOnOff.OffBackColor = System.Drawing.Color.Gray;
@@ -1260,7 +1097,7 @@
             this.lbServerIP.ForeColor = System.Drawing.Color.Black;
             this.lbServerIP.Location = new System.Drawing.Point(38, 32);
             this.lbServerIP.Name = "lbServerIP";
-            this.lbServerIP.Size = new System.Drawing.Size(175, 34);
+            this.lbServerIP.Size = new System.Drawing.Size(136, 34);
             this.lbServerIP.TabIndex = 32;
             this.lbServerIP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -1269,7 +1106,7 @@
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label18.ForeColor = System.Drawing.Color.Black;
-            this.label18.Location = new System.Drawing.Point(232, 37);
+            this.label18.Location = new System.Drawing.Point(6, 88);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(47, 20);
             this.label18.TabIndex = 30;
@@ -1280,7 +1117,7 @@
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label19.ForeColor = System.Drawing.Color.Black;
-            this.label19.Location = new System.Drawing.Point(6, 32);
+            this.label19.Location = new System.Drawing.Point(6, 38);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(26, 20);
             this.label19.TabIndex = 29;
@@ -1309,19 +1146,14 @@
             this.label15.TabIndex = 73;
             this.label15.Text = "Recording Sensors";
             // 
-            // tongleRunningMode
+            // lbTemp
             // 
-            this.tongleRunningMode.Location = new System.Drawing.Point(155, 711);
-            this.tongleRunningMode.MinimumSize = new System.Drawing.Size(45, 23);
-            this.tongleRunningMode.Name = "tongleRunningMode";
-            this.tongleRunningMode.OffBackColor = System.Drawing.Color.Gray;
-            this.tongleRunningMode.OffToggleColor = System.Drawing.Color.Gainsboro;
-            this.tongleRunningMode.OnBackColor = System.Drawing.Color.Lime;
-            this.tongleRunningMode.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.tongleRunningMode.Size = new System.Drawing.Size(93, 44);
-            this.tongleRunningMode.TabIndex = 56;
-            this.tongleRunningMode.UseVisualStyleBackColor = true;
-            this.tongleRunningMode.CheckedChanged += new System.EventHandler(this.ToggleRunningMode_CheckedChanged);
+            this.lbTemp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lbTemp.Location = new System.Drawing.Point(1440, 655);
+            this.lbTemp.Name = "lbTemp";
+            this.lbTemp.Size = new System.Drawing.Size(120, 61);
+            this.lbTemp.TabIndex = 76;
+            this.lbTemp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbStartRecording
             // 
@@ -1333,16 +1165,72 @@
             this.lbStartRecording.Size = new System.Drawing.Size(42, 44);
             this.lbStartRecording.TabIndex = 20;
             // 
+            // btnStop
+            // 
+            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnStop.BackColor = System.Drawing.Color.White;
+            this.btnStop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStop.BackgroundImage")));
+            this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnStop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnStop.Location = new System.Drawing.Point(298, 36);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(113, 101);
+            this.btnStop.TabIndex = 42;
+            this.btnStop.UseVisualStyleBackColor = false;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click_1);
+            // 
+            // btnEstop
+            // 
+            this.btnEstop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnEstop.BackColor = System.Drawing.Color.White;
+            this.btnEstop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEstop.BackgroundImage")));
+            this.btnEstop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnEstop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnEstop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnEstop.Location = new System.Drawing.Point(6, 129);
+            this.btnEstop.Name = "btnEstop";
+            this.btnEstop.Size = new System.Drawing.Size(141, 139);
+            this.btnEstop.TabIndex = 14;
+            this.btnEstop.UseVisualStyleBackColor = false;
+            this.btnEstop.Click += new System.EventHandler(this.btnEstop_Click_1);
+            // 
+            // btnMoveDown
+            // 
+            this.btnMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.BackgroundImage")));
+            this.btnMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMoveDown.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMoveDown.Location = new System.Drawing.Point(194, 25);
+            this.btnMoveDown.Name = "btnMoveDown";
+            this.btnMoveDown.Size = new System.Drawing.Size(63, 61);
+            this.btnMoveDown.TabIndex = 5;
+            this.btnMoveDown.UseVisualStyleBackColor = false;
+            this.btnMoveDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseDown_1);
+            this.btnMoveDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseUp_1);
+            // 
+            // btnMoveUp
+            // 
+            this.btnMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.BackgroundImage")));
+            this.btnMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMoveUp.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMoveUp.Location = new System.Drawing.Point(267, 25);
+            this.btnMoveUp.Name = "btnMoveUp";
+            this.btnMoveUp.Size = new System.Drawing.Size(63, 61);
+            this.btnMoveUp.TabIndex = 4;
+            this.btnMoveUp.UseVisualStyleBackColor = false;
+            this.btnMoveUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseDown_1);
+            this.btnMoveUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseUp_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1638, 1055);
+            this.Controls.Add(this.lbTemp);
             this.Controls.Add(this.groupBox6);
-            this.Controls.Add(this.lbRunningMode);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.tongleRunningMode);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.groupBox4);
@@ -1352,7 +1240,6 @@
             this.Controls.Add(this.gbDataView);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.listData);
-            this.Controls.Add(this.gbEpisode);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.SpeedGraph);
@@ -1376,8 +1263,6 @@
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.gbEpisode.ResumeLayout(false);
-            this.gbEpisode.PerformLayout();
             this.gbDataView.ResumeLayout(false);
             this.gbDataView.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -1437,11 +1322,6 @@
         private ButtonEllipse btnStop;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label lbObjectPosition;
-        private System.Windows.Forms.ToolStripMenuItem pulseTestToolStripMenuItem;
-        private System.Windows.Forms.GroupBox gbEpisode;
-        private System.Windows.Forms.Label lbCurrentEpisode;
-        private System.Windows.Forms.TextBox txtTotalEpisodes;
-        private System.Windows.Forms.Button btnSetEpisode;
         private System.Windows.Forms.ListView listData;
         private System.Windows.Forms.ColumnHeader Time;
         private System.Windows.Forms.ColumnHeader Speed;
@@ -1458,11 +1338,7 @@
         private System.Windows.Forms.Label lb_com_status;
         private System.Windows.Forms.Button btnRstMcu;
         private System.Windows.Forms.ToolStripMenuItem parameterSettingToolStripMenuItem;
-        private RJControls.RJToggleButton tongleRunningMode;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lbRunningMode;
         private System.Windows.Forms.ComboBox cbExperimentMode;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ToolStripMenuItem driverInputControlToolStripMenuItem;
@@ -1475,7 +1351,6 @@
         private System.Windows.Forms.ToolStripMenuItem tCPServerToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.Label lbStatus;
         private System.Windows.Forms.Label lbPort;
         private RJControls.RJToggleButton togServerOnOff;
         private System.Windows.Forms.Label lbServerIP;
@@ -1501,6 +1376,8 @@
         private System.Windows.Forms.ColumnHeader Position;
         private System.Windows.Forms.ToolStripMenuItem gyroAndDisGraphToolStripMenuItem;
         private System.Windows.Forms.Button btnSimulate;
+        private System.Windows.Forms.Label lbTemp;
+        private System.Windows.Forms.ToolStripMenuItem speedControlTestToolStripMenuItem;
     }
 }
 
