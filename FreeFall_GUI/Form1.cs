@@ -1976,7 +1976,7 @@ namespace FreeFall_GUI
         
         private void toggleServoEnable_CheckedChanged(object sender, EventArgs e)
         {
-            
+           
             if (toggleServoEnable.CheckState == CheckState.Checked) // Servo Enable ON
             {
                 if (Alarm) // Require Reset Alarm before Servo ON

@@ -88,15 +88,23 @@ namespace FreeFall_GUI
 
                 DrumRadius = float.Parse(txtDrumRadius.Text);
 
-                double PullingSpeedPoint1 = Math.Round(Math.Sqrt(2 * a1 * s1),1); // to rpm
-                double PullingSpeedPoint2 = Math.Round(Math.Sqrt(2 * a2 * s2 + PullingSpeedPoint1* PullingSpeedPoint1),1);
-                double PullingSpeedPoint3 = Math.Round(Math.Sqrt(-2 * a3 * s3 + PullingSpeedPoint2* PullingSpeedPoint2),1);
-                double PullingSpeedPoint4 = Math.Round(Math.Sqrt(-2 * a4 * s4 + PullingSpeedPoint3* PullingSpeedPoint3),1);
+                double PullingSpeedPoint1 = Math.Round(Math.Sqrt(2 * a1 * s1),3); // to rpm
 
-                lbPullingSpeedPoint1.Text = Math.Round((PullingSpeedPoint1 * 10 / DrumRadius), 1).ToString() + " rpm";
-                lbPullingSpeedPoint2.Text = Math.Round((PullingSpeedPoint2 * 10 / DrumRadius), 1).ToString() + " rpm";
-                lbPullingSpeedPoint3.Text = Math.Round((PullingSpeedPoint3 * 10 / DrumRadius), 1).ToString() + " rpm";
-                lbPullingSpeedPoint4.Text = Math.Round((PullingSpeedPoint4 * 10 / DrumRadius), 1).ToString() + " rpm";
+                double PullingSpeedPoint2 = Math.Round(Math.Sqrt(2 * a2 * s2 + PullingSpeedPoint1* PullingSpeedPoint1),3);
+
+                //double PullingSpeedPoint2 = Math.Round(Math.Sqrt(2 * a2 * s2)) + PullingSpeedPoint1;
+
+                double PullingSpeedPoint3 = Math.Round(Math.Sqrt(-2 * a3 * s3 + PullingSpeedPoint2* PullingSpeedPoint2),3);
+                double PullingSpeedPoint4 = Math.Round(Math.Sqrt(-2 * a4 * s4 + PullingSpeedPoint3* PullingSpeedPoint3),3);
+
+                //double PullingSpeedPoint3 = a3 * Math.Sqrt(2 * (PullingSpeedPoint2 * PullingSpeedPoint2 / (2 * a3) - s3) / a3);
+                //double PullingSpeedPoint4 = a4 * Math.Sqrt(2 * (PullingSpeedPoint3 * PullingSpeedPoint3 / (2 * a4) - s4) / a4);
+                //double PullingSpeedPoint4 = -Math.Round(Math.Sqrt(2 * a4 * s4)) + PullingSpeedPoint3;
+
+                lbPullingSpeedPoint1.Text = Math.Round((PullingSpeedPoint1 * 60 / (DrumRadius * 2 * Math.PI)), 3).ToString() + " rpm";
+                lbPullingSpeedPoint2.Text = Math.Round((PullingSpeedPoint2 * 60 / (DrumRadius * 2 * Math.PI)), 3).ToString() + " rpm";
+                lbPullingSpeedPoint3.Text = Math.Round((PullingSpeedPoint3 * 60 / (DrumRadius * 2 * Math.PI)), 3).ToString() + " rpm";
+                lbPullingSpeedPoint4.Text = Math.Round((PullingSpeedPoint4 * 60 / (DrumRadius * 2 * Math.PI)), 3).ToString() + " rpm";
 
                 double TotalPullingDist = PullingSpeedPoint4 * PullingSpeedPoint4 / (2 * float.Parse(txtPullingAcc5.Text)) +s1 +s2 +s3 +s4;
 
