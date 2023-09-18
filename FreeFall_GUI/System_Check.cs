@@ -21,14 +21,12 @@ namespace FreeFall_GUI
        
         private uint SampleTime;
         
-        private float FloatFeedbackValue;
-        private int IntFeedbackValue;
         // delegate to set parameters using serialport1 of the main UI
         
         public delegate void SendCommand(string Command);
-
         //public SetParameters _SetParameters;
         public SendCommand _SendCommand;
+
         public ParamSetting()
         {
             InitializeComponent();
@@ -48,37 +46,76 @@ namespace FreeFall_GUI
             StoppingTime = (UInt16)Params[2];
             SampleTime = (uint)Params[3];
 
-            DroppingAccelDistance = (double)Params[4];
-            DroppingAccel = Params[5];
-            DroppingDecel = Params[6];
-
-            PullingAccelDistance = Params[7];
-            PullingAccel = Params[8];
-            PullingDecel = Params[9];
-
-            //PID controller Params
-            Kp = Params[10];
-            Ki = Params[11];
-            Kd = Params[12];
-
             txtDrumRadius.Text = DrumRadius.ToString();
             txtPullingSpeed.Text = PullingSpeed.ToString();
             txtStoppingTime.Text = StoppingTime.ToString();
             txtSampleTime.Text = SampleTime.ToString();
 
-            txtDroppingAccelDistance.Text = DroppingAccelDistance.ToString();           
-            txtDroppingAccRef.Text = DroppingAccel.ToString();
-            txtDropDecel.Text = DroppingDecel.ToString();
+            txtPullingPoint1.Text = Params[4].ToString();
+            txtPullingPoint2.Text = Params[5].ToString();
+            txtPullingPoint3.Text = Params[6].ToString();
+            txtPullingPoint4.Text = Params[7].ToString();
 
-            txtAccelPullingDistance.Text = PullingAccelDistance.ToString();
-            txtPullingAccRef.Text = PullingAccel.ToString();
-            txtPullingDecel.Text = PullingDecel.ToString();
+            txtPullingAcc1.Text = Params[8].ToString();
+            txtPullingAcc2.Text = Params[9].ToString();
+            txtPullingAcc3.Text = Params[10].ToString();
+            txtPullingAcc4.Text = Params[11].ToString();
+            txtPullingAcc5.Text = Params[12].ToString();
 
-            txtKp.Text = Kp.ToString();
-            txtKi.Text = Ki.ToString();
-            txtKd.Text = Kd.ToString();
+            txtDisCoeff.Text = Params[13].ToString();
+
+            txtDroppingAccRef.Text = Params[14].ToString();
+            txtDroppingAccelDistance.Text = Params[15].ToString();
+            txtDroppingAccelSlope.Text = Params[16].ToString();
+            txtDropDecel.Text = Params[17].ToString();
+            txtDropDecelSlope.Text = Params[18].ToString();
+
+            CalculatePullingSpeed();
         }
-        
+        public void CalculatePullingSpeed ()
+        {
+            try
+            {
+                float a1 = float.Parse(txtPullingAcc1.Text);
+                float a2 = float.Parse(txtPullingAcc2.Text);
+                float a3 = float.Parse(txtPullingAcc3.Text);
+                float a4 = float.Parse(txtPullingAcc4.Text);
+
+                float s1 = float.Parse(txtPullingPoint1.Text);
+                float s2 = float.Parse(txtPullingPoint2.Text);
+                float s3 = float.Parse(txtPullingPoint3.Text);
+                float s4 = float.Parse(txtPullingPoint4.Text);
+
+                DrumRadius = float.Parse(txtDrumRadius.Text);
+
+                double PullingSpeedPoint1 = Math.Round(Math.Sqrt(2 * a1 * s1),3); // to rpm
+
+                double PullingSpeedPoint2 = Math.Round(Math.Sqrt(2 * a2 * s2 + PullingSpeedPoint1* PullingSpeedPoint1),3);
+
+                //double PullingSpeedPoint2 = Math.Round(Math.Sqrt(2 * a2 * s2)) + PullingSpeedPoint1;
+
+                double PullingSpeedPoint3 = Math.Round(Math.Sqrt(-2 * a3 * s3 + PullingSpeedPoint2* PullingSpeedPoint2),3);
+                double PullingSpeedPoint4 = Math.Round(Math.Sqrt(-2 * a4 * s4 + PullingSpeedPoint3* PullingSpeedPoint3),3);
+
+                //double PullingSpeedPoint3 = a3 * Math.Sqrt(2 * (PullingSpeedPoint2 * PullingSpeedPoint2 / (2 * a3) - s3) / a3);
+                //double PullingSpeedPoint4 = a4 * Math.Sqrt(2 * (PullingSpeedPoint3 * PullingSpeedPoint3 / (2 * a4) - s4) / a4);
+                //double PullingSpeedPoint4 = -Math.Round(Math.Sqrt(2 * a4 * s4)) + PullingSpeedPoint3;
+
+                lbPullingSpeedPoint1.Text = Math.Round((PullingSpeedPoint1 * 60 / (DrumRadius * 2 * Math.PI)), 3).ToString() + " rpm";
+                lbPullingSpeedPoint2.Text = Math.Round((PullingSpeedPoint2 * 60 / (DrumRadius * 2 * Math.PI)), 3).ToString() + " rpm";
+                lbPullingSpeedPoint3.Text = Math.Round((PullingSpeedPoint3 * 60 / (DrumRadius * 2 * Math.PI)), 3).ToString() + " rpm";
+                lbPullingSpeedPoint4.Text = Math.Round((PullingSpeedPoint4 * 60 / (DrumRadius * 2 * Math.PI)), 3).ToString() + " rpm";
+
+                double TotalPullingDist = PullingSpeedPoint4 * PullingSpeedPoint4 / (2 * float.Parse(txtPullingAcc5.Text)) +s1 +s2 +s3 +s4;
+
+                lbTotalPullingDist.Text = TotalPullingDist.ToString() + " m";
+            }
+            catch (Exception)
+            {
+                return;
+            }            
+        }
+
         public void CheckParams(uint ParamCode, float Param)
         {
             switch (ParamCode)
@@ -147,9 +184,9 @@ namespace FreeFall_GUI
                     }
                     break;
                 case 32:
-                    if (PullingAccelDistance == Param)
+                    if (float.Parse(txtPullingPoint1.Text) == Param)
                     {
-                        MessageBox.Show("Successfully Set Pulling Distance");
+                        MessageBox.Show("Successfully Set Pulling Point1");
                     }
                     else
                     {
@@ -157,9 +194,9 @@ namespace FreeFall_GUI
                     }
                     break;
                 case 33:
-                    if (PullingAccel == Param)
+                    if (float.Parse(txtPullingPoint2.Text) == Param)
                     {
-                        MessageBox.Show("Successfully Set Pulling AccRef");
+                        MessageBox.Show("Successfully Set Pulling Point2");
                     }
                     else
                     {
@@ -177,66 +214,118 @@ namespace FreeFall_GUI
                     }
                     break;
                 case 35:
-                    if (PullingDecel == Param)
+                    if (float.Parse(txtPullingPoint3.Text) == Param)
                     {
-                        MessageBox.Show("Successfully Set Pulling Decceleration");
+                        MessageBox.Show("Successfully Set Pulling Point3");
                     }
                     else
                     {
                         MessageBox.Show("Setting Failed! Set Again");
                     }
                     break;
-                case 41:
-                    if (Kp == Param)
+
+                case 36:
+                    if (float.Parse(txtPullingAcc1.Text) == Param)
                     {
-                        MessageBox.Show("Successfully Set Kp");
+                        MessageBox.Show("Successfully Set PullingAcc1");
                     }
                     else
                     {
-                        MessageBox.Show("Setting Failed!");
+                        MessageBox.Show("Setting Failed! Set Again");
+                    }
+                    break;
+
+                case 41:
+                    if (float.Parse(txtPullingAcc2.Text) == Param)
+                    {
+                        MessageBox.Show("Successfully Set PullingAcc2");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed! Set Again");
                     }
                     break;
                 case 42:
-                    if (Ki == Param)
+                    if (float.Parse(txtDisCoeff.Text) == Param)
                     {
-                        MessageBox.Show("Successfully Set Ki");
+                        MessageBox.Show("Successfully Set DistCoeff");
                     }
                     else
                     {
-                        MessageBox.Show("Setting Failed!");
+                        MessageBox.Show("Setting Failed! Set Again");
                     }
                     break;
                 case 43:
-                    if (Kd == Param)
+                    if (float.Parse(txtPullingAcc3.Text) == Param)
                     {
-                        MessageBox.Show("Successfully Set Kd");
+                        MessageBox.Show("Successfully Set PullingAcc3");
                     }
                     else
                     {
-                        MessageBox.Show("Setting Failed!");
+                        MessageBox.Show("Setting Failed! Set Again");
                     }
                     break;
-                //case 36:
-                //    if (PD_DroppingAccRef == Param)
-                //    {
-                //        MessageBox.Show("Successfully Set PD_DroppingAccRef");
-                //    }
-                //    else
-                //    {
-                //        MessageBox.Show("Setting Failed! Set Again");
-                //    }
-                //    break;
+                case 47:
+                    if (float.Parse(txtPullingAcc4.Text) == Param)
+                    {
+                        MessageBox.Show("Successfully Set PullingAcc4");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed! Set Again");
+                    }
+                    break;
 
-                //case 41:
-                //    if (kbrake == Param)
-                //    {
-                //        MessageBox.Show("Successfully Set kbrake");
-                //    }
-                //    else
-                //    {
-                //        MessageBox.Show("Setting Failed! Set Again");
-                //    }
-                //    break;
+                case 51:
+                    if (float.Parse(txtPullingAcc5.Text) == Param)
+                    {
+                        MessageBox.Show("Successfully Set PullingAcc5");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed! Set Again");
+                    }
+                    break;
+                case 49:
+                    if (uint.Parse(txtDroppingAccelSlope.Text) == Param)
+                    {
+                        MessageBox.Show("Successfully Set Drop Accel Slope");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed! Set Again");
+                    }
+                    break;
+                case 52:
+                    if (float.Parse(txtDroppingAccelDistance.Text) == Param)
+                    {
+                        MessageBox.Show("Successfully Set Drop Accel Distance");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed! Set Again");
+                    }
+                    break;
+                case 54:
+                    if (uint.Parse(txtDropDecelSlope.Text) == Param)
+                    {
+                        MessageBox.Show("Successfully Set Drop Accel Slope");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed! Set Again");
+                    }
+                    break;
+                case 9:
+                    if (float.Parse(txtPullingPoint4.Text) == Param)
+                    {
+                        MessageBox.Show("Successfully Set PullingPoint4");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Setting Failed! Set Again");
+                    }
+                    break;
                 default:
                     break;
             }
@@ -247,10 +336,6 @@ namespace FreeFall_GUI
             MOb = 5; // kg
             Jd = 2.9; // kgm2
             Fs = 1.2;
-
-            txtJd.Text = Jd.ToString();
-            txtMOb.Text = MOb.ToString();
-            txtFs.Text = Fs.ToString();
         }
 
         private void btnSave_Click_1(object sender, EventArgs e)
@@ -262,14 +347,12 @@ namespace FreeFall_GUI
         {
             _SendCommand("45/1" + "$");
         }
-        public delegate void SetDrumRadius(float radius);
-        public SetDrumRadius _SetDrumRadius;
+        
         private void btnDrumRadiusSet_Click(object sender, EventArgs e)
         {
             try
             {
-                DrumRadius = float.Parse(txtDrumRadius.Text);
-                _SetDrumRadius(DrumRadius);
+                DrumRadius = float.Parse(txtDrumRadius.Text);                
                 _SendCommand("11" + "/" + DrumRadius.ToString() + "$");
             }
             catch
@@ -277,18 +360,7 @@ namespace FreeFall_GUI
                 MessageBox.Show("Invalid Input Type");
             }
         }
-        private void btnMaxDistSet_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DroppingDistance = float.Parse(txtDroppingAccelDistance.Text);
-                _SendCommand("12" + "/" + DroppingDistance.ToString() + "$");
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Input Type");
-            }
-        }
+
         private void btnPullingSpeedSet_Click(object sender, EventArgs e)
         {
             try
@@ -323,18 +395,6 @@ namespace FreeFall_GUI
             }
         }
 
-        private void btnRefAccSet_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DroppingAccel = float.Parse(txtDroppingAccRef.Text);
-                _SendCommand("15" + "/" + DroppingAccel.ToString() +  "$");
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Input Type");
-            }
-        }
         public delegate void SetSampleTime(int _SampleTime);
         public SetSampleTime _SetSampleTime;
 
@@ -412,13 +472,9 @@ namespace FreeFall_GUI
                 DroppingDecel = double.Parse(txtDropDecel.Text); // m/s2
 
                 // Pulling Params
-                PullingAccelDistance = float.Parse(txtAccelPullingDistance.Text); //m
-                PullingAccel = double.Parse(txtPullingAccRef.Text); // m/s2
-                PullingDecel = double.Parse(txtPullingDecel.Text); // m/s2
-
-                Jd = double.Parse(txtJd.Text);
-                MOb = double.Parse(txtMOb.Text);
-                Fs = double.Parse(txtFs.Text);
+                PullingAccelDistance = float.Parse(txtPullingPoint1.Text); //m
+                PullingAccel = double.Parse(txtPullingPoint2.Text); // m/s2
+                PullingDecel = double.Parse(txtPullingPoint3.Text); // m/s2
 
                 // Dropping stage calculation
                 DroppingAccleratingTime = Math.Round(Math.Sqrt(2 * DroppingAccelDistance / DroppingAccel), 1); // s
@@ -460,37 +516,7 @@ namespace FreeFall_GUI
                 // Max Values
                 MaxSpeed = Math.Max(PullingMaxSpeed, DroppingMaxSpeed);
                 TotalDistance = Math.Max(PullingTotalDistance, DroppingTotalDistance);
-                MaxTorque = Math.Max(Math.Max(PullAccTorque, PullDecelTorque), Math.Max(DropAccTorque, DropDecelTorque));
-
-
-                // Visualize the data
-                // Dropping Stage
-                lbDropAcceleratingTime.Text = DroppingAccleratingTime.ToString();
-                lbDropMaxSpeed.Text = DroppingMaxSpeed.ToString();
-                lbDropDecelDistance.Text = DroppingDecelDistance.ToString();
-                lbDropDecelTime.Text = DroppingDecelTime.ToString();
-                lbDropTotalDistance.Text = DroppingTotalDistance.ToString();
-
-                // Pulling Stage
-                lbPullingAccTime.Text = PullingAccleratingTime.ToString();
-                lbPullingMaxSpeed.Text = PullingMaxSpeed.ToString();
-                lbPullingBrakingDis.Text = PullingDecelDistance.ToString();
-                lbPullingBrakingTime.Text = PullingDecelTime.ToString();
-                lbPullingTotalDis.Text = PullingTotalDistance.ToString();
-                double PullingMaxSpeedInKph = Math.Round((Math.Sqrt(2 * PullingAccel * PullingAccelDistance) * 3.6), 1);// km/h
-                lbPullingMaxSpdInKph.Text = PullingMaxSpeedInKph.ToString();
-
-                // Torque
-                lbDropAccTorque.Text = DropAccTorque.ToString();
-                lbDropDecelTorque.Text = DropDecelTorque.ToString();
-
-                lbPullAccTorque.Text = PullAccTorque.ToString();
-                lbPullDecelTorque.Text = PullDecelTorque.ToString();
-
-                // Max Speed and Total Distance
-                lbMaxSpeed.Text = MaxSpeed.ToString() + " rpm";
-                lbTotalDistance.Text = TotalDistance.ToString() + " m";
-                lbMaxTorque.Text = MaxTorque.ToString() + " Nm";               
+                MaxTorque = Math.Max(Math.Max(PullAccTorque, PullDecelTorque), Math.Max(DropAccTorque, DropDecelTorque));              
             }
             catch
             {
@@ -500,58 +526,6 @@ namespace FreeFall_GUI
         private void bnCalculate_Click(object sender, EventArgs e)
         {
             CalculateRunningParameters();
-        }
-        // Pulling Exp Mode
-        private void btnPullingDistance_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                PullingAccelDistance = float.Parse(txtAccelPullingDistance.Text);
-                _SendCommand("32" + "/" + PullingAccelDistance.ToString() + "$");
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Input Type");
-            }
-        }
-        
-        private void btnPullingAccRef_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                PullingAccel = float.Parse(txtPullingAccRef.Text);
-                _SendCommand("33" + "/" + PullingAccel.ToString() + "$");
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Input Type");
-            }
-        }
-
-        private void btnSetDropDecel_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DroppingDecel = float.Parse(txtDropDecel.Text);
-                _SendCommand("34" + "/" + DroppingDecel.ToString() + "$");
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Input Type");
-            }
-        }
-
-        private void btnPullingDecel_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                PullingDecel = float.Parse(txtPullingDecel.Text);
-                _SendCommand("35" + "/" + PullingDecel.ToString() + "$");
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Input Type");
-            }
         }
 
         private void txtDroppingAccelDistance_TextChanged(object sender, EventArgs e)
@@ -606,22 +580,14 @@ namespace FreeFall_GUI
 
         private void btnSetKp_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Kp = float.Parse(txtKp.Text);
-                _SendCommand("41" + "/" + Kp.ToString() + "$");
-            }
-            catch
-            {
-                MessageBox.Show("Invalid Input Type");
-            }
+            
         }
 
-        private void btnSetKi_Click(object sender, EventArgs e)
+        private void btnSetDisCoeff_Click(object sender, EventArgs e)
         {
             try
             {
-                Ki = float.Parse(txtKi.Text);
+                Ki = float.Parse(txtDisCoeff.Text);
                 _SendCommand("42" + "/" + Ki.ToString() + "$");
             }
             catch
@@ -632,16 +598,194 @@ namespace FreeFall_GUI
 
         private void btnSetKd_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
             try
             {
-                Kd = float.Parse(txtKd.Text);
-                _SendCommand("43" + "/" + Kd.ToString() + "$");
+                float PullingAcc1 = float.Parse(txtPullingAcc1.Text);
+                CalculatePullingSpeed();
+                _SendCommand("36" + "/" + PullingAcc1.ToString() + "$");
             }
             catch
             {
                 MessageBox.Show("Invalid Input Type");
             }
         }
-        
+
+        private void btnSetPullingAcc2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float PullingAcc2 = float.Parse(txtPullingAcc2.Text);
+                CalculatePullingSpeed();
+                _SendCommand("41" + "/" + PullingAcc2.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        private void btnSetPullingAcc3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float PullingAcc2 = float.Parse(txtPullingAcc3.Text);
+                CalculatePullingSpeed();
+                _SendCommand("43" + "/" + PullingAcc2.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        private void btnSetPullingAcc4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float PullingAcc4 = float.Parse(txtPullingAcc4.Text);
+                CalculatePullingSpeed();
+                _SendCommand("47" + "/" + PullingAcc4.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        private void btnSetPullingAcc5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float PullingAcc5 = float.Parse(txtPullingAcc5.Text);
+                CalculatePullingSpeed();
+                _SendCommand("51" + "/" + PullingAcc5.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        private void btnSetPullingPoint1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float PullingPoint1 = float.Parse(txtPullingPoint1.Text);
+                CalculatePullingSpeed();
+                _SendCommand("32" + "/" + PullingPoint1.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        private void btnSetPullingPoint2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float PullingPoint2 = float.Parse(txtPullingPoint2.Text);
+                CalculatePullingSpeed();
+                _SendCommand("33" + "/" + PullingPoint2.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+        private void btnSetPullingPoint3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float PullingPoint3 = float.Parse(txtPullingPoint3.Text);
+                CalculatePullingSpeed();
+                _SendCommand("35" + "/" + PullingPoint3.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        // Dropping Setting Params
+        private void btnDropAccelSlope_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                uint DropAccelSlope = UInt16.Parse(txtDroppingAccelSlope.Text);
+                _SendCommand("49" + "/" + DropAccelSlope.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+        private void btnMaxDistSet_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                float DropAcceleDist = float.Parse(txtDroppingAccelDistance.Text);
+                _SendCommand("52" + "/" + DropAcceleDist.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+        private void btnRefAccSet_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DroppingAccel = float.Parse(txtDroppingAccRef.Text);
+                _SendCommand("15" + "/" + DroppingAccel.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+        private void btnSetDropDecel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DroppingDecel = float.Parse(txtDropDecel.Text);
+                _SendCommand("34" + "/" + DroppingDecel.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+        private void btnDropDecelSlope_Click(object sender, EventArgs e)
+        {
+            try
+            {
+               uint DropDecelSlope = uint.Parse(txtDropDecelSlope.Text);
+                _SendCommand("54" + "/" + DropDecelSlope.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                float PullingPoint4 = float.Parse(txtPullingPoint4.Text);
+                CalculatePullingSpeed();
+                _SendCommand("9" + "/" + PullingPoint4.ToString() + "$");
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Input Type");
+            }
+        }
     }
 }
