@@ -60,7 +60,6 @@ C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GU
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.DriverInputControl.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.DriverSetingParams.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Form1.resources
-C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Main_Control.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.Properties.Resources.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.ParamSetting.resources
 C:\Users\Thanh_Engineer\Documents\Liintech\DocAndPrograms\CSharp_App\Freefall_GUI\FreeFall_GUI\obj\Debug\FreeFall_GUI.csproj.GenerateResource.cache

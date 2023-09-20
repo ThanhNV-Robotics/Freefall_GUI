@@ -26,12 +26,9 @@ namespace FreeFall_GUI
         
 
         private string ReceivedMessage;
-
-        private string AccelDataToSend;
+        
 
         COM_Config _COM_Config = new COM_Config();
-        
-        Main_Control _MainCOntrol = new Main_Control();
 
         _2ndDataGraph GyroAndDistGraph = new _2ndDataGraph();
         public delegate void Draw2ndGraph(double time, double _GyroX, double _GyroY, double _GyroZ, double _Position, double _PositionCmd);
@@ -72,15 +69,14 @@ namespace FreeFall_GUI
         private bool CwTorqueLimit;
         private bool ZeroSpeedReach;
         
-        private bool RunningMode; // true = automatic, false = manual
-        private uint ExperimentMode = 1; // 1 = Dropping Mode, 2 = PullingMode, 3 = Pulling+Dropping
+      
         private int TotalEpisodes = 1; // default value is 1
         private int CurrentEpisode;
         private bool StartWaitingFlag = false; // Flag to wait for running next episode
         private uint WaitingCount; // To count the timer for waiting
         private uint CountBeforeRunning;
         private bool WaitingBeforeRunning = false;
-        private int PulseCmd; // to count the pulse cmd generate by the mcu
+        
 
         private bool SimuOrRunning = false;
 
@@ -101,14 +97,13 @@ namespace FreeFall_GUI
         bool GraphOn = false;
         bool SpeedView = false;
         bool SpdCmdView = false;
-        bool MotorDriver = true; // true -> FDA7000, false -> ASDA-A3
+        
         bool AccZView = false;
         bool AccRefView = false;
 
         float MotorSpeed; // Motor speed
         float SpdCommand; // Speed Command
-        int CurrentPulse = 0;
-        int PulseError;
+       
 
         float DrumRadius = (float)0.05; //m - big model
         
@@ -1145,10 +1140,7 @@ namespace FreeFall_GUI
         {
             progressBar.Visible = false; // hide the progress bar
             progressBar.Minimum = 0;
-            if (!RunningMode)
-            {
-                progressBar.Maximum = 1;
-            }
+
             progressBar.Step = 1;
             progressBar.Value = 1;
         }        
@@ -2176,8 +2168,6 @@ namespace FreeFall_GUI
                     SendMessage("31/1");
                 }
 
-                ExperimentMode = 1;
-
             }
             if (cbExperimentMode.SelectedIndex == 1) // Pulling Mode
             {
@@ -2185,15 +2175,13 @@ namespace FreeFall_GUI
                 {
                     SendMessage("31/2");
                 }                
-                ExperimentMode = 2;
             }
             if (cbExperimentMode.SelectedIndex == 2) // Pulling Mode
             {
                 if (serialPort1.IsOpen)
                 {
                     SendMessage("31/3");
-                }                
-                ExperimentMode = 3;
+                }               
             }
         }
 
@@ -2208,7 +2196,7 @@ namespace FreeFall_GUI
         {
             if (cbDriverType.SelectedIndex == 0) // HIGEN FDA7000 Driver
             {
-                MotorDriver = true;
+               
                 DrumRadius = (float)0.3;
                 if (serialPort1.IsOpen)
                 {
@@ -2217,7 +2205,7 @@ namespace FreeFall_GUI
             }
             else // ASDA-A3, small model
             {
-                MotorDriver = false;
+                
                 DrumRadius = (float)0.05;
                 SendMessage("39/0");
             }
