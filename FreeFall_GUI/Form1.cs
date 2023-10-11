@@ -828,7 +828,7 @@ namespace FreeFall_GUI
                     if (btnGraphOn.Text == "Graph OFF")
                     {
                         time += (timer2.Interval) / 1000.0;  // to seconds
-                        DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef);
+                        DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef,TrigalSignal);
 
                         if ((Application.OpenForms["_2ndDataGraph"] as _2ndDataGraph) != null) // Check if the form is opened or not
                         {
@@ -1091,10 +1091,10 @@ namespace FreeFall_GUI
             SpeedGraph.GraphPane.YAxis.Scale.Max = 100;
 
             
-            SpeedGraph.GraphPane.Y2Axis.Title.Text = "Acc(m/s2)";
-            SpeedGraph.GraphPane.Y2Axis.Scale.Min = -20;
+            SpeedGraph.GraphPane.Y2Axis.Title.Text = "Acc(g)";
+            SpeedGraph.GraphPane.Y2Axis.Scale.Min = -2;
             SpeedGraph.GraphPane.Y2Axis.Scale.Max = 2;
-            SpeedGraph.GraphPane.Y2Axis.Scale.MinorStep = 2;
+            SpeedGraph.GraphPane.Y2Axis.Scale.MinorStep = 0.2;
             SpeedGraph.GraphPane.Y2Axis.Scale.FontSpec.FontColor = Color.Blue;
             SpeedGraph.GraphPane.Y2Axis.Title.FontSpec.FontColor = Color.Blue;
             SpeedGraph.GraphPane.Y2Axis.IsVisible = true;
@@ -1127,12 +1127,18 @@ namespace FreeFall_GUI
             LineItem AccRefCurve = SpeedGraph.GraphPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
             AccRefCurve.Line.Width = (float)3; // Set LineWidth
 
-            
+            RollingPointPairList TrigalSignalList = new RollingPointPairList(60000);
+            LineItem TrigalSignalCurve = SpeedGraph.GraphPane.AddCurve("Trig", TrigalSignalList, Color.Purple, SymbolType.None);
+            TrigalSignalCurve.Line.Width = (float)3; // Set LineWidth
+
+
             AccXCurve.IsY2Axis = true;
             AccYCurve.IsY2Axis = true;
-            AccZCurve.IsY2Axis = true;
+            AccZCurve.IsY2Axis = true;            
 
             AccRefCurve.IsY2Axis = true;
+
+            TrigalSignalCurve.IsY2Axis = true;
 
             SpeedGraph.GraphPane.AxisChange();
         }
@@ -1235,7 +1241,7 @@ namespace FreeFall_GUI
                 MessageBox.Show("Saving Failed!");
             }
         }
-        private DateTime LocalTime;
+
         string TimeString;
         private void Data_Listview()
         {
@@ -1362,7 +1368,7 @@ namespace FreeFall_GUI
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
         }
-        private void DrawAllData(double time, double speed, double spdcmd, double _AccX, double _AccY, double _AccZ, double _AccRef)
+        private void DrawAllData(double time, double speed, double spdcmd, double _AccX, double _AccY, double _AccZ, double _AccRef, int TrigSig)
         {
             if (SpeedGraph.GraphPane.CurveList.Count <= 0) // neu ko co duong du lieu dc khoi tao
             {
@@ -1430,6 +1436,12 @@ namespace FreeFall_GUI
                 AccRefList.Add(time, _AccRef);
             }
 
+            LineItem TrigalCurve = SpeedGraph.GraphPane.CurveList[6] as LineItem;
+            if (TrigalCurve == null) return;
+            IPointListEdit TrigalList = TrigalCurve.Points as IPointListEdit;
+            if (TrigalList == null) return;
+            TrigalCurve.IsY2Axis = true;
+            TrigalList.Add(time, TrigalSignal);
 
 
             Scale xScale = SpeedGraph.GraphPane.XAxis.Scale;
@@ -1488,7 +1500,8 @@ namespace FreeFall_GUI
                 //SendMessage("6/1"); // command to get the data
                 timer2.Enabled = true;
                 TickStart = Environment.TickCount;
-                if (SpeedGraph.GraphPane.CurveList.Count <= 0) // Neu chua co duong Curve thi khoi tao
+
+                if (SpeedGraph.GraphPane.CurveList.Count < 7 ) // Neu chua co duong Curve thi khoi tao
                 {
                     RollingPointPairList MotorSpeedList = new RollingPointPairList(60000);
                     LineItem MotorSpeedCurve = SpeedGraph.GraphPane.AddCurve("Motor Speed", MotorSpeedList, Color.Red, SymbolType.None);
@@ -1514,9 +1527,13 @@ namespace FreeFall_GUI
                     LineItem AccRefCurve = SpeedGraph.GraphPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
                     AccRefCurve.Line.Width = (float)3; // Set LineWidth
 
-                    RollingPointPairList PositionList = new RollingPointPairList(60000);
-                    LineItem PositionCurve = SpeedGraph.GraphPane.AddCurve("Position", PositionList, Color.Pink, SymbolType.None);
-                    AccZCurve.Line.Width = (float)2; // Set LineWidth
+                    //RollingPointPairList PositionList = new RollingPointPairList(60000);
+                    //LineItem PositionCurve = SpeedGraph.GraphPane.AddCurve("Position", PositionList, Color.Pink, SymbolType.None);
+                    //AccZCurve.Line.Width = (float)2; // Set LineWidth
+
+                    RollingPointPairList TrigalSignalList = new RollingPointPairList(60000);
+                    LineItem TrigalSignalCurve = SpeedGraph.GraphPane.AddCurve("Trig", TrigalSignalList, Color.Purple, SymbolType.None);
+                    TrigalSignalCurve.Line.Width = (float)3; // Set LineWidth
 
                     SpeedGraph.AxisChange();
                 }
@@ -1576,7 +1593,7 @@ namespace FreeFall_GUI
 
             SpeedGraph.GraphPane.CurveList.Clear(); // Xoa do thi
 
-            //GraphInit(); // Reinitialize the Graph
+            //GraphInit();
 
             SpeedGraph.GraphPane.XAxis.Scale.Max = 10;
             SpeedGraph.GraphPane.XAxis.Scale.Min = 0;
@@ -1617,8 +1634,14 @@ namespace FreeFall_GUI
             LineItem AccRefCurve = SpeedGraph.GraphPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
             AccRefCurve.Line.Width = (float)3; // Set LineWidth
 
+            RollingPointPairList TrigalSignalList = new RollingPointPairList(60000);
+            LineItem TrigalSignalCurve = SpeedGraph.GraphPane.AddCurve("Trig", TrigalSignalList, Color.Purple, SymbolType.None);
+            TrigalSignalCurve.Line.Width = (float)3; // Set LineWidth
+
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
+
+
             listData.Items.Clear(); // Clear data in the list view
         }
         private void btnResetGraph_Click(object sender, EventArgs e)
@@ -2275,6 +2298,7 @@ namespace FreeFall_GUI
         UdpClient server;
         IPEndPoint endPoint;
         private bool ConnectToESP = false;
+        int TrigalSignal = 0;
 
         private void ServerStart()
         {
@@ -2294,16 +2318,17 @@ namespace FreeFall_GUI
                             {
                                 AccX = double.Parse(ExtractAccelData[0]) * 9.8 / 1000; // get acceleration value
                                 AccY = double.Parse(ExtractAccelData[1]) * 9.8 / 1000; // get acceleration value
-                                AccZData = Math.Round(double.Parse(ExtractAccelData[2]) * 9.8 / 1000, 2);
+                                AccZData = Math.Round(double.Parse(ExtractAccelData[2]) / 1000, 2); // unit in g
                                 AccZ = AccZData;
-                                if (ExtractAccelData.Length >= 4)
+                                TrigalSignal = int.Parse(ExtractAccelData[3]);
+                                if (ExtractAccelData.Length >= 5)
                                 {
-                                    // get acceleration value
+                                    // get temperature value
                                     Temp = double.Parse(ExtractAccelData[3]);
                                     lbTemp.Text = Temp.ToString() + " C";
                                 }
 
-                                lbAccZ.Text = AccZ.ToString(); // Show on the Screen
+                                lbAccZ.Text = AccZ.ToString(); //Show on the Screen
 
                                 DataByteRegion = "";
                             }
@@ -2319,8 +2344,6 @@ namespace FreeFall_GUI
                 }
             }
         }
-
-        //string ServerReceivedMessage;
        
         bool IsServerOn;
         double AccX;
@@ -2388,9 +2411,8 @@ namespace FreeFall_GUI
                 server.Close();
                 server.Dispose();
                 ConnectToESP = false;
-                backgroundWorker1.CancelAsync();               
-
-                //ServerOff();
+                backgroundWorker1.CancelAsync();
+                
                 IsServerOn = false;
                 
             }
@@ -2403,12 +2425,8 @@ namespace FreeFall_GUI
                 backgroundWorker1.RunWorkerAsync();
                 backgroundWorker1.WorkerSupportsCancellation = true; // ability to cancel
 
-                //ServerOn();
                 IsServerOn = true;
                 timer1.Enabled = true;
-
-                //System.Net.IPAddress ip = System.Net.IPAddress.Parse(lbServerIP.Text);
-                //server.Start(ip, Port);
             }
         }
         
@@ -2531,7 +2549,7 @@ namespace FreeFall_GUI
                         double _AccRef = double.Parse(datafield[6]);
                         double ObjectPos = double.Parse(datafield[7]);
 
-                        DrawAllData(_time, _Speed, _RefSpd, _AccX, _AccY, _AccZ, _AccRef);
+                        DrawAllData(_time, _Speed, _RefSpd, _AccX, _AccY, _AccZ, 0, 0);
                         
                     }
                     catch
