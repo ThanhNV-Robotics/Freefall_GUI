@@ -68,8 +68,8 @@ namespace FreeFall_GUI
         private bool CcwTorqueLimit;
         private bool CwTorqueLimit;
         private bool ZeroSpeedReach;
-        
-      
+        private bool AutoSaveData = true;
+        private uint FileNameCount = 0;
         private int TotalEpisodes = 1; // default value is 1
         private int CurrentEpisode;
         private bool StartWaitingFlag = false; // Flag to wait for running next episode
@@ -102,10 +102,7 @@ namespace FreeFall_GUI
         bool AccRefView = false;
 
         float MotorSpeed; // Motor speed
-        float SpdCommand; // Speed Command
-       
-
-        float DrumRadius = (float)0.05; //m - big model
+        float SpdCommand; // Speed Command        
         
         private const int HIGENEncoderRes = 8192; // =2048*4, quarter count Encoder Resolution
         private const int ASDAEncoderRes = 1024; // 
@@ -343,7 +340,15 @@ namespace FreeFall_GUI
             btnSetHome.Enabled = true;
 
             btnHoming.Enabled = false;
-            
+
+            if (tgAutoSave.CheckState == CheckState.Checked)
+            {
+                AutoSaveData = true;
+            }
+            else
+            {
+                AutoSaveData = false;
+            }
            
 
             btnStartDropping.Enabled = false;
@@ -1094,7 +1099,7 @@ namespace FreeFall_GUI
             SpeedGraph.GraphPane.Y2Axis.Title.Text = "Acc(g)";
             SpeedGraph.GraphPane.Y2Axis.Scale.Min = -2;
             SpeedGraph.GraphPane.Y2Axis.Scale.Max = 2;
-            SpeedGraph.GraphPane.Y2Axis.Scale.MinorStep = 0.2;
+            SpeedGraph.GraphPane.Y2Axis.Scale.MinorStep = 0.1;
             SpeedGraph.GraphPane.Y2Axis.Scale.FontSpec.FontColor = Color.Blue;
             SpeedGraph.GraphPane.Y2Axis.Title.FontSpec.FontColor = Color.Blue;
             SpeedGraph.GraphPane.Y2Axis.IsVisible = true;
@@ -1255,7 +1260,7 @@ namespace FreeFall_GUI
                 item.SubItems.Add(AccX.ToString());
                 item.SubItems.Add(AccY.ToString());
                 item.SubItems.Add(AccZ.ToString());
-                item.SubItems.Add(AccRef.ToString());
+                item.SubItems.Add(TrigalSignal.ToString());
                 item.SubItems.Add(ObjectPosition.ToString());
                 //LocalTime = DateTime.Now;
 
@@ -1441,7 +1446,7 @@ namespace FreeFall_GUI
             IPointListEdit TrigalList = TrigalCurve.Points as IPointListEdit;
             if (TrigalList == null) return;
             TrigalCurve.IsY2Axis = true;
-            TrigalList.Add(time, TrigalSignal);
+            TrigalList.Add(time, TrigSig);
 
 
             Scale xScale = SpeedGraph.GraphPane.XAxis.Scale;
@@ -1563,7 +1568,7 @@ namespace FreeFall_GUI
             if (StartWaitingFlag) // stm32 finishes an episode, then delay for seconds before the next one
             {
                 WaitingCount++;
-                if (WaitingCount >= 40) // Delay for 2 seconds, 50*40 = 2000ms
+                if (WaitingCount >= 10) // Delay for 2 seconds, 50*40 = 2000ms
                 {
                     StartWaitingFlag = false;
                     WaitingCount = 0;
@@ -1573,7 +1578,7 @@ namespace FreeFall_GUI
             if (WaitingBeforeRunning)
             {
                 CountBeforeRunning++;
-                if (CountBeforeRunning >= 40) // delay for 2 secs
+                if (CountBeforeRunning >= 10) // delay for 2 secs
                 {
                     WaitingBeforeRunning = false;
                     CountBeforeRunning = 0;
@@ -1602,10 +1607,10 @@ namespace FreeFall_GUI
             SpeedGraph.GraphPane.YAxis.Scale.MajorStep = 50;
             SpeedGraph.GraphPane.YAxis.Scale.MinorStep = 10;
 
-            SpeedGraph.GraphPane.Y2Axis.Scale.Min = -20;
+            SpeedGraph.GraphPane.Y2Axis.Scale.Min = -2;
             SpeedGraph.GraphPane.Y2Axis.Scale.Max = 2;
-            SpeedGraph.GraphPane.Y2Axis.Scale.MajorStep = 5;
-            SpeedGraph.GraphPane.Y2Axis.Scale.MinorStep = 1;
+            SpeedGraph.GraphPane.Y2Axis.Scale.MajorStep = 0.1;
+            SpeedGraph.GraphPane.Y2Axis.Scale.MinorStep = 0.1;
 
 
             SpeedGraph.GraphPane.IsAlignGrids = true;
@@ -1761,7 +1766,7 @@ namespace FreeFall_GUI
             if (StartWaitingFlag) // stm32 finishes an episode, then delay for seconds before the next one
             {
                 WaitingCount++;
-                if (WaitingCount >= 40) // Delay for 2 seconds, 50*40 = 2000ms
+                if (WaitingCount >= 10) // Delay for 2 seconds, 50*40 = 2000ms
                 {
                     StartWaitingFlag = false;
                     WaitingCount = 0;
@@ -1771,7 +1776,7 @@ namespace FreeFall_GUI
             if (WaitingBeforeRunning)
             {
                 CountBeforeRunning++;
-                if (CountBeforeRunning >= 40) // delay for 2 secs
+                if (CountBeforeRunning >= 10) // delay for 2 secs
                 {
                     WaitingBeforeRunning = false;
                     CountBeforeRunning = 0;
@@ -1949,23 +1954,40 @@ namespace FreeFall_GUI
             if (btnStartDropping.Text == "STOP") // if is not running > Start running
             {
                 SendMessage(StopRunning);
-                DialogResult Response;
-                Response = MessageBox.Show("Do you want to Save the Data?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                if (Response == DialogResult.OK)
+                if (AutoSaveData) // SaveData
                 {
-                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                    {
-                        //SaveToExcel(saveFileDialog1.FileName);
-                        SaveDataToTxtFile(saveFileDialog1.FileName);
-                        ResetGraph();
-                        _ReSetGyroDisGraph();
-                    }                    
-                }
-                else
-                {
+                    string folder = @"C:\Users\Thanh_Engineer\OneDrive - Space Liintech\Thanh_SharedDocument\ExperimentData\YemiExp\AutoSaveFolder";
+                    string FileName = "Data" + FileNameCount.ToString() + ".txt";
+                    string fullPath = folder + FileName;
+
+                    SaveDataToTxtFile(fullPath);
+
+                    FileNameCount++;
+                    txtFileCount.Text = FileNameCount.ToString();
+
                     ResetGraph();
                     _ReSetGyroDisGraph();
                 }
+                else
+                {
+                    DialogResult Response;
+                    Response = MessageBox.Show("Do you want to Save the Data?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    if (Response == DialogResult.OK)
+                    {
+                        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            //SaveToExcel(saveFileDialog1.FileName);
+                            SaveDataToTxtFile(saveFileDialog1.FileName);
+                            ResetGraph();
+                            _ReSetGyroDisGraph();
+                        }
+                    }
+                    else
+                    {
+                        ResetGraph();
+                        _ReSetGyroDisGraph();
+                    }
+                }                
                 
                 btnStartDropping.BackColor = Color.Lime;
                 btnStartDropping.Text = "START";
@@ -2220,7 +2242,7 @@ namespace FreeFall_GUI
             if (cbDriverType.SelectedIndex == 0) // HIGEN FDA7000 Driver
             {
                
-                DrumRadius = (float)0.3;
+               
                 if (serialPort1.IsOpen)
                 {
                     SendMessage("39/1");
@@ -2229,7 +2251,7 @@ namespace FreeFall_GUI
             else // ASDA-A3, small model
             {
                 
-                DrumRadius = (float)0.05;
+                
                 SendMessage("39/0");
             }
         }
@@ -2316,8 +2338,8 @@ namespace FreeFall_GUI
                             string[] ExtractAccelData = DataByteRegion.Split('/'); // split data frame
                             try
                             {
-                                AccX = double.Parse(ExtractAccelData[0]) * 9.8 / 1000; // get acceleration value
-                                AccY = double.Parse(ExtractAccelData[1]) * 9.8 / 1000; // get acceleration value
+                                AccX = double.Parse(ExtractAccelData[0]) / 1000; // get acceleration value
+                                AccY = double.Parse(ExtractAccelData[1]) / 1000; // get acceleration value
                                 AccZData = Math.Round(double.Parse(ExtractAccelData[2]) / 1000, 2); // unit in g
                                 AccZ = AccZData;
                                 TrigalSignal = int.Parse(ExtractAccelData[3]);
@@ -2546,10 +2568,10 @@ namespace FreeFall_GUI
                         double _AccX = double.Parse(datafield[3]);
                         double _AccY = double.Parse(datafield[4]);
                         double _AccZ = double.Parse(datafield[5]);
-                        double _AccRef = double.Parse(datafield[6]);
+                        int _Trig = int.Parse(datafield[6]);
                         double ObjectPos = double.Parse(datafield[7]);
 
-                        DrawAllData(_time, _Speed, _RefSpd, _AccX, _AccY, _AccZ, 0, 0);
+                        DrawAllData(_time, _Speed, _RefSpd, _AccX, _AccY, _AccZ, 0, _Trig);
                         
                     }
                     catch
@@ -2651,6 +2673,21 @@ namespace FreeFall_GUI
             _SpeedControlTest._SendCommand = new SpeedControlTest.SendCommand(SendMessage);
             _SpeedControlTest._StartTesting = new SpeedControlTest.StartTesting(StartSpeedTesting);
             _SpeedControlTest.Show();            
+        }
+
+        private void tgAutoSave_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tgAutoSave.CheckState == CheckState.Checked)
+            {
+                AutoSaveData = true;
+                MessageBox.Show("Changed to AutoSave Mode");
+            }
+            else
+            {
+                AutoSaveData = false;
+                FileNameCount = 0;
+                MessageBox.Show("Changed to Manual Save");
+            }
         }
     }
 }

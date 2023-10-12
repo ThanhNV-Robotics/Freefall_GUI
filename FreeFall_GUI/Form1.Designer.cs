@@ -52,15 +52,6 @@
             this.labelCcwTorqueLim = new System.Windows.Forms.Label();
             this.labelAlarm = new System.Windows.Forms.Label();
             this.labelTorqueLimit = new System.Windows.Forms.Label();
-            this.lbZeroSpeedReach = new FreeFall_GUI.Elip_Label();
-            this.lbCwTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbCcwTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbAlarm = new FreeFall_GUI.Elip_Label();
-            this.lbTorqueLimit = new FreeFall_GUI.Elip_Label();
-            this.lbSpeedReach = new FreeFall_GUI.Elip_Label();
-            this.lbReady = new FreeFall_GUI.Elip_Label();
-            this.lbBrake = new FreeFall_GUI.Elip_Label();
-            this.lb_Type = new FreeFall_GUI.Elip_Label();
             this.lbReach = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -69,6 +60,8 @@
             this.btnSetJogSpeed = new System.Windows.Forms.Button();
             this.txtSetSpeed = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.btnMoveDown = new System.Windows.Forms.Button();
+            this.btnMoveUp = new System.Windows.Forms.Button();
             this.btnSimulate = new System.Windows.Forms.Button();
             this.btnHoming = new System.Windows.Forms.Button();
             this.lbMotorSpeed = new System.Windows.Forms.Label();
@@ -77,13 +70,10 @@
             this.btnStartDropping = new System.Windows.Forms.Button();
             this.SpeedGraph = new ZedGraph.ZedGraphControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.toggleServoEnable = new FreeFall_GUI.RJControls.RJToggleButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.lbAccZ = new System.Windows.Forms.Label();
-            this.tongleDataOnOff = new FreeFall_GUI.RJControls.RJToggleButton();
-            this.tongleSoftLimit = new FreeFall_GUI.RJControls.RJToggleButton();
             this.btnSetHome = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -96,7 +86,7 @@
             this.AccelX = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.AccelY = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.AccelZ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.AccZRef = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.TrigalData = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Position = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listLocalTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timer2 = new System.Windows.Forms.Timer(this.components);
@@ -119,7 +109,6 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.lbPort = new System.Windows.Forms.Label();
-            this.togServerOnOff = new FreeFall_GUI.RJControls.RJToggleButton();
             this.lbServerIP = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -128,11 +117,25 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label15 = new System.Windows.Forms.Label();
             this.lbTemp = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtFileCount = new System.Windows.Forms.Label();
+            this.tgAutoSave = new FreeFall_GUI.RJControls.RJToggleButton();
+            this.togServerOnOff = new FreeFall_GUI.RJControls.RJToggleButton();
             this.lbStartRecording = new FreeFall_GUI.Elip_Label();
+            this.tongleDataOnOff = new FreeFall_GUI.RJControls.RJToggleButton();
+            this.tongleSoftLimit = new FreeFall_GUI.RJControls.RJToggleButton();
             this.btnStop = new FreeFall_GUI.ButtonEllipse();
             this.btnEstop = new FreeFall_GUI.ButtonEllipse();
-            this.btnMoveDown = new System.Windows.Forms.Button();
-            this.btnMoveUp = new System.Windows.Forms.Button();
+            this.toggleServoEnable = new FreeFall_GUI.RJControls.RJToggleButton();
+            this.lbZeroSpeedReach = new FreeFall_GUI.Elip_Label();
+            this.lbCwTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbCcwTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbAlarm = new FreeFall_GUI.Elip_Label();
+            this.lbTorqueLimit = new FreeFall_GUI.Elip_Label();
+            this.lbSpeedReach = new FreeFall_GUI.Elip_Label();
+            this.lbReady = new FreeFall_GUI.Elip_Label();
+            this.lbBrake = new FreeFall_GUI.Elip_Label();
+            this.lb_Type = new FreeFall_GUI.Elip_Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gbJogControl.SuspendLayout();
@@ -163,7 +166,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1638, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1638, 30);
             this.menuStrip1.TabIndex = 12;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -173,7 +176,7 @@
             this.cOMPortToolStripMenuItem,
             this.tCPServerToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(98, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(98, 26);
             this.fileToolStripMenuItem.Text = "Connection";
             // 
             // cOMPortToolStripMenuItem
@@ -195,7 +198,7 @@
             this.selectFolderToSaveToolStripMenuItem,
             this.openAFileToolStripMenuItem});
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
-            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(46, 26);
             this.fileToolStripMenuItem1.Text = "File";
             // 
             // selectFolderToSaveToolStripMenuItem
@@ -218,27 +221,27 @@
             this.driverInputControlToolStripMenuItem,
             this.speedControlTestToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 24);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 26);
             this.aboutToolStripMenuItem.Text = "Tool";
             // 
             // parameterSettingToolStripMenuItem
             // 
             this.parameterSettingToolStripMenuItem.Name = "parameterSettingToolStripMenuItem";
-            this.parameterSettingToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.parameterSettingToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
             this.parameterSettingToolStripMenuItem.Text = "Parameter Setting";
             this.parameterSettingToolStripMenuItem.Click += new System.EventHandler(this.parameterSettingToolStripMenuItem_Click);
             // 
             // driverInputControlToolStripMenuItem
             // 
             this.driverInputControlToolStripMenuItem.Name = "driverInputControlToolStripMenuItem";
-            this.driverInputControlToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.driverInputControlToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
             this.driverInputControlToolStripMenuItem.Text = "Driver Input Control";
             this.driverInputControlToolStripMenuItem.Click += new System.EventHandler(this.driverInputControlToolStripMenuItem_Click);
             // 
             // speedControlTestToolStripMenuItem
             // 
             this.speedControlTestToolStripMenuItem.Name = "speedControlTestToolStripMenuItem";
-            this.speedControlTestToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.speedControlTestToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
             this.speedControlTestToolStripMenuItem.Text = "Speed Control Test";
             this.speedControlTestToolStripMenuItem.Click += new System.EventHandler(this.speedControlTestToolStripMenuItem_Click);
             // 
@@ -247,7 +250,7 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gyroAndDisGraphToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
             this.helpToolStripMenuItem.Text = "View";
             // 
             // gyroAndDisGraphToolStripMenuItem
@@ -353,96 +356,6 @@
             this.labelTorqueLimit.TabIndex = 21;
             this.labelTorqueLimit.Text = "Torque Limit";
             // 
-            // lbZeroSpeedReach
-            // 
-            this.lbZeroSpeedReach.AutoEllipsis = true;
-            this.lbZeroSpeedReach.BackColor = System.Drawing.Color.Gray;
-            this.lbZeroSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbZeroSpeedReach.Location = new System.Drawing.Point(9, 394);
-            this.lbZeroSpeedReach.Name = "lbZeroSpeedReach";
-            this.lbZeroSpeedReach.Size = new System.Drawing.Size(31, 33);
-            this.lbZeroSpeedReach.TabIndex = 20;
-            // 
-            // lbCwTorqueLimit
-            // 
-            this.lbCwTorqueLimit.AutoEllipsis = true;
-            this.lbCwTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbCwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbCwTorqueLimit.Location = new System.Drawing.Point(9, 349);
-            this.lbCwTorqueLimit.Name = "lbCwTorqueLimit";
-            this.lbCwTorqueLimit.Size = new System.Drawing.Size(31, 33);
-            this.lbCwTorqueLimit.TabIndex = 19;
-            // 
-            // lbCcwTorqueLimit
-            // 
-            this.lbCcwTorqueLimit.AutoEllipsis = true;
-            this.lbCcwTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbCcwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbCcwTorqueLimit.Location = new System.Drawing.Point(9, 301);
-            this.lbCcwTorqueLimit.Name = "lbCcwTorqueLimit";
-            this.lbCcwTorqueLimit.Size = new System.Drawing.Size(31, 33);
-            this.lbCcwTorqueLimit.TabIndex = 18;
-            // 
-            // lbAlarm
-            // 
-            this.lbAlarm.AutoEllipsis = true;
-            this.lbAlarm.BackColor = System.Drawing.Color.Gray;
-            this.lbAlarm.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbAlarm.Location = new System.Drawing.Point(9, 253);
-            this.lbAlarm.Name = "lbAlarm";
-            this.lbAlarm.Size = new System.Drawing.Size(31, 33);
-            this.lbAlarm.TabIndex = 17;
-            // 
-            // lbTorqueLimit
-            // 
-            this.lbTorqueLimit.AutoEllipsis = true;
-            this.lbTorqueLimit.BackColor = System.Drawing.Color.Gray;
-            this.lbTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbTorqueLimit.Location = new System.Drawing.Point(9, 208);
-            this.lbTorqueLimit.Name = "lbTorqueLimit";
-            this.lbTorqueLimit.Size = new System.Drawing.Size(31, 33);
-            this.lbTorqueLimit.TabIndex = 16;
-            // 
-            // lbSpeedReach
-            // 
-            this.lbSpeedReach.AutoEllipsis = true;
-            this.lbSpeedReach.BackColor = System.Drawing.Color.Gray;
-            this.lbSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbSpeedReach.Location = new System.Drawing.Point(9, 164);
-            this.lbSpeedReach.Name = "lbSpeedReach";
-            this.lbSpeedReach.Size = new System.Drawing.Size(31, 33);
-            this.lbSpeedReach.TabIndex = 15;
-            // 
-            // lbReady
-            // 
-            this.lbReady.AutoEllipsis = true;
-            this.lbReady.BackColor = System.Drawing.Color.Gray;
-            this.lbReady.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbReady.Location = new System.Drawing.Point(9, 121);
-            this.lbReady.Name = "lbReady";
-            this.lbReady.Size = new System.Drawing.Size(31, 33);
-            this.lbReady.TabIndex = 14;
-            // 
-            // lbBrake
-            // 
-            this.lbBrake.AutoEllipsis = true;
-            this.lbBrake.BackColor = System.Drawing.Color.Gray;
-            this.lbBrake.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbBrake.Location = new System.Drawing.Point(9, 74);
-            this.lbBrake.Name = "lbBrake";
-            this.lbBrake.Size = new System.Drawing.Size(31, 33);
-            this.lbBrake.TabIndex = 13;
-            // 
-            // lb_Type
-            // 
-            this.lb_Type.AutoEllipsis = true;
-            this.lb_Type.BackColor = System.Drawing.Color.Gray;
-            this.lb_Type.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lb_Type.Location = new System.Drawing.Point(9, 28);
-            this.lb_Type.Name = "lb_Type";
-            this.lb_Type.Size = new System.Drawing.Size(31, 33);
-            this.lb_Type.TabIndex = 12;
-            // 
             // lbReach
             // 
             this.lbReach.AutoSize = true;
@@ -530,6 +443,34 @@
             this.label5.TabIndex = 13;
             this.label5.Text = "Set Speed (rpm)";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btnMoveDown
+            // 
+            this.btnMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.BackgroundImage")));
+            this.btnMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMoveDown.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMoveDown.Location = new System.Drawing.Point(194, 25);
+            this.btnMoveDown.Name = "btnMoveDown";
+            this.btnMoveDown.Size = new System.Drawing.Size(63, 61);
+            this.btnMoveDown.TabIndex = 5;
+            this.btnMoveDown.UseVisualStyleBackColor = false;
+            this.btnMoveDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseDown_1);
+            this.btnMoveDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseUp_1);
+            // 
+            // btnMoveUp
+            // 
+            this.btnMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.BackgroundImage")));
+            this.btnMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMoveUp.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMoveUp.Location = new System.Drawing.Point(267, 25);
+            this.btnMoveUp.Name = "btnMoveUp";
+            this.btnMoveUp.Size = new System.Drawing.Size(63, 61);
+            this.btnMoveUp.TabIndex = 4;
+            this.btnMoveUp.UseVisualStyleBackColor = false;
+            this.btnMoveUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseDown_1);
+            this.btnMoveUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseUp_1);
             // 
             // btnSimulate
             // 
@@ -638,20 +579,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Control";
             // 
-            // toggleServoEnable
-            // 
-            this.toggleServoEnable.Location = new System.Drawing.Point(167, 36);
-            this.toggleServoEnable.MinimumSize = new System.Drawing.Size(45, 23);
-            this.toggleServoEnable.Name = "toggleServoEnable";
-            this.toggleServoEnable.OffBackColor = System.Drawing.Color.Gray;
-            this.toggleServoEnable.OffToggleColor = System.Drawing.Color.Gainsboro;
-            this.toggleServoEnable.OnBackColor = System.Drawing.Color.Lime;
-            this.toggleServoEnable.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.toggleServoEnable.Size = new System.Drawing.Size(111, 50);
-            this.toggleServoEnable.TabIndex = 39;
-            this.toggleServoEnable.UseVisualStyleBackColor = true;
-            this.toggleServoEnable.CheckedChanged += new System.EventHandler(this.toggleServoEnable_CheckedChanged);
-            // 
             // groupBox3
             // 
             this.groupBox3.AutoSize = true;
@@ -705,36 +632,6 @@
             this.lbAccZ.Size = new System.Drawing.Size(198, 85);
             this.lbAccZ.TabIndex = 67;
             this.lbAccZ.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tongleDataOnOff
-            // 
-            this.tongleDataOnOff.Location = new System.Drawing.Point(6, 437);
-            this.tongleDataOnOff.MinimumSize = new System.Drawing.Size(45, 23);
-            this.tongleDataOnOff.Name = "tongleDataOnOff";
-            this.tongleDataOnOff.OffBackColor = System.Drawing.Color.Gray;
-            this.tongleDataOnOff.OffToggleColor = System.Drawing.Color.Gainsboro;
-            this.tongleDataOnOff.OnBackColor = System.Drawing.Color.Lime;
-            this.tongleDataOnOff.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.tongleDataOnOff.Size = new System.Drawing.Size(95, 45);
-            this.tongleDataOnOff.TabIndex = 57;
-            this.tongleDataOnOff.UseVisualStyleBackColor = true;
-            this.tongleDataOnOff.CheckedChanged += new System.EventHandler(this.tongleDataOnOff_CheckedChanged);
-            // 
-            // tongleSoftLimit
-            // 
-            this.tongleSoftLimit.Checked = true;
-            this.tongleSoftLimit.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tongleSoftLimit.Location = new System.Drawing.Point(5, 378);
-            this.tongleSoftLimit.MinimumSize = new System.Drawing.Size(45, 23);
-            this.tongleSoftLimit.Name = "tongleSoftLimit";
-            this.tongleSoftLimit.OffBackColor = System.Drawing.Color.Gray;
-            this.tongleSoftLimit.OffToggleColor = System.Drawing.Color.Gainsboro;
-            this.tongleSoftLimit.OnBackColor = System.Drawing.Color.Red;
-            this.tongleSoftLimit.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.tongleSoftLimit.Size = new System.Drawing.Size(95, 45);
-            this.tongleSoftLimit.TabIndex = 57;
-            this.tongleSoftLimit.UseVisualStyleBackColor = true;
-            this.tongleSoftLimit.CheckedChanged += new System.EventHandler(this.tongleSoftLimit_CheckedChanged);
             // 
             // btnSetHome
             // 
@@ -797,7 +694,7 @@
             this.AccelX,
             this.AccelY,
             this.AccelZ,
-            this.AccZRef,
+            this.TrigalData,
             this.Position,
             this.listLocalTime});
             this.listData.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -836,10 +733,10 @@
             // 
             this.AccelZ.Text = "AccZ";
             // 
-            // AccZRef
+            // TrigalData
             // 
-            this.AccZRef.Text = "AccRef";
-            this.AccZRef.Width = 79;
+            this.TrigalData.Text = "Trigal";
+            this.TrigalData.Width = 79;
             // 
             // Position
             // 
@@ -1075,20 +972,6 @@
             this.lbPort.TabIndex = 33;
             this.lbPort.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // togServerOnOff
-            // 
-            this.togServerOnOff.Location = new System.Drawing.Point(135, 83);
-            this.togServerOnOff.MinimumSize = new System.Drawing.Size(45, 23);
-            this.togServerOnOff.Name = "togServerOnOff";
-            this.togServerOnOff.OffBackColor = System.Drawing.Color.Gray;
-            this.togServerOnOff.OffToggleColor = System.Drawing.Color.Gainsboro;
-            this.togServerOnOff.OnBackColor = System.Drawing.Color.Lime;
-            this.togServerOnOff.OnToggleColor = System.Drawing.Color.WhiteSmoke;
-            this.togServerOnOff.Size = new System.Drawing.Size(83, 29);
-            this.togServerOnOff.TabIndex = 34;
-            this.togServerOnOff.UseVisualStyleBackColor = true;
-            this.togServerOnOff.CheckedChanged += new System.EventHandler(this.togServerOnOff_CheckedChanged);
-            // 
             // lbServerIP
             // 
             this.lbServerIP.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -1155,6 +1038,57 @@
             this.lbTemp.TabIndex = 76;
             this.lbTemp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.ForeColor = System.Drawing.Color.Black;
+            this.label1.Location = new System.Drawing.Point(562, 927);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(143, 20);
+            this.label1.TabIndex = 35;
+            this.label1.Text = "AutoSaveData";
+            // 
+            // txtFileCount
+            // 
+            this.txtFileCount.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.txtFileCount.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.txtFileCount.ForeColor = System.Drawing.Color.Black;
+            this.txtFileCount.Location = new System.Drawing.Point(711, 922);
+            this.txtFileCount.Name = "txtFileCount";
+            this.txtFileCount.Size = new System.Drawing.Size(53, 30);
+            this.txtFileCount.TabIndex = 35;
+            this.txtFileCount.Text = "0";
+            this.txtFileCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tgAutoSave
+            // 
+            this.tgAutoSave.Location = new System.Drawing.Point(449, 907);
+            this.tgAutoSave.MinimumSize = new System.Drawing.Size(45, 22);
+            this.tgAutoSave.Name = "tgAutoSave";
+            this.tgAutoSave.OffBackColor = System.Drawing.Color.Gray;
+            this.tgAutoSave.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.tgAutoSave.OnBackColor = System.Drawing.Color.MediumSlateBlue;
+            this.tgAutoSave.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.tgAutoSave.Size = new System.Drawing.Size(107, 50);
+            this.tgAutoSave.TabIndex = 77;
+            this.tgAutoSave.UseVisualStyleBackColor = true;
+            this.tgAutoSave.CheckedChanged += new System.EventHandler(this.tgAutoSave_CheckedChanged);
+            // 
+            // togServerOnOff
+            // 
+            this.togServerOnOff.Location = new System.Drawing.Point(135, 83);
+            this.togServerOnOff.MinimumSize = new System.Drawing.Size(45, 23);
+            this.togServerOnOff.Name = "togServerOnOff";
+            this.togServerOnOff.OffBackColor = System.Drawing.Color.Gray;
+            this.togServerOnOff.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.togServerOnOff.OnBackColor = System.Drawing.Color.Lime;
+            this.togServerOnOff.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.togServerOnOff.Size = new System.Drawing.Size(83, 29);
+            this.togServerOnOff.TabIndex = 34;
+            this.togServerOnOff.UseVisualStyleBackColor = true;
+            this.togServerOnOff.CheckedChanged += new System.EventHandler(this.togServerOnOff_CheckedChanged);
+            // 
             // lbStartRecording
             // 
             this.lbStartRecording.AutoEllipsis = true;
@@ -1164,6 +1098,36 @@
             this.lbStartRecording.Name = "lbStartRecording";
             this.lbStartRecording.Size = new System.Drawing.Size(42, 44);
             this.lbStartRecording.TabIndex = 20;
+            // 
+            // tongleDataOnOff
+            // 
+            this.tongleDataOnOff.Location = new System.Drawing.Point(6, 437);
+            this.tongleDataOnOff.MinimumSize = new System.Drawing.Size(45, 23);
+            this.tongleDataOnOff.Name = "tongleDataOnOff";
+            this.tongleDataOnOff.OffBackColor = System.Drawing.Color.Gray;
+            this.tongleDataOnOff.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.tongleDataOnOff.OnBackColor = System.Drawing.Color.Lime;
+            this.tongleDataOnOff.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.tongleDataOnOff.Size = new System.Drawing.Size(95, 45);
+            this.tongleDataOnOff.TabIndex = 57;
+            this.tongleDataOnOff.UseVisualStyleBackColor = true;
+            this.tongleDataOnOff.CheckedChanged += new System.EventHandler(this.tongleDataOnOff_CheckedChanged);
+            // 
+            // tongleSoftLimit
+            // 
+            this.tongleSoftLimit.Checked = true;
+            this.tongleSoftLimit.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tongleSoftLimit.Location = new System.Drawing.Point(5, 378);
+            this.tongleSoftLimit.MinimumSize = new System.Drawing.Size(45, 23);
+            this.tongleSoftLimit.Name = "tongleSoftLimit";
+            this.tongleSoftLimit.OffBackColor = System.Drawing.Color.Gray;
+            this.tongleSoftLimit.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.tongleSoftLimit.OnBackColor = System.Drawing.Color.Red;
+            this.tongleSoftLimit.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.tongleSoftLimit.Size = new System.Drawing.Size(95, 45);
+            this.tongleSoftLimit.TabIndex = 57;
+            this.tongleSoftLimit.UseVisualStyleBackColor = true;
+            this.tongleSoftLimit.CheckedChanged += new System.EventHandler(this.tongleSoftLimit_CheckedChanged);
             // 
             // btnStop
             // 
@@ -1195,33 +1159,109 @@
             this.btnEstop.UseVisualStyleBackColor = false;
             this.btnEstop.Click += new System.EventHandler(this.btnEstop_Click_1);
             // 
-            // btnMoveDown
+            // toggleServoEnable
             // 
-            this.btnMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.BackgroundImage")));
-            this.btnMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMoveDown.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveDown.Location = new System.Drawing.Point(194, 25);
-            this.btnMoveDown.Name = "btnMoveDown";
-            this.btnMoveDown.Size = new System.Drawing.Size(63, 61);
-            this.btnMoveDown.TabIndex = 5;
-            this.btnMoveDown.UseVisualStyleBackColor = false;
-            this.btnMoveDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseDown_1);
-            this.btnMoveDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseUp_1);
+            this.toggleServoEnable.Location = new System.Drawing.Point(167, 36);
+            this.toggleServoEnable.MinimumSize = new System.Drawing.Size(45, 23);
+            this.toggleServoEnable.Name = "toggleServoEnable";
+            this.toggleServoEnable.OffBackColor = System.Drawing.Color.Gray;
+            this.toggleServoEnable.OffToggleColor = System.Drawing.Color.Gainsboro;
+            this.toggleServoEnable.OnBackColor = System.Drawing.Color.Lime;
+            this.toggleServoEnable.OnToggleColor = System.Drawing.Color.WhiteSmoke;
+            this.toggleServoEnable.Size = new System.Drawing.Size(111, 50);
+            this.toggleServoEnable.TabIndex = 39;
+            this.toggleServoEnable.UseVisualStyleBackColor = true;
+            this.toggleServoEnable.CheckedChanged += new System.EventHandler(this.toggleServoEnable_CheckedChanged);
             // 
-            // btnMoveUp
+            // lbZeroSpeedReach
             // 
-            this.btnMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.BackgroundImage")));
-            this.btnMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMoveUp.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveUp.Location = new System.Drawing.Point(267, 25);
-            this.btnMoveUp.Name = "btnMoveUp";
-            this.btnMoveUp.Size = new System.Drawing.Size(63, 61);
-            this.btnMoveUp.TabIndex = 4;
-            this.btnMoveUp.UseVisualStyleBackColor = false;
-            this.btnMoveUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseDown_1);
-            this.btnMoveUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseUp_1);
+            this.lbZeroSpeedReach.AutoEllipsis = true;
+            this.lbZeroSpeedReach.BackColor = System.Drawing.Color.Gray;
+            this.lbZeroSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbZeroSpeedReach.Location = new System.Drawing.Point(9, 394);
+            this.lbZeroSpeedReach.Name = "lbZeroSpeedReach";
+            this.lbZeroSpeedReach.Size = new System.Drawing.Size(31, 33);
+            this.lbZeroSpeedReach.TabIndex = 20;
+            // 
+            // lbCwTorqueLimit
+            // 
+            this.lbCwTorqueLimit.AutoEllipsis = true;
+            this.lbCwTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbCwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbCwTorqueLimit.Location = new System.Drawing.Point(9, 349);
+            this.lbCwTorqueLimit.Name = "lbCwTorqueLimit";
+            this.lbCwTorqueLimit.Size = new System.Drawing.Size(31, 33);
+            this.lbCwTorqueLimit.TabIndex = 19;
+            // 
+            // lbCcwTorqueLimit
+            // 
+            this.lbCcwTorqueLimit.AutoEllipsis = true;
+            this.lbCcwTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbCcwTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbCcwTorqueLimit.Location = new System.Drawing.Point(9, 301);
+            this.lbCcwTorqueLimit.Name = "lbCcwTorqueLimit";
+            this.lbCcwTorqueLimit.Size = new System.Drawing.Size(31, 33);
+            this.lbCcwTorqueLimit.TabIndex = 18;
+            // 
+            // lbAlarm
+            // 
+            this.lbAlarm.AutoEllipsis = true;
+            this.lbAlarm.BackColor = System.Drawing.Color.Gray;
+            this.lbAlarm.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbAlarm.Location = new System.Drawing.Point(9, 253);
+            this.lbAlarm.Name = "lbAlarm";
+            this.lbAlarm.Size = new System.Drawing.Size(31, 33);
+            this.lbAlarm.TabIndex = 17;
+            // 
+            // lbTorqueLimit
+            // 
+            this.lbTorqueLimit.AutoEllipsis = true;
+            this.lbTorqueLimit.BackColor = System.Drawing.Color.Gray;
+            this.lbTorqueLimit.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbTorqueLimit.Location = new System.Drawing.Point(9, 208);
+            this.lbTorqueLimit.Name = "lbTorqueLimit";
+            this.lbTorqueLimit.Size = new System.Drawing.Size(31, 33);
+            this.lbTorqueLimit.TabIndex = 16;
+            // 
+            // lbSpeedReach
+            // 
+            this.lbSpeedReach.AutoEllipsis = true;
+            this.lbSpeedReach.BackColor = System.Drawing.Color.Gray;
+            this.lbSpeedReach.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbSpeedReach.Location = new System.Drawing.Point(9, 164);
+            this.lbSpeedReach.Name = "lbSpeedReach";
+            this.lbSpeedReach.Size = new System.Drawing.Size(31, 33);
+            this.lbSpeedReach.TabIndex = 15;
+            // 
+            // lbReady
+            // 
+            this.lbReady.AutoEllipsis = true;
+            this.lbReady.BackColor = System.Drawing.Color.Gray;
+            this.lbReady.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbReady.Location = new System.Drawing.Point(9, 121);
+            this.lbReady.Name = "lbReady";
+            this.lbReady.Size = new System.Drawing.Size(31, 33);
+            this.lbReady.TabIndex = 14;
+            // 
+            // lbBrake
+            // 
+            this.lbBrake.AutoEllipsis = true;
+            this.lbBrake.BackColor = System.Drawing.Color.Gray;
+            this.lbBrake.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbBrake.Location = new System.Drawing.Point(9, 74);
+            this.lbBrake.Name = "lbBrake";
+            this.lbBrake.Size = new System.Drawing.Size(31, 33);
+            this.lbBrake.TabIndex = 13;
+            // 
+            // lb_Type
+            // 
+            this.lb_Type.AutoEllipsis = true;
+            this.lb_Type.BackColor = System.Drawing.Color.Gray;
+            this.lb_Type.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lb_Type.Location = new System.Drawing.Point(9, 28);
+            this.lb_Type.Name = "lb_Type";
+            this.lb_Type.Size = new System.Drawing.Size(31, 33);
+            this.lb_Type.TabIndex = 12;
             // 
             // Form1
             // 
@@ -1229,6 +1269,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1638, 1055);
+            this.Controls.Add(this.txtFileCount);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.tgAutoSave);
             this.Controls.Add(this.lbTemp);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
@@ -1370,7 +1413,7 @@
         private RJControls.RJToggleButton tongleDataOnOff;
         private RJControls.RJToggleButton tongleSoftLimit;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ColumnHeader AccZRef;
+        private System.Windows.Forms.ColumnHeader TrigalData;
         private System.Windows.Forms.ColumnHeader AccelX;
         private System.Windows.Forms.ColumnHeader AccelY;
         private System.Windows.Forms.ColumnHeader Position;
@@ -1378,6 +1421,9 @@
         private System.Windows.Forms.Button btnSimulate;
         private System.Windows.Forms.Label lbTemp;
         private System.Windows.Forms.ToolStripMenuItem speedControlTestToolStripMenuItem;
+        private RJControls.RJToggleButton tgAutoSave;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label txtFileCount;
     }
 }
 
