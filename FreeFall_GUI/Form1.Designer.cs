@@ -65,6 +65,8 @@
             this.btnSetJogSpeed = new System.Windows.Forms.Button();
             this.txtSetSpeed = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.btnMoveDown = new System.Windows.Forms.Button();
+            this.btnMoveUp = new System.Windows.Forms.Button();
             this.btnSimulate = new System.Windows.Forms.Button();
             this.btnHoming = new System.Windows.Forms.Button();
             this.lbMotorSpeed = new System.Windows.Forms.Label();
@@ -73,6 +75,8 @@
             this.btnStartDropping = new System.Windows.Forms.Button();
             this.SpeedGraph = new ZedGraph.ZedGraphControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnStop = new FreeFall_GUI.ButtonEllipse();
+            this.btnEstop = new FreeFall_GUI.ButtonEllipse();
             this.toggleServoEnable = new FreeFall_GUI.RJControls.RJToggleButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -125,10 +129,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.lbTemp = new System.Windows.Forms.Label();
             this.lbStartRecording = new FreeFall_GUI.Elip_Label();
-            this.btnStop = new FreeFall_GUI.ButtonEllipse();
-            this.btnEstop = new FreeFall_GUI.ButtonEllipse();
-            this.btnMoveDown = new System.Windows.Forms.Button();
-            this.btnMoveUp = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gbJogControl.SuspendLayout();
@@ -204,7 +204,7 @@
             // parameterSettingToolStripMenuItem
             // 
             this.parameterSettingToolStripMenuItem.Name = "parameterSettingToolStripMenuItem";
-            this.parameterSettingToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.parameterSettingToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             this.parameterSettingToolStripMenuItem.Text = "Parameter Setting";
             this.parameterSettingToolStripMenuItem.Click += new System.EventHandler(this.parameterSettingToolStripMenuItem_Click);
             // 
@@ -497,6 +497,34 @@
             this.label5.Text = "Set Speed (rpm)";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // btnMoveDown
+            // 
+            this.btnMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.BackgroundImage")));
+            this.btnMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMoveDown.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMoveDown.Location = new System.Drawing.Point(194, 25);
+            this.btnMoveDown.Name = "btnMoveDown";
+            this.btnMoveDown.Size = new System.Drawing.Size(63, 61);
+            this.btnMoveDown.TabIndex = 5;
+            this.btnMoveDown.UseVisualStyleBackColor = false;
+            this.btnMoveDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseDown_1);
+            this.btnMoveDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseUp_1);
+            // 
+            // btnMoveUp
+            // 
+            this.btnMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.BackgroundImage")));
+            this.btnMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMoveUp.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnMoveUp.Location = new System.Drawing.Point(267, 25);
+            this.btnMoveUp.Name = "btnMoveUp";
+            this.btnMoveUp.Size = new System.Drawing.Size(63, 61);
+            this.btnMoveUp.TabIndex = 4;
+            this.btnMoveUp.UseVisualStyleBackColor = false;
+            this.btnMoveUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseDown_1);
+            this.btnMoveUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseUp_1);
+            // 
             // btnSimulate
             // 
             this.btnSimulate.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -603,6 +631,36 @@
             this.groupBox1.TabIndex = 58;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Control";
+            // 
+            // btnStop
+            // 
+            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnStop.BackColor = System.Drawing.Color.White;
+            this.btnStop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStop.BackgroundImage")));
+            this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnStop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnStop.Location = new System.Drawing.Point(298, 36);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(113, 101);
+            this.btnStop.TabIndex = 42;
+            this.btnStop.UseVisualStyleBackColor = false;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click_1);
+            // 
+            // btnEstop
+            // 
+            this.btnEstop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnEstop.BackColor = System.Drawing.Color.White;
+            this.btnEstop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEstop.BackgroundImage")));
+            this.btnEstop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnEstop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnEstop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnEstop.Location = new System.Drawing.Point(6, 129);
+            this.btnEstop.Name = "btnEstop";
+            this.btnEstop.Size = new System.Drawing.Size(141, 139);
+            this.btnEstop.TabIndex = 14;
+            this.btnEstop.UseVisualStyleBackColor = false;
+            this.btnEstop.Click += new System.EventHandler(this.btnEstop_Click_1);
             // 
             // toggleServoEnable
             // 
@@ -819,7 +877,7 @@
             // 
             // timer2
             // 
-            this.timer2.Interval = 50;
+            this.timer2.Interval = 25;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick_1);
             // 
             // progressBar
@@ -1130,64 +1188,6 @@
             this.lbStartRecording.Name = "lbStartRecording";
             this.lbStartRecording.Size = new System.Drawing.Size(42, 44);
             this.lbStartRecording.TabIndex = 20;
-            // 
-            // btnStop
-            // 
-            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStop.BackColor = System.Drawing.Color.White;
-            this.btnStop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStop.BackgroundImage")));
-            this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnStop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnStop.Location = new System.Drawing.Point(298, 36);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(113, 101);
-            this.btnStop.TabIndex = 42;
-            this.btnStop.UseVisualStyleBackColor = false;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click_1);
-            // 
-            // btnEstop
-            // 
-            this.btnEstop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEstop.BackColor = System.Drawing.Color.White;
-            this.btnEstop.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEstop.BackgroundImage")));
-            this.btnEstop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnEstop.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnEstop.Font = new System.Drawing.Font("Gulim", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnEstop.Location = new System.Drawing.Point(6, 129);
-            this.btnEstop.Name = "btnEstop";
-            this.btnEstop.Size = new System.Drawing.Size(141, 139);
-            this.btnEstop.TabIndex = 14;
-            this.btnEstop.UseVisualStyleBackColor = false;
-            this.btnEstop.Click += new System.EventHandler(this.btnEstop_Click_1);
-            // 
-            // btnMoveDown
-            // 
-            this.btnMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveDown.BackgroundImage")));
-            this.btnMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMoveDown.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveDown.Location = new System.Drawing.Point(194, 25);
-            this.btnMoveDown.Name = "btnMoveDown";
-            this.btnMoveDown.Size = new System.Drawing.Size(63, 61);
-            this.btnMoveDown.TabIndex = 5;
-            this.btnMoveDown.UseVisualStyleBackColor = false;
-            this.btnMoveDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseDown_1);
-            this.btnMoveDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveDown_MouseUp_1);
-            // 
-            // btnMoveUp
-            // 
-            this.btnMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveUp.BackgroundImage")));
-            this.btnMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMoveUp.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnMoveUp.Location = new System.Drawing.Point(267, 25);
-            this.btnMoveUp.Name = "btnMoveUp";
-            this.btnMoveUp.Size = new System.Drawing.Size(63, 61);
-            this.btnMoveUp.TabIndex = 4;
-            this.btnMoveUp.UseVisualStyleBackColor = false;
-            this.btnMoveUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseDown_1);
-            this.btnMoveUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMoveUp_MouseUp_1);
             // 
             // Form1
             // 
