@@ -1,3 +1,0 @@
-Module Mass/5/kg
-System Inertia/7.8/kgm2
-Safety Factor/1.3
