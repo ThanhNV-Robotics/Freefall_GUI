@@ -36,10 +36,9 @@
             this.btnLoadFile = new System.Windows.Forms.Button();
             this.listData = new System.Windows.Forms.ListView();
             this.Time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Value = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.PosiTion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Pulse = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.CountTimer = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.proSending = new System.Windows.Forms.ProgressBar();
             this.btnResetGraph = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -59,6 +58,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.btnSetGoingSpeed = new System.Windows.Forms.Button();
             this.gbParam = new System.Windows.Forms.GroupBox();
+            this.btnSaveParam = new System.Windows.Forms.Button();
             this.cbModify = new System.Windows.Forms.CheckBox();
             this.btnSetStoppingTime = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -71,6 +71,7 @@
             this.lbPullingDist = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.lbDroppingDist = new System.Windows.Forms.Label();
+            this.Radius = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbParam.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -134,10 +135,10 @@
             // 
             this.listData.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Time,
-            this.Value,
+            this.PosiTion,
             this.Speed,
-            this.Pulse,
-            this.CountTimer});
+            this.Radius,
+            this.Pulse});
             this.listData.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.listData.HideSelection = false;
             this.listData.Location = new System.Drawing.Point(12, 32);
@@ -152,25 +153,20 @@
             this.Time.Text = "time step";
             this.Time.Width = 107;
             // 
-            // Value
+            // PosiTion
             // 
-            this.Value.Text = "PosValue (m)";
-            this.Value.Width = 134;
+            this.PosiTion.Text = "PosValue (m)";
+            this.PosiTion.Width = 134;
             // 
             // Speed
             // 
             this.Speed.Text = "Speed";
-            this.Speed.Width = 111;
+            this.Speed.Width = 94;
             // 
             // Pulse
             // 
             this.Pulse.Text = "DeltaPulse";
             this.Pulse.Width = 121;
-            // 
-            // CountTimer
-            // 
-            this.CountTimer.Text = "Pulse Speed";
-            this.CountTimer.Width = 132;
             // 
             // proSending
             // 
@@ -332,6 +328,7 @@
             // 
             // gbParam
             // 
+            this.gbParam.Controls.Add(this.btnSaveParam);
             this.gbParam.Controls.Add(this.cbModify);
             this.gbParam.Controls.Add(this.btnSetStoppingTime);
             this.gbParam.Controls.Add(this.label3);
@@ -361,6 +358,16 @@
             this.gbParam.TabStop = false;
             this.gbParam.Text = "Param Seting";
             // 
+            // btnSaveParam
+            // 
+            this.btnSaveParam.Location = new System.Drawing.Point(506, 131);
+            this.btnSaveParam.Name = "btnSaveParam";
+            this.btnSaveParam.Size = new System.Drawing.Size(100, 40);
+            this.btnSaveParam.TabIndex = 23;
+            this.btnSaveParam.Text = "Save";
+            this.btnSaveParam.UseVisualStyleBackColor = true;
+            this.btnSaveParam.Click += new System.EventHandler(this.btnSaveParam_Click);
+            // 
             // cbModify
             // 
             this.cbModify.AutoSize = true;
@@ -370,6 +377,7 @@
             this.cbModify.TabIndex = 22;
             this.cbModify.Text = "Modify";
             this.cbModify.UseVisualStyleBackColor = true;
+            this.cbModify.CheckedChanged += new System.EventHandler(this.cbModify_CheckedChanged);
             // 
             // btnSetStoppingTime
             // 
@@ -477,6 +485,11 @@
             this.lbDroppingDist.TabIndex = 84;
             this.lbDroppingDist.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // Radius
+            // 
+            this.Radius.Text = "Drum Radius";
+            this.Radius.Width = 130;
+            // 
             // Setting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -518,10 +531,9 @@
         private System.Windows.Forms.Button btnLoadFile;
         private System.Windows.Forms.ListView listData;
         private System.Windows.Forms.ColumnHeader Time;
-        private System.Windows.Forms.ColumnHeader Value;
+        private System.Windows.Forms.ColumnHeader PosiTion;
         private System.Windows.Forms.ColumnHeader Speed;
         private System.Windows.Forms.ColumnHeader Pulse;
-        private System.Windows.Forms.ColumnHeader CountTimer;
         private System.Windows.Forms.ProgressBar proSending;
         private System.Windows.Forms.Button btnResetGraph;
         private System.Windows.Forms.Label label4;
@@ -553,5 +565,7 @@
         private System.Windows.Forms.Label lbPullingDist;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label lbDroppingDist;
+        private System.Windows.Forms.Button btnSaveParam;
+        private System.Windows.Forms.ColumnHeader Radius;
     }
 }

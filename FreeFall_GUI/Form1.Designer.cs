@@ -96,7 +96,7 @@
             this.AccelX = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.AccelY = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.AccelZ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.AccZRef = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Trig = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Position = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listLocalTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timer2 = new System.Windows.Forms.Timer(this.components);
@@ -821,7 +821,7 @@
             this.AccelX,
             this.AccelY,
             this.AccelZ,
-            this.AccZRef,
+            this.Trig,
             this.Position,
             this.listLocalTime});
             this.listData.Font = new System.Drawing.Font("Gulim", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -860,10 +860,10 @@
             // 
             this.AccelZ.Text = "AccZ";
             // 
-            // AccZRef
+            // Trig
             // 
-            this.AccZRef.Text = "AccRef";
-            this.AccZRef.Width = 79;
+            this.Trig.Text = "Trigal";
+            this.Trig.Width = 79;
             // 
             // Position
             // 
@@ -1333,7 +1333,7 @@
         private RJControls.RJToggleButton tongleDataOnOff;
         private RJControls.RJToggleButton tongleSoftLimit;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ColumnHeader AccZRef;
+        private System.Windows.Forms.ColumnHeader Trig;
         private System.Windows.Forms.ColumnHeader AccelX;
         private System.Windows.Forms.ColumnHeader AccelY;
         private System.Windows.Forms.ColumnHeader Position;

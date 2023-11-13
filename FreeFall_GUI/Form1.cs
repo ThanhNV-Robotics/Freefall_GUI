@@ -683,9 +683,7 @@ namespace FreeFall_GUI
                                 MessageBox.Show("Software Limit is OFF");
                             }
                             break;
-                        case 14:
-                            MessageBox.Show("Simulation finished\n Dropping distance is" + Param.ToString() + "m");
-                            break;
+
                         case 15:
                             MessageBox.Show("Simulation finished\n Pulling distance is" + Param.ToString() + "m");
                             break;
@@ -704,6 +702,19 @@ namespace FreeFall_GUI
                             else // Param = 1, then start the experiment
                             {
                                 btnStartDropping.Text = "STOP";
+                            }
+                            break;
+                        case 14:
+                            if (Param != 1) // Can not start the simulation
+                            {
+                                MessageBox.Show("CAN NOT START!!\n There is no input Data");
+                                ResetGraph();
+                                btnSimulate.Text = "Start Init";                           
+                                
+                            }
+                            else // Param = 1, then start the experiment
+                            {
+                                btnSimulate.Text = "Stop Init";
                             }
                             break;
                         default:
@@ -804,7 +815,7 @@ namespace FreeFall_GUI
                     if (btnGraphOn.Text == "Graph OFF")
                     {
                         time += (timer2.Interval) / 1000.0;  // to seconds
-                        DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef);
+                        DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef, TrigalSignal);
 
                         if ((Application.OpenForms["_2ndDataGraph"] as _2ndDataGraph) != null) // Check if the form is opened or not
                         {
@@ -827,13 +838,12 @@ namespace FreeFall_GUI
                 //{                
                 try
                 {
-                    MotorSpeed = float.Parse(ExtractReceivedMessage[0]);
-                    SpdCommand = float.Parse(ExtractReceivedMessage[1]);
+                    MotorSpeed = float.Parse(ExtractReceivedMessage[0]);                    
 
-                    ObjectPosition = float.Parse(ExtractReceivedMessage[2]);
-                    PositionCmd = float.Parse(ExtractReceivedMessage[3]);
+                    ObjectPosition = float.Parse(ExtractReceivedMessage[1]);
+                    PositionCmd = float.Parse(ExtractReceivedMessage[2]);
 
-                    AccRef = double.Parse(ExtractReceivedMessage[4]);
+                    //AccRef = double.Parse(ExtractReceivedMessage[4]);
                     // Write to the Buffer
 
                     //WriteToSpdCmdBuffer(SpdCommand);
@@ -850,7 +860,7 @@ namespace FreeFall_GUI
                     if (btnGraphOn.Text == "Graph OFF")
                     {
                         time += (timer2.Interval) / 1000.0;  // to seconds
-                        DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef);
+                        DrawAllData(time, MotorSpeed, SpdCommand, AccX, AccY, AccZ, AccRef, TrigalSignal);
 
                         if ((Application.OpenForms["_2ndDataGraph"] as _2ndDataGraph) != null) // Check if the form is opened or not
                         {
@@ -1131,10 +1141,15 @@ namespace FreeFall_GUI
             LineItem AccRefCurve = SpeedGraph.GraphPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
             AccRefCurve.Line.Width = (float)3; // Set LineWidth
 
-            
+            RollingPointPairList TrigalList = new RollingPointPairList(60000);
+            LineItem TrigalCurve = SpeedGraph.GraphPane.AddCurve("Trigal Signal", TrigalList, Color.Purple, SymbolType.None);
+            TrigalCurve.Line.Width = (float)3; // Set LineWidth
+
+
             AccXCurve.IsY2Axis = true;
             AccYCurve.IsY2Axis = true;
             AccZCurve.IsY2Axis = true;
+            TrigalCurve.IsY2Axis = true;
 
             AccRefCurve.IsY2Axis = true;
 
@@ -1256,7 +1271,7 @@ namespace FreeFall_GUI
                 item.SubItems.Add(AccX.ToString());
                 item.SubItems.Add(AccY.ToString());
                 item.SubItems.Add(AccZ.ToString());
-                item.SubItems.Add(AccRef.ToString());
+                item.SubItems.Add(TrigalSignal.ToString());
                 item.SubItems.Add(ObjectPosition.ToString());
                 //LocalTime = DateTime.Now;
 
@@ -1369,7 +1384,7 @@ namespace FreeFall_GUI
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
         }
-        private void DrawAllData(double time, double speed, double spdcmd, double _AccX, double _AccY, double _AccZ, double _AccRef)
+        private void DrawAllData(double time, double speed, double spdcmd, double _AccX, double _AccY, double _AccZ, double _AccRef, uint _Trigal)
         {
             if (SpeedGraph.GraphPane.CurveList.Count <= 0) // neu ko co duong du lieu dc khoi tao
             {
@@ -1437,6 +1452,13 @@ namespace FreeFall_GUI
                 AccRefList.Add(time, _AccRef);
             }
 
+            LineItem TrigCurve = SpeedGraph.GraphPane.CurveList[6] as LineItem;
+            if (TrigCurve == null) return;
+            IPointListEdit TrigalList = TrigCurve.Points as IPointListEdit;
+            if (TrigalList == null) return;
+            
+            TrigCurve.IsY2Axis = true;
+            TrigalList.Add(time, _Trigal);
 
 
             Scale xScale = SpeedGraph.GraphPane.XAxis.Scale;
@@ -1623,6 +1645,10 @@ namespace FreeFall_GUI
             RollingPointPairList AccRefList = new RollingPointPairList(60000);
             LineItem AccRefCurve = SpeedGraph.GraphPane.AddCurve("AccRef", AccRefList, Color.Green, SymbolType.None);
             AccRefCurve.Line.Width = (float)3; // Set LineWidth
+
+            RollingPointPairList TrigalList = new RollingPointPairList(60000);
+            LineItem TrigalCurve = SpeedGraph.GraphPane.AddCurve("Trigal", TrigalList, Color.Purple, SymbolType.None);
+            TrigalCurve.Line.Width = (float)3; // Set LineWidth
 
             SpeedGraph.AxisChange();
             SpeedGraph.Invalidate();
@@ -2187,16 +2213,16 @@ namespace FreeFall_GUI
             if (cbDriverType.SelectedIndex == 0) // HIGEN FDA7000 Driver
             {
                 MotorDriver = true;
-                DrumRadius = (float)0.3;
                 if (serialPort1.IsOpen)
                 {
                     SendMessage("39/1");
-                }                
+                }
+                
             }
             else // ASDA-A3, small model
             {
                 MotorDriver = false;
-                DrumRadius = (float)0.05;
+
                 SendMessage("39/0");
             }
         }
@@ -2265,7 +2291,7 @@ namespace FreeFall_GUI
         UdpClient server;
         IPEndPoint endPoint;
         private bool ConnectToESP = false;
-
+        private uint TrigalSignal;
         private void ServerStart()
         {
             while (ConnectToESP)
@@ -2285,8 +2311,9 @@ namespace FreeFall_GUI
                                 AccX = double.Parse(ExtractAccelData[0]) * 9.8 / 1000; // get acceleration value
                                 AccY = double.Parse(ExtractAccelData[1]) * 9.8 / 1000; // get acceleration value
                                 AccZData = Math.Round(double.Parse(ExtractAccelData[2]) * 9.8 / 1000, 2);
+                                TrigalSignal = uint.Parse(ExtractAccelData[3]);
                                 AccZ = AccZData;
-                                if (ExtractAccelData.Length >= 4)
+                                if (ExtractAccelData.Length >= 5)
                                 {
                                     // get acceleration value
                                     Temp = double.Parse(ExtractAccelData[3]);
@@ -2430,7 +2457,8 @@ namespace FreeFall_GUI
                 {
                     AccX = double.Parse(ExtractAccelData[0]); // get acceleration value
                     AccY = double.Parse(ExtractAccelData[1]); // get acceleration value
-                    AccZ = double.Parse(ExtractAccelData[2]); // get acceleration value                    
+                    AccZ = double.Parse(ExtractAccelData[2]); // get acceleration value
+                    TrigalSignal = uint.Parse(ExtractAccelData[3]);                                          // 
                 }
                 catch { }
                 //e.MessageString = null;
@@ -2518,10 +2546,10 @@ namespace FreeFall_GUI
                         double _AccX = double.Parse(datafield[3]);
                         double _AccY = double.Parse(datafield[4]);
                         double _AccZ = double.Parse(datafield[5]);
-                        double _AccRef = double.Parse(datafield[6]);
+                        uint _Trigal = uint.Parse(datafield[6]);
                         double ObjectPos = double.Parse(datafield[7]);
 
-                        DrawAllData(_time, _Speed, _RefSpd, _AccX, _AccY, _AccZ, _AccRef);
+                        DrawAllData(_time, _Speed, _RefSpd, _AccX, _AccY, _AccZ, 0, TrigalSignal);
                         
                     }
                     catch
@@ -2618,7 +2646,8 @@ namespace FreeFall_GUI
             ResetGraph();
             TurnOnGraph();
         }
-
+        public delegate void LoadParamToSettingForm(uint Code, float Paramvalue);
+        public LoadParamToSettingForm _LoadParamToSettingForm;
         private void parameterSettingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Application.OpenForms.OfType<Setting>().Count() == 1)
@@ -2634,7 +2663,8 @@ namespace FreeFall_GUI
             // Assign the delegate to a function in Paramseting Form
             LoadData = new LoadDataToParamSettingForm(_Setting.LoadParams);
             _Setting._SendCommand = new Setting.SendCommand(SendMessage);
-            
+            _LoadParamToSettingForm = new LoadParamToSettingForm(_Setting.SetParam);
+
 
             //_ShowFeedbackDriverDataFrame = new ShowFeedbackDriverDataFrame(_ParamSetting.ShowDriverDataFrame);
             tongleDataOnOff.CheckState = CheckState.Unchecked;

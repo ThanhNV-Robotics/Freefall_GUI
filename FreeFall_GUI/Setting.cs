@@ -19,9 +19,7 @@ namespace FreeFall_GUI
             InitializeComponent();
         }
         uint EncoderResolution; //pulse
-        float DrumRadius; // m
-        float TimeStep = 0;
-        uint TimerPeriod;        
+        float DrumRadius; // m      
 
         public delegate void SendCommand(string Message); // Function to send a message to STM32
         public SendCommand _SendCommand; //
@@ -34,7 +32,23 @@ namespace FreeFall_GUI
         {
             GraphInit();
             proSending.Visible = false;
-            gbParam.Enabled = true;                      
+            gbParam.Enabled = true;
+            if (cbModify.CheckState == CheckState.Unchecked)
+            {
+                // Disable param setting
+                txtDrumRadius.Enabled = false;
+                txtGoingSpeed.Enabled = false;
+                txtSampleTime.Enabled = false;
+                txtStoppingTime.Enabled = false;
+            }
+            else
+            {
+                // Disable param setting
+                txtDrumRadius.Enabled = true;
+                txtGoingSpeed.Enabled = true;
+                txtSampleTime.Enabled = true;
+                txtStoppingTime.Enabled = true;
+            }
         }
 
         private void GraphInit()
@@ -141,8 +155,7 @@ namespace FreeFall_GUI
         }
 
         private void ResetGraph()
-        {
-            TimeStep = 0;            
+        {           
 
             TempGraph.GraphPane.CurveList.Clear();
             // Re-init the curve
@@ -154,13 +167,17 @@ namespace FreeFall_GUI
             
         }
         uint ExperimentMode;
+        public void SetParam (uint Code, float ParamValue)
+        {
+
+        }
+        bool MotorDriver;
         private void btnLoadFile_Click(object sender, EventArgs e)
         {
             try
             {
                  DrumRadius = float.Parse(txtDrumRadius.Text);
-                 EncoderResolution = uint.Parse(lbEncoderResolution.Text);
-                
+                 EncoderResolution = uint.Parse(lbEncoderResolution.Text);                
             }
             catch
             {
@@ -238,14 +255,17 @@ namespace FreeFall_GUI
                 }
 
                 // Start Reading Data
-                line = sr.ReadLine();
+                
                 
                 int TimeStep = 0;
                 float PrePosition = 0;
-                uint TimerCount = 0;
+                
                 int DeltaPulse = 0;
                 int TotalPullingPulse = 0;
                 int TotalDroppingPulse = 0;
+                float CurrentPosition = 0;
+
+                line = sr.ReadLine();
                 //Continue to read until you reach end of file
                 while (line != null)
                 {
@@ -255,21 +275,57 @@ namespace FreeFall_GUI
 
                         // Add to listview
                         ListViewItem item = new ListViewItem(TimeStep.ToString());
-                        item.SubItems.Add(datafield[0]);
-                        item.SubItems.Add(datafield[1]);
+                        item.SubItems.Add(datafield[0]); //time step
+                        item.SubItems.Add(datafield[1]); // position value in m
 
-                        float CurrentPosition = float.Parse(datafield[0]);
+                        switch (datafield.Length)
+                        {
+                            case 2:
+
+                                item.SubItems.Add(txtDrumRadius.Text); // Add drum radius
+                                break;
+                            case 3:
+                                item.SubItems.Add(datafield[datafield.Length - 1]);
+                                DrumRadius = float.Parse(datafield[datafield.Length - 1]);
+                                break;
+                            default:
+                                break;
+                        }                        
+                        
+                        CurrentPosition = float.Parse(datafield[0]);
+                        if (TimeStep == 0)
+                        {
+                            PrePosition = CurrentPosition;
+                        }
 
                         float Speed = float.Parse(datafield[1]);
 
+
+
                         if (CurrentPosition - PrePosition > 0)
-                        {
-                            DeltaPulse = (int)(0.5 + (CurrentPosition - PrePosition) * EncoderResolution / (2 * Math.PI * DrumRadius));
+                        {                   
+                            
+                            if (EncoderResolution == 8192) // Egearatio = 8, HIGEN Driver
+                            {
+                                DeltaPulse = (int)(0.5 + (CurrentPosition - PrePosition) * EncoderResolution / (2 * 8 * Math.PI * DrumRadius)); // 8 is Egear Ratio
+                            }
+                            else //ASDA
+                            {
+                                DeltaPulse = (int)(0.5 + (CurrentPosition - PrePosition) * EncoderResolution / (2 * Math.PI * DrumRadius));
+                            }
+                            
                             TotalDroppingPulse += DeltaPulse;
                         }
                         if (CurrentPosition - PrePosition < 0)
-                        {
-                            DeltaPulse = (int)(-0.5 + (CurrentPosition - PrePosition) * EncoderResolution / (2 * Math.PI * DrumRadius));
+                        {                            
+                            if (EncoderResolution == 8192) // Egearatio = 8, HIGEN
+                            {
+                                DeltaPulse = (int)(-0.5 + (CurrentPosition - PrePosition) * EncoderResolution / (2 * 8 * Math.PI * DrumRadius)); // 8 is Egear Ratio
+                            }
+                            else // Egear ratio = 1, ASDA
+                            {
+                                DeltaPulse = (int)(-0.5 + (CurrentPosition - PrePosition) * EncoderResolution / (2 * Math.PI * DrumRadius));
+                            }
                             TotalPullingPulse += DeltaPulse;
                         }
                         if (CurrentPosition - PrePosition == 0)
@@ -277,8 +333,7 @@ namespace FreeFall_GUI
                             DeltaPulse = 0;
                         }
 
-                        item.SubItems.Add(DeltaPulse.ToString());
-                        item.SubItems.Add(TimerCount.ToString());
+                        item.SubItems.Add(DeltaPulse.ToString());                        
 
                         listData.Items.Add(item); // Gán biến datas vào cột tiếp theo của ListView
                         listData.Items[listData.Items.Count - 1].EnsureVisible(); //
@@ -293,9 +348,19 @@ namespace FreeFall_GUI
                     }
                     line = sr.ReadLine();
                 }
-                lbTotalPullingPulse.Text = Math.Abs(TotalPullingPulse).ToString();
-                lbPullingDist.Text = Math.Round(Math.Abs(TotalPullingPulse * 2 * Math.PI * DrumRadius / EncoderResolution),2).ToString();
-                lbDroppingDist.Text = Math.Round(Math.Abs(TotalDroppingPulse * 2 * Math.PI * DrumRadius / EncoderResolution), 2).ToString();
+                if (EncoderResolution == 8192)
+                {
+                    lbTotalPullingPulse.Text = Math.Abs(TotalPullingPulse).ToString();
+                    lbPullingDist.Text = Math.Round(Math.Abs(TotalPullingPulse * 2 * Math.PI * 8 * DrumRadius / EncoderResolution), 2).ToString();
+                    lbDroppingDist.Text = Math.Round(Math.Abs(TotalDroppingPulse * 2 * Math.PI * 8 * DrumRadius / EncoderResolution), 2).ToString();
+                }
+                else
+                {
+                    lbTotalPullingPulse.Text = Math.Abs(TotalPullingPulse).ToString();
+                    lbPullingDist.Text = Math.Round(Math.Abs(TotalPullingPulse * 2 * Math.PI * DrumRadius / EncoderResolution), 2).ToString();
+                    lbDroppingDist.Text = Math.Round(Math.Abs(TotalDroppingPulse * 2 * Math.PI * DrumRadius / EncoderResolution), 2).ToString();
+                }
+       
             }
         }
 
@@ -320,9 +385,19 @@ namespace FreeFall_GUI
             {
                 try
                 {
-                    time = double.Parse(listData.Items[i].SubItems[0].Text) * 0.005;
+                    DrumRadius = float.Parse(listData.Items[i].SubItems[3].Text); 
+                }
+                catch
+                {
+                    // take the value in the Drum Radius textbox
+                }
+
+                try
+                {
+
+                    time = double.Parse(listData.Items[i].SubItems[0].Text) * (double)(uint.Parse(txtSampleTime.Text)/1000.0);
                     RefPosition = float.Parse(listData.Items[i].SubItems[1].Text);
-                    float DrumRadius = float.Parse(txtDrumRadius.Text);
+                    
                     RefSpeed = float.Parse(listData.Items[i].SubItems[2].Text) * 60 / (DrumRadius * 2 * (float)3.14);
                 }
                 catch
@@ -377,7 +452,7 @@ namespace FreeFall_GUI
             {
                 try
                 {
-                    string DataToSend = "2/" + listData.Items[i].SubItems[0].Text + "/" + listData.Items[i].SubItems[3].Text + "/" + listData.Items[i].SubItems[4].Text;
+                    string DataToSend = "2/" + listData.Items[i].SubItems[0].Text + "/" + listData.Items[i].SubItems[4].Text;
                     _SendCommand(DataToSend);
                     Thread.Sleep(5);
                     proSending.Value++;
@@ -443,6 +518,9 @@ namespace FreeFall_GUI
                         MessageBox.Show("Setting Going Speed is Failed");
                     }
                     break;
+                case 7: // Check saving system param
+                    MessageBox.Show("Saving Done!");                  
+                    break;
                 default:
                     break;
             }
@@ -480,6 +558,9 @@ namespace FreeFall_GUI
             if (uint.TryParse(txtSampleTime.Text, out _SampleTime))
             {
                 _SendCommand("16/" + _SampleTime.ToString());
+                MessageBox.Show("You changed the Sample Time! Please load the Input Data Again!!!");
+                listData.Items.Clear();
+                ResetGraph();
             }
             else
             {
@@ -511,6 +592,31 @@ namespace FreeFall_GUI
             {
                 MessageBox.Show("Invalid Input");
             }
+        }
+
+        private void cbModify_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbModify.CheckState == CheckState.Unchecked)
+            {
+                // Disable param setting
+                txtDrumRadius.Enabled = false;
+                txtGoingSpeed.Enabled = false;
+                txtSampleTime.Enabled = false;
+                txtStoppingTime.Enabled = false;
+            }
+            else
+            {
+                // Enable param setting
+                txtDrumRadius.Enabled = true;
+                txtGoingSpeed.Enabled = true;
+                txtSampleTime.Enabled = true;
+                txtStoppingTime.Enabled = true;
+            }
+        }
+
+        private void btnSaveParam_Click(object sender, EventArgs e)
+        {
+            _SendCommand("7/1");
         }
     }
 }
